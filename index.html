@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PSV Reaction Force Calculator</title>
+  <style>
+    /* Design System - CSS Variables */
+    :root {
+      /* Colors */
+      --color-primary: #4F7CFF;
+      --color-primary-dark: #3D63E5;
+      --color-success: #10B981;
+      --color-warning: #F59E0B;
+      --color-error: #EF4444;
+      --color-info: #06B6D4;
+      
+      /* Neutrals */
+      --color-gray-50: #F9FAFB;
+      --color-gray-100: #F3F4F6;
+      --color-gray-200: #E5E7EB;
+      --color-gray-300: #D1D5DB;
+      --color-gray-500: #6B7280;
+      --color-gray-700: #374151;
+      --color-gray-900: #111827;
+      
+      /* Backgrounds */
+      --bg-page: #F7F8FA;
+      --bg-surface: #FFFFFF;
+      
+      /* Spacing */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      
+      /* Typography */
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow-lg: 0 4px 6px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.06);
+      
+      /* Border Radius */
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      
+      /* Transitions */
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-page);
+      color: var(--color-gray-900);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--space-6) var(--space-4);
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: var(--space-8) var(--space-6);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .container {
+        padding: var(--space-10) var(--space-8);
+      }
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: var(--space-10);
+      padding: var(--space-6) var(--space-4);
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-2);
+      line-height: 1.25;
+    }
+
+    .header p {
+      font-size: 16px;
+      color: var(--color-gray-500);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Main Layout - Desktop 2 columns */
+    .calc-layout {
+      display: block;
+      margin-bottom: var(--space-8);
+    }
+
+    @media (min-width: 1024px) {
+      .calc-layout {
+        display: grid;
+        grid-template-columns: 420px 1fr;
+        gap: var(--space-6);
+        align-items: start;
+      }
+    }
+
+    /* Input Section */
+    .input-section {
+      margin-bottom: var(--space-6);
+    }
+
+    @media (min-width: 1024px) {
+      .input-section {
+        margin-bottom: 0;
+        position: sticky;
+        top: var(--space-4);
+        max-height: calc(100vh - var(--space-8));
+        overflow-y: auto;
+      }
+    }
+
+    /* Parameter Card */
+    .param-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      margin-bottom: var(--space-4);
+    }
+
+    .param-card h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+
+    .param-group {
+      margin-bottom: var(--space-4);
+    }
+
+    .param-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-gray-700);
+      margin-bottom: 6px;
+    }
+
+    .required {
+      color: var(--color-error);
+      margin-left: 2px;
+    }
+
+    /* Input with Unit */
+    .input-with-unit {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .input-with-unit input {
+      flex: 1;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      height: 40px;
+      padding: 10px 12px;
+      border: 1px solid var(--color-gray-300);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-family: var(--font-sans);
+      color: var(--color-gray-900);
+      background: var(--bg-surface);
+      transition: all var(--transition-base);
+    }
+
+    select:focus, input[type="number"]:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(79,124,255,0.1);
+    }
+
+    .unit-select {
+      width: 100px;
+      background: var(--color-gray-50);
+      font-size: 13px;
+      color: var(--color-gray-700);
+    }
+
+    .helper-text {
+      display: block;
+      font-size: 12px;
+      color: var(--color-gray-500);
+      margin-top: 4px;
+    }
+
+    /* Formula Box */
+    .formula-box {
+      background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+      border-left: 4px solid var(--color-info);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-6);
+    }
+
+    .formula-box h5 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-2);
+    }
+
+    .formula {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-3);
+    }
+
+    .formula-legend {
+      font-size: 12px;
+      color: var(--color-gray-700);
+      line-height: 1.6;
+    }
+
+    /* Action Group */
+    .action-group {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-6);
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:active {
+      background: #2D4FCC;
+      transform: translateY(0);
+    }
+
+    .btn-primary:disabled {
+      background: var(--color-gray-300);
+      color: var(--color-gray-500);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface);
+      color: var(--color-gray-700);
+      border: 1px solid var(--color-gray-300);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-gray-50);
+    }
+
+    .btn-secondary:active {
+      background: var(--color-gray-100);
+    }
+
+    .btn-large {
+      height: 48px;
+      padding: 12px 24px;
+      font-size: 15px;
+    }
+
+    .btn-icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* Results Section */
+    .results-section {
+      display: none;
+    }
+
+    .results-section.show {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-card {
+      background: var(--bg-surface);
+      border-left: 4px solid var(--color-success);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-md);
+      margin-bottom: var(--space-4);
+    }
+
+    .result-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+
+    .result-item {
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-label {
+      display: block;
+      font-size: 14px;
+      color: var(--color-gray-700);
+      margin-bottom: var(--space-2);
+    }
+
+    .result-value-group {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-2);
+      margin-bottom: var(--space-1);
+    }
+
+    .result-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-gray-900);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .result-unit {
+      font-size: 16px;
+      color: var(--color-gray-500);
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      height: 24px;
+    }
+
+    .badge-success {
+      background: #ECFDF5;
+      color: #059669;
+    }
+
+    .badge-info {
+      background: #CFFAFE;
+      color: #0891B2;
+    }
+
+    /* Reference Tables */
+    .reference-section {
+      margin-top: var(--space-10);
+    }
+
+    .reference-section h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-6);
+    }
+
+    .table-container {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin-bottom: var(--space-6);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: var(--color-gray-100);
+    }
+
+    th {
+      text-align: left;
+      padding: var(--space-3) var(--space-4);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--color-gray-200);
+      font-size: 14px;
+      color: var(--color-gray-900);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: var(--color-gray-50);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .container {
+        padding: var(--space-4) var(--space-3);
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .header p {
+        font-size: 14px;
+      }
+
+      .header {
+        margin-bottom: var(--space-6);
+      }
+
+      .action-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .result-value {
+        font-size: 28px;
+      }
+
+      .param-card {
+        padding: var(--space-4);
+      }
+    }
+
+    @media (min-width: 641px) and (max-width: 1023px) {
+      .result-value {
+        font-size: 32px;
+      }
+
+      .header {
+        margin-bottom: var(--space-8);
+      }
+    }
+
+    /* Tables responsive */
+    @media (max-width: 640px) {
+      table {
+        font-size: 12px;
+      }
+
+      th, td {
+        padding: var(--space-2);
+      }
+
+      .table-container {
+        overflow-x: auto;
+      }
+    }
+
+    /* Loading State */
+    .btn-loading {
+      position: relative;
+      color: transparent;
+    }
+
+    .btn-loading::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      top: 50%;
+      left: 50%;
+      margin-left: -8px;
+      margin-top: -8px;
+      border: 2px solid white;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spinner 0.6s linear infinite;
+    }
+
+    @keyframes spinner {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Print Styles for PDF */
+    @media print {
+      body {
+        background: white;
+      }
+
+      .action-group,
+      .reference-section {
+        display: none;
+      }
+
+      .result-card {
+        box-shadow: none;
+        border: 1px solid var(--color-gray-300);
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>PSV Reaction Force Calculator</h1>
+      <p>Calcul de la force de réaction d'une soupape de sûreté selon F = Kf × A × P1</p>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="calc-layout">
+      <!-- Left Column: Input Parameters -->
+      <div class="input-section">
+        <div class="param-card">
+          <h4>Paramètres de la soupape</h4>
+          
+          <div class="param-group">
+            <label for="dn">DN (Diamètre Nominal) <span class="required">*</span></label>
+            <select id="dn" required>
+              <option value="">Sélectionner...</option>
+              <option value="50">DN 50 (2")</option>
+              <option value="65">DN 65 (2"½)</option>
+              <option value="80">DN 80 (3")</option>
+              <option value="100">DN 100 (4")</option>
+              <option value="150">DN 150 (6")</option>
+              <option value="200">DN 200 (8")</option>
+              <option value=">200">DN > 200 (> 8")</option>
+            </select>
+            <span class="helper-text">Diamètre nominal de sortie de la soupape</span>
+          </div>
+
+          <div class="param-group">
+            <label for="fluidType">Type de fluide <span class="required">*</span></label>
+            <select id="fluidType" required>
+              <option value="">Sélectionner...</option>
+              <option value="gaz">Gaz</option>
+              <option value="vapeur eau">Vapeur d'eau</option>
+            </select>
+            <span class="helper-text">Nature du fluide de process</span>
+          </div>
+
+          <div class="param-group">
+            <label for="orifice">Orifice <span class="required">*</span></label>
+            <select id="orifice" required>
+              <option value="">Sélectionner...</option>
+              <option value="D">D (0,71 cm²)</option>
+              <option value="E">E (1,26 cm²)</option>
+              <option value="F">F (1,98 cm²)</option>
+              <option value="G">G (3,24 cm²)</option>
+              <option value="H">H (5,06 cm²)</option>
+              <option value="J">J (8,3 cm²)</option>
+              <option value="K">K (11,86 cm²)</option>
+              <option value="L">L (18,41 cm²)</option>
+              <option value="M">M (23,2 cm²)</option>
+              <option value="N">N (28 cm²)</option>
+              <option value="P">P (41,2 cm²)</option>
+              <option value="Q">Q (71,2 cm²)</option>
+              <option value="R">R (103 cm²)</option>
+              <option value="T">T (168 cm²)</option>
+              <option value="V">V (271 cm²)</option>
+              <option value="W">W (406 cm²)</option>
+            </select>
+            <span class="helper-text">Lettre de l'orifice selon ASME</span>
+          </div>
+
+          <div class="param-group">
+            <label for="pressure">Pression de décharge <span class="required">*</span></label>
+            <div class="input-with-unit">
+              <input type="number" id="pressure" min="0" step="0.1" placeholder="0.0" required>
+              <select class="unit-select" id="pressureUnit">
+                <option value="bar">bar abs</option>
+              </select>
+            </div>
+            <span class="helper-text">P1 = Pression absolue incluant la surpression</span>
+          </div>
+        </div>
+
+        <!-- Formula Box -->
+        <div class="formula-box">
+          <h5>Formule de calcul</h5>
+          <div class="formula">F = Kf × A × P1</div>
+          <div class="formula-legend">
+            <strong>Kf :</strong> Facteur dépendant du fluide et du DN<br>
+            <strong>A :</strong> Section d'orifice de la soupape (cm²)<br>
+            <strong>P1 :</strong> Pression de décharge absolue (bar)<br>
+            <strong>F :</strong> Force de réaction (daN)
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-group">
+          <button class="btn btn-primary btn-large" id="calculateBtn">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="4" y="2" width="16" height="20" rx="2"/>
+              <line x1="8" y1="6" x2="16" y2="6"/>
+              <line x1="8" y1="10" x2="16" y2="10"/>
+              <line x1="8" y1="14" x2="16" y2="14"/>
+              <line x1="8" y1="18" x2="10" y2="18"/>
+            </svg>
+            Calculer
+          </button>
+          <button class="btn btn-secondary" id="resetBtn">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
+            Réinitialiser
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Results -->
+      <div class="results-section" id="resultsSection">
+        <div class="result-card">
+          <h3>Résultats du calcul</h3>
+          
+          <div class="result-item">
+            <span class="result-label">Force de réaction</span>
+            <div class="result-value-group">
+              <span class="result-value" id="forceValue">-</span>
+              <span class="result-unit">daN</span>
+            </div>
+            <span class="badge badge-success" id="statusBadge">Calculé</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label">Paramètres utilisés</span>
+            <div style="font-size: 13px; color: var(--color-gray-700); line-height: 1.8;">
+              <div id="paramsSummary"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-group">
+          <button class="btn btn-secondary" id="copyBtn">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            Copier le résultat
+          </button>
+          <button class="btn btn-secondary" id="printBtn">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9"/>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+              <rect x="6" y="14" width="12" height="8"/>
+            </svg>
+            Imprimer / PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reference Tables -->
+    <div class="reference-section">
+      <h3>Tables de référence</h3>
+      
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>DN (mm)</th>
+              <th>Taille (pouces)</th>
+              <th>Kf Gaz</th>
+              <th>Kf Vapeur d'eau</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>50</td>
+              <td>2"</td>
+              <td>1,9</td>
+              <td>2,0</td>
+            </tr>
+            <tr>
+              <td>65</td>
+              <td>2"½</td>
+              <td>1,9</td>
+              <td>2,0</td>
+            </tr>
+            <tr>
+              <td>80</td>
+              <td>3"</td>
+              <td>1,5</td>
+              <td>1,6</td>
+            </tr>
+            <tr>
+              <td>100</td>
+              <td>4"</td>
+              <td>1,5</td>
+              <td>1,6</td>
+            </tr>
+            <tr>
+              <td>150</td>
+              <td>6"</td>
+              <td>1,3</td>
+              <td>1,3</td>
+            </tr>
+            <tr>
+              <td>200</td>
+              <td>8"</td>
+              <td>1,1</td>
+              <td>1,1</td>
+            </tr>
+            <tr>
+              <td>> 200</td>
+              <td>> 8"</td>
+              <td>1,1</td>
+              <td>1,1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Orifice</th>
+              <th>Section (cm²)</th>
+              <th>Orifice</th>
+              <th>Section (cm²)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>D</td>
+              <td>0,71</td>
+              <td>K</td>
+              <td>11,86</td>
+            </tr>
+            <tr>
+              <td>E</td>
+              <td>1,26</td>
+              <td>L</td>
+              <td>18,41</td>
+            </tr>
+            <tr>
+              <td>F</td>
+              <td>1,98</td>
+              <td>M</td>
+              <td>23,2</td>
+            </tr>
+            <tr>
+              <td>G</td>
+              <td>3,24</td>
+              <td>N</td>
+              <td>28</td>
+            </tr>
+            <tr>
+              <td>H</td>
+              <td>5,06</td>
+              <td>P</td>
+              <td>41,2</td>
+            </tr>
+            <tr>
+              <td>J</td>
+              <td>8,3</td>
+              <td>Q</td>
+              <td>71,2</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>R</td>
+              <td>103</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>T</td>
+              <td>168</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>V</td>
+              <td>271</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>W</td>
+              <td>406</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Data tables
+    const kfTable = {
+      '50': { 'gaz': 1.9, 'vapeur eau': 2.0 },
+      '65': { 'gaz': 1.9, 'vapeur eau': 2.0 },
+      '80': { 'gaz': 1.5, 'vapeur eau': 1.6 },
+      '100': { 'gaz': 1.5, 'vapeur eau': 1.6 },
+      '150': { 'gaz': 1.3, 'vapeur eau': 1.3 },
+      '200': { 'gaz': 1.1, 'vapeur eau': 1.1 },
+      '>200': { 'gaz': 1.1, 'vapeur eau': 1.1 }
+    };
+
+    const areaTable = {
+      'D': 0.71, 'E': 1.26, 'F': 1.98, 'G': 3.24, 'H': 5.06,
+      'J': 8.3, 'K': 11.86, 'L': 18.41, 'M': 23.2, 'N': 28,
+      'P': 41.2, 'Q': 71.2, 'R': 103, 'T': 168, 'V': 271, 'W': 406
+    };
+
+    // DOM Elements
+    const dnInput = document.getElementById('dn');
+    const fluidTypeInput = document.getElementById('fluidType');
+    const orificeInput = document.getElementById('orifice');
+    const pressureInput = document.getElementById('pressure');
+    const calculateBtn = document.getElementById('calculateBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const printBtn = document.getElementById('printBtn');
+    const resultsSection = document.getElementById('resultsSection');
+    const forceValue = document.getElementById('forceValue');
+    const paramsSummary = document.getElementById('paramsSummary');
+
+    // Validation
+    function validateInputs() {
+      const isValid = dnInput.value && fluidTypeInput.value && 
+                      orificeInput.value && pressureInput.value > 0;
+      calculateBtn.disabled = !isValid;
+      return isValid;
+    }
+
+    // Event listeners for validation
+    [dnInput, fluidTypeInput, orificeInput, pressureInput].forEach(input => {
+      input.addEventListener('input', validateInputs);
+    });
+
+    // Calculate function
+    function calculateForce() {
+      if (!validateInputs()) return;
+
+      // Show loading state
+      calculateBtn.classList.add('btn-loading');
+      calculateBtn.disabled = true;
+
+      // Simulate calculation delay for better UX
+      setTimeout(() => {
+        const dn = dnInput.value;
+        const fluidType = fluidTypeInput.value;
+        const orifice = orificeInput.value;
+        const pressure = parseFloat(pressureInput.value);
+
+        const kf = kfTable[dn][fluidType];
+        const area = areaTable[orifice];
+
+        const force = kf * area * pressure;
+
+        // Display results
+        forceValue.textContent = force.toFixed(2);
+        
+        // Update parameters summary
+        paramsSummary.innerHTML = `
+          <strong>DN:</strong> ${dn}<br>
+          <strong>Fluide:</strong> ${fluidType === 'gaz' ? 'Gaz' : 'Vapeur d\'eau'}<br>
+          <strong>Orifice:</strong> ${orifice} (${area} cm²)<br>
+          <strong>Kf:</strong> ${kf}<br>
+          <strong>P1:</strong> ${pressure.toFixed(2)} bar abs
+        `;
+
+        // Show results section
+        resultsSection.classList.add('show');
+        
+        // Scroll to results on mobile
+        if (window.innerWidth < 1024) {
+          setTimeout(() => {
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
+        }
+
+        // Remove loading state
+        calculateBtn.classList.remove('btn-loading');
+        calculateBtn.disabled = false;
+      }, 300);
+    }
+
+    // Reset function
+    function resetForm() {
+      dnInput.value = '';
+      fluidTypeInput.value = '';
+      orificeInput.value = '';
+      pressureInput.value = '';
+      resultsSection.classList.remove('show');
+      validateInputs();
+    }
+
+    // Copy result
+    function copyResult() {
+      const force = forceValue.textContent;
+      const text = `Force de réaction: ${force} daN`;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        // Visual feedback
+        const originalText = copyBtn.innerHTML;
+        copyBtn.innerHTML = `
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Copié !
+        `;
+        setTimeout(() => {
+          copyBtn.innerHTML = originalText;
+        }, 2000);
+      });
+    }
+
+    // Print/PDF
+    function printResult() {
+      window.print();
+    }
+
+    // Event listeners
+    calculateBtn.addEventListener('click', calculateForce);
+    resetBtn.addEventListener('click', resetForm);
+    copyBtn.addEventListener('click', copyResult);
+    printBtn.addEventListener('click', printResult);
+
+    // Allow Enter key to calculate
+    pressureInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !calculateBtn.disabled) {
+        calculateForce();
+      }
+    });
+
+    // Initial validation
+    validateInputs();
+  </script>
+</body>
+</html>
