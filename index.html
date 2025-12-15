@@ -14,7 +14,7 @@
       --color-warning: #F59E0B;
       --color-error: #EF4444;
       --color-info: #06B6D4;
-      
+     
       /* Neutrals */
       --color-gray-50: #F9FAFB;
       --color-gray-100: #F3F4F6;
@@ -23,11 +23,11 @@
       --color-gray-500: #6B7280;
       --color-gray-700: #374151;
       --color-gray-900: #111827;
-      
+     
       /* Backgrounds */
       --bg-page: #F7F8FA;
       --bg-surface: #FFFFFF;
-      
+     
       /* Spacing */
       --space-1: 4px;
       --space-2: 8px;
@@ -36,20 +36,20 @@
       --space-6: 24px;
       --space-8: 32px;
       --space-10: 40px;
-      
+     
       /* Typography */
       --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-      
+     
       /* Shadows */
       --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
       --shadow-md: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
       --shadow-lg: 0 4px 6px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.06);
-      
+     
       /* Border Radius */
       --radius-sm: 6px;
       --radius-md: 8px;
       --radius-lg: 12px;
-      
+     
       /* Transitions */
       --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
       --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -599,7 +599,7 @@
       <div class="input-section">
         <div class="param-card">
           <h4>Paramètres de la soupape</h4>
-          
+         
           <div class="param-group">
             <label for="dn">DN (Diamètre Nominal) <span class="required">*</span></label>
             <select id="dn" required>
@@ -657,7 +657,8 @@
                 <option value="bar">bar abs</option>
               </select>
             </div>
-            <span class="helper-text">P1 = Pression absolue incluant la surpression</span>
+            <span class="helper-text">P1 = Pression absolue incluant la surpression (approche simplifié) <strong>ou</strong> Ptarage + Surpression + Patmosphérique (approche classique)
+</span>
           </div>
         </div>
 
@@ -699,7 +700,7 @@
       <div class="results-section" id="resultsSection">
         <div class="result-card">
           <h3>Résultats du calcul</h3>
-          
+         
           <div class="result-item">
             <span class="result-label">Force de réaction</span>
             <div class="result-value-group">
@@ -740,7 +741,7 @@
     <!-- Reference Tables -->
     <div class="reference-section">
       <h3>Tables de référence</h3>
-      
+     
       <div class="table-container">
         <table>
           <thead>
@@ -908,7 +909,7 @@
 
     // Validation
     function validateInputs() {
-      const isValid = dnInput.value && fluidTypeInput.value && 
+      const isValid = dnInput.value && fluidTypeInput.value &&
                       orificeInput.value && pressureInput.value > 0;
       calculateBtn.disabled = !isValid;
       return isValid;
@@ -941,7 +942,7 @@
 
         // Display results
         forceValue.textContent = force.toFixed(2);
-        
+       
         // Update parameters summary
         paramsSummary.innerHTML = `
           <strong>DN:</strong> ${dn}<br>
@@ -953,7 +954,7 @@
 
         // Show results section
         resultsSection.classList.add('show');
-        
+       
         // Scroll to results on mobile
         if (window.innerWidth < 1024) {
           setTimeout(() => {
@@ -981,7 +982,7 @@
     function copyResult() {
       const force = forceValue.textContent;
       const text = `Force de réaction: ${force} daN`;
-      
+     
       navigator.clipboard.writeText(text).then(() => {
         // Visual feedback
         const originalText = copyBtn.innerHTML;
