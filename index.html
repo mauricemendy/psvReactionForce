@@ -11,27 +11,43 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
   <style>
-    /* Design System - CSS Variables */
+    /* Design System - CSS Variables (Maurice Design System) */
     :root {
-      /* Colors */
-      --color-primary: #4F7CFF;
-      --color-primary-dark: #3D63E5;
-      --color-success: #10B981;
-      --color-warning: #F59E0B;
-      --color-error: #EF4444;
-      --color-info: #06B6D4;
+      /* Primary Colors - Teal */
+      --color-primary: #0D9488;
+      --color-primary-dark: #0F766E;
+      --color-primary-darker: #115E59;
+      --color-primary-light: #F0FDFA;
+      --color-primary-lighter: #CCFBF1;
+
+      /* Accent - Black for primary buttons */
+      --color-accent: #111827;
+      --color-accent-dark: #1F2937;
+      --color-accent-darker: #374151;
+
+      /* Semantic Colors */
+      --color-success: #0D9488;
+      --color-success-light: #F0FDFA;
+      --color-warning: #D97706;
+      --color-warning-light: #FEF3C7;
+      --color-error: #DC2626;
+      --color-error-light: #FEE2E2;
+      --color-info: #6B7280;
 
       /* Neutrals */
       --color-gray-50: #F9FAFB;
       --color-gray-100: #F3F4F6;
       --color-gray-200: #E5E7EB;
       --color-gray-300: #D1D5DB;
+      --color-gray-400: #9CA3AF;
       --color-gray-500: #6B7280;
+      --color-gray-600: #4B5563;
       --color-gray-700: #374151;
+      --color-gray-800: #1F2937;
       --color-gray-900: #111827;
 
       /* Backgrounds */
-      --bg-page: #F7F8FA;
+      --bg-page: #F3F4F6;
       --bg-surface: #FFFFFF;
 
       /* Spacing */
@@ -39,26 +55,35 @@
       --space-2: 8px;
       --space-3: 12px;
       --space-4: 16px;
+      --space-5: 20px;
       --space-6: 24px;
       --space-8: 32px;
       --space-10: 40px;
 
       /* Typography */
-      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
-      /* Shadows */
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-      --shadow-md: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-      --shadow-lg: 0 4px 6px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.06);
+      /* Shadows - Subtle */
+      --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.03);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.03);
+
+      /* Focus Rings */
+      --ring-primary: 0 0 0 3px rgba(13, 148, 136, 0.15);
+      --ring-error: 0 0 0 3px rgba(220, 38, 38, 0.15);
 
       /* Border Radius */
-      --radius-sm: 6px;
-      --radius-md: 8px;
-      --radius-lg: 12px;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+      --radius-xl: 12px;
+      --radius-full: 9999px;
 
       /* Transitions */
-      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-      --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-fast: 150ms ease;
+      --transition-base: 200ms ease;
     }
 
     * {
@@ -104,7 +129,7 @@
       margin-bottom: var(--space-6);
       padding: var(--space-6) var(--space-4);
       background: var(--bg-surface);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       box-shadow: var(--shadow-sm);
     }
 
@@ -258,7 +283,7 @@
     select:focus, input[type="number"]:focus, input[type="text"]:focus {
       outline: none;
       border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(79,124,255,0.1);
+      box-shadow: var(--ring-primary);
     }
 
     .unit-select {
@@ -315,8 +340,8 @@
 
     /* Buttons */
     .btn {
-      padding: 10px 20px;
-      border-radius: var(--radius-md);
+      padding: 12px 20px;
+      border-radius: var(--radius-lg);
       font-size: 14px;
       font-weight: 600;
       font-family: var(--font-sans);
@@ -327,30 +352,26 @@
       align-items: center;
       gap: var(--space-2);
       justify-content: center;
+      min-height: 44px;
     }
 
     .btn-primary {
-      background: var(--color-primary);
+      background: var(--color-accent);
       color: white;
-      box-shadow: var(--shadow-sm);
     }
 
     .btn-primary:hover {
-      background: var(--color-primary-dark);
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-md);
+      background: var(--color-accent-dark);
     }
 
     .btn-primary:active {
-      background: #2D4FCC;
-      transform: translateY(0);
+      background: var(--color-accent-darker);
     }
 
     .btn-primary:disabled {
       background: var(--color-gray-300);
-      color: var(--color-gray-500);
+      color: var(--color-gray-400);
       cursor: not-allowed;
-      transform: none;
     }
 
     .btn-secondary {
@@ -373,7 +394,7 @@
     }
 
     .btn-success:hover {
-      background: #059669;
+      background: var(--color-primary-dark);
     }
 
     .btn-large {
@@ -389,8 +410,9 @@
     }
 
     .btn-small {
-      padding: 6px 12px;
+      padding: 8px 12px;
       font-size: 13px;
+      min-height: 36px;
     }
 
     .btn-danger {
@@ -400,7 +422,7 @@
     }
 
     .btn-danger:hover {
-      background: #FEE2E2;
+      background: var(--color-error-light);
     }
 
     /* Results Section */
@@ -427,7 +449,7 @@
     .result-card {
       background: var(--bg-surface);
       border-left: 4px solid var(--color-success);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       padding: var(--space-6);
       box-shadow: var(--shadow-md);
       margin-bottom: var(--space-4);
@@ -483,30 +505,31 @@
       display: inline-flex;
       align-items: center;
       padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 12px;
+      border-radius: var(--radius-sm);
+      font-size: 10px;
       font-weight: 600;
-      height: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
     }
 
     .badge-success {
-      background: #ECFDF5;
-      color: #059669;
+      background: var(--color-success);
+      color: white;
     }
 
     .badge-error {
-      background: #FEE2E2;
-      color: #DC2626;
+      background: var(--color-error-light);
+      color: var(--color-error);
     }
 
     .badge-info {
-      background: #CFFAFE;
-      color: #0891B2;
+      background: var(--color-gray-100);
+      color: var(--color-gray-700);
     }
 
     .badge-warning {
-      background: #FEF3C7;
-      color: #D97706;
+      background: var(--color-warning-light);
+      color: var(--color-warning);
     }
 
     /* Reference Tables */
@@ -523,7 +546,7 @@
 
     .table-container {
       background: var(--bg-surface);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       overflow: hidden;
       box-shadow: var(--shadow-md);
       margin-bottom: var(--space-6);
@@ -535,15 +558,15 @@
     }
 
     thead {
-      background: var(--color-gray-100);
+      background: var(--color-gray-50);
     }
 
     th {
       text-align: left;
       padding: var(--space-3) var(--space-4);
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 600;
-      color: var(--color-gray-500);
+      color: var(--color-gray-400);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -627,7 +650,7 @@
     /* Batch Form Container */
     .batch-form-container {
       background: var(--bg-surface);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       padding: var(--space-6);
       box-shadow: var(--shadow-md);
       margin-bottom: var(--space-6);
@@ -668,7 +691,11 @@
     .batch-table th {
       background: var(--color-gray-50);
       padding: var(--space-3);
-      font-size: 11px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--color-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       text-align: center;
       white-space: nowrap;
     }
@@ -756,7 +783,7 @@
 
     .drop-zone {
       border: 2px dashed var(--color-gray-300);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       padding: var(--space-10);
       text-align: center;
       transition: all var(--transition-fast);
@@ -872,9 +899,13 @@
     }
 
     .results-table th {
-      background: var(--color-gray-100);
+      background: var(--color-gray-50);
       padding: var(--space-3);
-      font-size: 11px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--color-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       text-align: center;
       white-space: nowrap;
       position: sticky;
