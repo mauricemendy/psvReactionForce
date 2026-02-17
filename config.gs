@@ -1,0 +1,40 @@
+// ============================================
+// config.gs — Source de verite unique
+// Les tables Kf, sections d'orifice et listes
+// de valeurs valides sont definies ICI et
+// uniquement ici pour le contexte Google Sheets.
+// ============================================
+
+var PSV_CONFIG = {
+  kfTable: {
+    '50':   { 'gaz': 1.9, 'vapeur eau': 2.0 },
+    '65':   { 'gaz': 1.9, 'vapeur eau': 2.0 },
+    '80':   { 'gaz': 1.5, 'vapeur eau': 1.6 },
+    '100':  { 'gaz': 1.5, 'vapeur eau': 1.6 },
+    '150':  { 'gaz': 1.3, 'vapeur eau': 1.3 },
+    '200':  { 'gaz': 1.1, 'vapeur eau': 1.1 },
+    '>200': { 'gaz': 1.1, 'vapeur eau': 1.1 }
+  },
+
+  areaTable: {
+    'D': 0.71, 'E': 1.26, 'F': 1.98, 'G': 3.24, 'H': 5.06,
+    'J': 8.3,  'K': 11.86, 'L': 18.41, 'M': 23.2, 'N': 28,
+    'P': 41.2, 'Q': 71.2,  'R': 103,   'T': 168,  'V': 271, 'W': 406
+  },
+
+  validDNs: ['50', '65', '80', '100', '150', '200', '>200'],
+
+  validFluids: [
+    { value: 'gaz', label: 'Gaz' },
+    { value: 'vapeur eau', label: "Vapeur d'eau" }
+  ],
+
+  validOrifices: ['D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'T', 'V', 'W']
+};
+
+/**
+ * Retourne la configuration pour le sidebar (appele via google.script.run)
+ */
+function getConfig() {
+  return PSV_CONFIG;
+}
