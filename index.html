@@ -572,14 +572,21 @@
 
     /* Reference Tables */
     .reference-section {
-      margin-top: var(--space-8);
+      margin-top: var(--space-6);
+      background: var(--bg-surface);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-sm);
     }
 
     .reference-section h3 {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 600;
       color: var(--color-gray-900);
       margin-bottom: var(--space-4);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--color-gray-100);
     }
 
     .reference-tables-grid {
@@ -588,18 +595,36 @@
       gap: var(--space-4);
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 900px) {
       .reference-tables-grid {
         grid-template-columns: 1fr 1fr;
       }
     }
 
     .table-container {
-      background: var(--bg-surface);
-      border-radius: var(--radius-xl);
+      background: var(--color-gray-50);
+      border-radius: var(--radius-lg);
       overflow: hidden;
-      box-shadow: var(--shadow-md);
+      border: 1px solid var(--color-gray-200);
       margin-bottom: 0;
+    }
+
+    .table-container table {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 480px) {
+      .reference-section {
+        padding: var(--space-4);
+      }
+
+      .table-container {
+        overflow-x: auto;
+      }
+
+      .reference-section h3 {
+        font-size: 16px;
+      }
     }
 
     table {
@@ -1151,6 +1176,24 @@
 
       .param-card {
         padding: var(--space-4);
+      }
+
+      .empty-state {
+        min-height: 180px;
+        padding: var(--space-6) var(--space-4);
+      }
+
+      .empty-state-icon {
+        width: 36px;
+        height: 36px;
+      }
+
+      .config-panel {
+        padding: var(--space-4);
+      }
+
+      .config-panel-header h3 {
+        font-size: 15px;
       }
 
       .input-method-selector {
