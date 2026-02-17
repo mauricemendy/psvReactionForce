@@ -42,75 +42,79 @@
         display: none;
         margin-top: 10px;
       }
+      .loading {
+        color: #888;
+        font-style: italic;
+      }
     </style>
   </head>
   <body>
     <div class="form-group">
-      <label for="dn">DN (Diamètre Nominal):</label>
+      <label for="dn">DN (Diametre Nominal):</label>
       <select id="dn">
-        <option value="50">50</option>
-        <option value="65">65</option>
-        <option value="80">80</option>
-        <option value="100">100</option>
-        <option value="150">150</option>
-        <option value="200">200</option>
-        <option value=">200">>200</option>
+        <option value="">Chargement...</option>
       </select>
     </div>
     <div class="form-group">
       <label for="fluidType">Type de fluide:</label>
       <select id="fluidType">
-        <option value="gaz">Gaz</option>
-        <option value="vapeur eau">Vapeur d'eau</option>
+        <option value="">Chargement...</option>
       </select>
     </div>
     <div class="form-group">
       <label for="orifice">Orifice:</label>
       <select id="orifice">
-        <option value="D">D</option>
-        <option value="E">E</option>
-        <option value="F">F</option>
-        <option value="G">G</option>
-        <option value="H">H</option>
-        <option value="J">J</option>
-        <option value="K">K</option>
-        <option value="L">L</option>
-        <option value="M">M</option>
-        <option value="N">N</option>
-        <option value="P">P</option>
-        <option value="Q">Q</option>
-        <option value="R">R</option>
-        <option value="T">T</option>
-        <option value="V">V</option>
-        <option value="W">W</option>
+        <option value="">Chargement...</option>
       </select>
     </div>
     <div class="form-group">
-      <label for="pressure">Pression de décharge (bars absolus):</label>
+      <label for="pressure">Pression de decharge (bars absolus):</label>
       <input type="number" id="pressure" min="0" step="0.1">
     </div>
     <button onclick="calculate()">Calculer</button>
     <div id="result"></div>
-    <button id="copyButton" onclick="copyResult()">Copier le résultat</button>
+    <button id="copyButton" onclick="copyResult()">Copier le resultat</button>
     <button id="pdfButton" onclick="generatePDF()">Exporter en PDF</button>
 
     <script>
       var forceResult;
-      
+
+      // Charger les options depuis config.gs (source de verite unique)
+      google.script.run.withSuccessHandler(function(config) {
+        populateSelect('dn', config.validDNs.map(function(dn) {
+          return { value: dn, label: dn };
+        }));
+        populateSelect('fluidType', config.validFluids);
+        populateSelect('orifice', config.validOrifices.map(function(o) {
+          return { value: o, label: o };
+        }));
+      }).getConfig();
+
+      function populateSelect(id, options) {
+        var select = document.getElementById(id);
+        select.innerHTML = '';
+        options.forEach(function(opt) {
+          var option = document.createElement('option');
+          option.value = opt.value;
+          option.textContent = opt.label;
+          select.appendChild(option);
+        });
+      }
+
       function calculate() {
         var dn = document.getElementById('dn').value;
         var fluidType = document.getElementById('fluidType').value;
         var orifice = document.getElementById('orifice').value;
         var pressure = parseFloat(document.getElementById('pressure').value);
-        
+
         google.script.run.withSuccessHandler(function(result) {
           forceResult = result;
-          document.getElementById('result').innerHTML = 'Force de réaction: ' + result + ' daN';
+          document.getElementById('result').innerHTML = 'Force de reaction: ' + result + ' daN';
           document.getElementById('copyButton').style.display = 'inline-block';
           document.getElementById('pdfButton').style.display = 'inline-block';
         }).calculateForce(dn, fluidType, orifice, pressure);
       }
-      
+
       function copyResult() {
         var tempInput = document.createElement("input");
         tempInput.value = forceResult + ' daN';
@@ -118,15 +122,15 @@
         tempInput.select();
         document.execCommand("copy");
         document.body.removeChild(tempInput);
-        alert("Résultat copié : " + forceResult + " daN");
+        alert("Resultat copie : " + forceResult + " daN");
       }
-      
+
       function generatePDF() {
         var dn = document.getElementById('dn').value;
         var fluidType = document.getElementById('fluidType').value;
         var orifice = document.getElementById('orifice').value;
         var pressure = parseFloat(document.getElementById('pressure').value);
-        
+
         google.script.run.withSuccessHandler(function(pdfUrl) {
           var link = document.createElement('a');
           link.href = pdfUrl;
