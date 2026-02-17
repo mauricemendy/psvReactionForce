@@ -12,16 +12,36 @@ function showSidebar() {
   SpreadsheetApp.getUi().showSidebar(html);
 }
 
-function calculateForce(dn, fluidType, orifice, pressure) {
+function calculateForce(dn, fluidType, orifice, pressure, configId, dlf) {
   // Tables centralisees dans config.gs (PSV_CONFIG)
   var kf = PSV_CONFIG.kfTable[dn][fluidType];
   var area = PSV_CONFIG.areaTable[orifice];
 
   var force = kf * area * pressure;
-  return force.toFixed(2);
+
+  // v2.0 - DLF and directional components (optional parameters)
+  var dlfValue = (dlf !== undefined && dlf !== null) ? dlf : 2.0;
+  var config = (configId && PSV_CONFIG.configurations[configId])
+    ? PSV_CONFIG.configurations[configId]
+    : PSV_CONFIG.configurations['CFG-1'];
+
+  var fDesign = force * dlfValue;
+  var fx = parseFloat((config.fx * fDesign).toFixed(2));
+  var fy = parseFloat((config.fy * fDesign).toFixed(2));
+  var fz = parseFloat((config.fz * fDesign).toFixed(2));
+
+  return {
+    force: parseFloat(force.toFixed(2)),
+    dlf: dlfValue,
+    fDesign: parseFloat(fDesign.toFixed(2)),
+    fx: fx,
+    fy: fy,
+    fz: fz,
+    config: config.id
+  };
 }
 
-function generatePDF(dn, fluidType, orifice, pressure, force) {
+function generatePDF(dn, fluidType, orifice, pressure, force, dlf, fDesign, fx, fy, fz) {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
   // Creer une feuille temporaire — ne jamais toucher a la feuille active
@@ -44,13 +64,28 @@ function generatePDF(dn, fluidType, orifice, pressure, force) {
     tempSheet.getRange("B7").setValue(pressure);
 
     // Resultat
-    tempSheet.getRange("A9").setValue("Resultat:");
-    tempSheet.getRange("A10").setValue("Force de reaction (daN):");
+    tempSheet.getRange("A9").setValue("Resultats:");
+    tempSheet.getRange("A10").setValue("Force brute (daN):");
     tempSheet.getRange("B10").setValue(force);
 
-    // Formule
-    tempSheet.getRange("A12").setValue("Formule: F = Kf x A x P1")
-      .setFontStyle("italic");
+    // v2.0 - Enriched results
+    if (dlf !== undefined) {
+      tempSheet.getRange("A11").setValue("DLF:");
+      tempSheet.getRange("B11").setValue(dlf);
+      tempSheet.getRange("A12").setValue("Force de design (daN):");
+      tempSheet.getRange("B12").setValue(fDesign);
+      tempSheet.getRange("A13").setValue("Fx (daN):");
+      tempSheet.getRange("B13").setValue(fx);
+      tempSheet.getRange("A14").setValue("Fy (daN):");
+      tempSheet.getRange("B14").setValue(fy);
+      tempSheet.getRange("A15").setValue("Fz (daN):");
+      tempSheet.getRange("B15").setValue(fz);
+      tempSheet.getRange("A17").setValue("Formules: F_brute = Kf x A x P1 | F_design = F_brute x DLF")
+        .setFontStyle("italic");
+    } else {
+      tempSheet.getRange("A12").setValue("Formule: F = Kf x A x P1")
+        .setFontStyle("italic");
+    }
 
     tempSheet.autoResizeColumns(1, 2);
 

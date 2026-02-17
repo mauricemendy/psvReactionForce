@@ -689,7 +689,7 @@
 
     .batch-table {
       width: 100%;
-      min-width: 900px;
+      min-width: 1100px;
       border-collapse: collapse;
     }
 
@@ -899,7 +899,7 @@
 
     .results-table {
       width: 100%;
-      min-width: 1000px;
+      min-width: 1400px;
       border-collapse: collapse;
     }
 
@@ -1323,6 +1323,439 @@
       to { transform: rotate(360deg); }
     }
 
+    /* ======================= */
+    /* V2.0 - NEW STYLES      */
+    /* ======================= */
+
+    /* Warning Banner - Method Limitations */
+    .method-warning {
+      background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+      border-left: 4px solid var(--color-warning);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-4);
+      font-size: 13px;
+      color: var(--color-gray-700);
+      line-height: 1.6;
+    }
+
+    .method-warning strong {
+      color: var(--color-gray-900);
+      display: block;
+      margin-bottom: var(--space-1);
+    }
+
+    /* P1 Calculator Panel */
+    .p1-calculator-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--color-primary);
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 2px 0;
+      font-family: var(--font-sans);
+      font-weight: 500;
+      transition: color var(--transition-fast);
+    }
+
+    .p1-calculator-toggle:hover {
+      color: var(--color-primary-dark);
+      text-decoration: underline;
+    }
+
+    .p1-calculator-toggle svg {
+      width: 14px;
+      height: 14px;
+      transition: transform var(--transition-fast);
+    }
+
+    .p1-calculator-toggle.open svg {
+      transform: rotate(180deg);
+    }
+
+    .p1-calculator-panel {
+      display: none;
+      background: var(--color-gray-50);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-3);
+      animation: fadeIn 0.2s ease;
+    }
+
+    .p1-calculator-panel.show {
+      display: block;
+    }
+
+    .p1-calculator-panel h5 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-3);
+    }
+
+    .p1-calc-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+
+    .p1-calc-field label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-gray-500);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .p1-calc-field input {
+      height: 36px;
+      font-size: 13px;
+    }
+
+    .p1-calc-result {
+      background: var(--color-primary-light);
+      border: 1px solid var(--color-primary-lighter);
+      border-radius: var(--radius-sm);
+      padding: var(--space-2) var(--space-3);
+      font-size: 13px;
+      color: var(--color-primary-darker);
+      display: none;
+    }
+
+    .p1-calc-result.show {
+      display: block;
+    }
+
+    .p1-calc-formula {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-gray-500);
+      margin-bottom: var(--space-2);
+    }
+
+    @media (max-width: 640px) {
+      .p1-calc-fields {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Load Example Button */
+    .btn-example {
+      background: var(--color-primary-light);
+      color: var(--color-primary-darker);
+      border: 1px solid var(--color-primary-lighter);
+    }
+
+    .btn-example:hover {
+      background: var(--color-primary-lighter);
+    }
+
+    /* Force Configuration Panel */
+    .config-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      margin-top: var(--space-6);
+      box-shadow: var(--shadow-md);
+    }
+
+    .config-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .config-panel-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .config-panel-toggle {
+      background: none;
+      border: none;
+      color: var(--color-gray-400);
+      cursor: pointer;
+      padding: var(--space-2);
+      transition: transform var(--transition-fast);
+    }
+
+    .config-panel-toggle.open {
+      transform: rotate(180deg);
+    }
+
+    .config-panel-body {
+      display: none;
+      margin-top: var(--space-6);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--color-gray-100);
+    }
+
+    .config-panel-body.show {
+      display: block;
+    }
+
+    .config-section {
+      margin-bottom: var(--space-6);
+    }
+
+    .config-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .config-section h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-gray-800);
+      margin-bottom: var(--space-3);
+    }
+
+    /* Discharge Configuration Selector */
+    .config-options {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--space-3);
+    }
+
+    @media (max-width: 768px) {
+      .config-options {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .config-options {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .config-option {
+      border: 2px solid var(--color-gray-200);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      cursor: pointer;
+      text-align: center;
+      transition: all var(--transition-fast);
+      background: var(--bg-surface);
+    }
+
+    .config-option:hover {
+      border-color: var(--color-gray-300);
+      background: var(--color-gray-50);
+    }
+
+    .config-option.active {
+      border-color: var(--color-primary);
+      background: var(--color-primary-light);
+    }
+
+    .config-option input[type="radio"] {
+      display: none;
+    }
+
+    .config-option-svg {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto var(--space-2);
+    }
+
+    .config-option-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-gray-700);
+      line-height: 1.3;
+    }
+
+    .config-option.active .config-option-label {
+      color: var(--color-primary-darker);
+    }
+
+    /* DLF Selection */
+    .dlf-options {
+      display: flex;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    .dlf-option {
+      flex: 1;
+      min-width: 120px;
+      border: 2px solid var(--color-gray-200);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      cursor: pointer;
+      text-align: center;
+      transition: all var(--transition-fast);
+      background: var(--bg-surface);
+    }
+
+    .dlf-option:hover {
+      border-color: var(--color-gray-300);
+    }
+
+    .dlf-option.active {
+      border-color: var(--color-primary);
+      background: var(--color-primary-light);
+    }
+
+    .dlf-option input[type="radio"] {
+      display: none;
+    }
+
+    .dlf-option-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-gray-900);
+    }
+
+    .dlf-option.active .dlf-option-value {
+      color: var(--color-primary-darker);
+    }
+
+    .dlf-option-label {
+      font-size: 11px;
+      color: var(--color-gray-500);
+      margin-top: 2px;
+    }
+
+    .dlf-custom-input {
+      display: none;
+      margin-top: var(--space-3);
+    }
+
+    .dlf-custom-input.show {
+      display: block;
+    }
+
+    .dlf-custom-input input {
+      width: 120px;
+      height: 36px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .dlf-warning {
+      font-size: 12px;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-sm);
+      margin-top: var(--space-2);
+      display: none;
+    }
+
+    .dlf-warning.show {
+      display: block;
+    }
+
+    .dlf-warning.warning-low {
+      background: var(--color-warning-light);
+      color: var(--color-warning);
+    }
+
+    .dlf-warning.warning-high {
+      background: var(--color-error-light);
+      color: var(--color-error);
+    }
+
+    .dlf-tooltip {
+      font-size: 12px;
+      color: var(--color-gray-500);
+      font-style: italic;
+      margin-top: var(--space-2);
+    }
+
+    /* Enriched Results - Design Force */
+    .design-force-section {
+      margin-top: var(--space-6);
+      padding-top: var(--space-4);
+      border-top: 2px solid var(--color-primary-lighter);
+    }
+
+    .design-force-header {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-4);
+    }
+
+    .force-components-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+
+    @media (max-width: 640px) {
+      .force-components-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .force-component {
+      background: var(--color-gray-50);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      text-align: center;
+    }
+
+    .force-component.highlight {
+      background: var(--color-primary-light);
+      border-color: var(--color-primary-lighter);
+    }
+
+    .force-component-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-gray-500);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .force-component-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-gray-900);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .force-component.highlight .force-component-value {
+      color: var(--color-primary-darker);
+    }
+
+    .force-component-unit {
+      font-size: 12px;
+      color: var(--color-gray-500);
+    }
+
+    /* SVG Diagram in results */
+    .force-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+      background: var(--color-gray-50);
+      border-radius: var(--radius-md);
+      margin-top: var(--space-4);
+    }
+
+    .force-diagram svg {
+      max-width: 300px;
+      width: 100%;
+      height: auto;
+    }
+
     /* Print Styles */
     @media print {
       body {
@@ -1425,12 +1858,46 @@
             <div class="param-group">
               <label for="pressure">Pression de decharge <span class="required">*</span></label>
               <div class="input-with-unit">
-                <input type="number" id="pressure" min="0" step="0.1" placeholder="0.0" required>
+                <input type="number" id="pressure" min="0" step="0.1" placeholder="ex: 15.5" required>
                 <select class="unit-select" id="pressureUnit">
                   <option value="bar">bar abs</option>
                 </select>
               </div>
-              <span class="helper-text">P1 = Pression absolue incluant la surpression</span>
+              <span class="helper-text">P1 = P_tarage x (1 + surpression%) + P_atm</span>
+              <button type="button" class="p1-calculator-toggle" id="p1CalcToggle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+                Calculer P1
+              </button>
+
+              <!-- P1 Calculator Panel -->
+              <div class="p1-calculator-panel" id="p1CalcPanel">
+                <h5>Calculateur de P1</h5>
+                <div class="p1-calc-formula">P1 = P_tarage x (1 + surpression/100) + P_atm</div>
+                <div class="p1-calc-fields">
+                  <div class="p1-calc-field">
+                    <label for="p1Ptarage">P_tarage (barg)</label>
+                    <input type="number" id="p1Ptarage" min="0" step="0.1" placeholder="ex: 14.0">
+                  </div>
+                  <div class="p1-calc-field">
+                    <label for="p1Surpression">Surpression (%)</label>
+                    <input type="number" id="p1Surpression" min="0" max="100" step="1" value="10" placeholder="10">
+                  </div>
+                  <div class="p1-calc-field">
+                    <label for="p1Patm">P_atm (bar abs)</label>
+                    <input type="number" id="p1Patm" min="0.8" max="1.1" step="0.001" value="1.013" placeholder="1.013">
+                  </div>
+                </div>
+                <button type="button" class="btn btn-small btn-success" id="p1CalcApplyBtn">Appliquer</button>
+                <div class="p1-calc-result" id="p1CalcResult"></div>
+              </div>
+            </div>
+
+            <!-- Method Limitation Warning -->
+            <div class="method-warning">
+              <strong>Methode simplifiee</strong>
+              Cette methode utilise des facteurs Kf empiriques. Pour les cas critiques (H2, haute pression &gt; 100 bar, services diphasiques, contre-pression significative), un calcul conforme a l'API 520 Part II est requis. Les resultats sont conservatifs et adaptes aux estimations de conception et au dimensionnement preliminaire des supports.
             </div>
           </div>
 
@@ -1465,6 +1932,16 @@
               </svg>
               Reinitialiser
             </button>
+            <button class="btn btn-example" id="loadExampleBtn">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+              Charger un exemple
+            </button>
           </div>
         </div>
 
@@ -1474,7 +1951,7 @@
             <h3>Resultats du calcul</h3>
 
             <div class="result-item">
-              <span class="result-label">Force de reaction</span>
+              <span class="result-label">Force brute de reaction (F = Kf x A x P1)</span>
               <div class="result-value-group">
                 <span class="result-value" id="forceValue">-</span>
                 <span class="result-unit">daN</span>
@@ -1486,6 +1963,193 @@
               <span class="result-label">Parametres utilises</span>
               <div style="font-size: 13px; color: var(--color-gray-700); line-height: 1.8;">
                 <div id="paramsSummary"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Force Application Configuration Panel -->
+          <div class="config-panel" id="configPanel">
+            <div class="config-panel-header" id="configPanelHeader">
+              <h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m15.5-7.8l-4.2 4.2M6.7 17.3l4.2-4.2m0-6.2l4.2 4.2M6.7 6.7l4.2 4.2"/>
+                </svg>
+                Configuration d'application des forces
+              </h3>
+              <button class="config-panel-toggle" id="configPanelToggle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="config-panel-body" id="configPanelBody">
+              <!-- Section 1: Discharge Configuration -->
+              <div class="config-section">
+                <h4>Type de configuration de decharge</h4>
+                <div class="config-options" id="configOptions">
+                  <!-- CFG-1: Vertical Up -->
+                  <label class="config-option active" data-config="CFG-1">
+                    <input type="radio" name="dischargeConfig" value="CFG-1" checked>
+                    <div class="config-option-svg">
+                      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="30" y="35" width="20" height="25" rx="2" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.5"/>
+                        <rect x="33" y="28" width="14" height="10" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.5"/>
+                        <line x1="40" y1="28" x2="40" y2="12" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue)"/>
+                        <line x1="40" y1="60" x2="40" y2="74" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+                        <text x="40" y="8" text-anchor="middle" font-size="7" fill="#3B82F6">Sortie</text>
+                        <text x="40" y="78" text-anchor="middle" font-size="7" fill="#EF4444">F</text>
+                        <defs>
+                          <marker id="arrowBlue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                          <marker id="arrowRed" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
+                        </defs>
+                      </svg>
+                    </div>
+                    <div class="config-option-label">Verticale haut</div>
+                  </label>
+
+                  <!-- CFG-2: Vertical Down -->
+                  <label class="config-option" data-config="CFG-2">
+                    <input type="radio" name="dischargeConfig" value="CFG-2">
+                    <div class="config-option-svg">
+                      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="30" y="20" width="20" height="25" rx="2" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.5"/>
+                        <rect x="33" y="42" width="14" height="10" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.5"/>
+                        <line x1="40" y1="52" x2="40" y2="68" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue2)"/>
+                        <line x1="40" y1="20" x2="40" y2="6" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrowRed2)"/>
+                        <text x="40" y="74" text-anchor="middle" font-size="7" fill="#3B82F6">Sortie</text>
+                        <text x="40" y="5" text-anchor="middle" font-size="7" fill="#EF4444">F</text>
+                        <defs>
+                          <marker id="arrowBlue2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                          <marker id="arrowRed2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
+                        </defs>
+                      </svg>
+                    </div>
+                    <div class="config-option-label">Verticale bas</div>
+                  </label>
+
+                  <!-- CFG-3: Horizontal -->
+                  <label class="config-option" data-config="CFG-3">
+                    <input type="radio" name="dischargeConfig" value="CFG-3">
+                    <div class="config-option-svg">
+                      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="15" y="30" width="25" height="20" rx="2" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.5"/>
+                        <rect x="37" y="33" width="10" height="14" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.5"/>
+                        <line x1="47" y1="40" x2="65" y2="40" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue3)"/>
+                        <line x1="15" y1="40" x2="3" y2="40" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrowRed3)"/>
+                        <text x="68" y="38" font-size="7" fill="#3B82F6">Sortie</text>
+                        <text x="3" y="47" font-size="7" fill="#EF4444">F</text>
+                        <defs>
+                          <marker id="arrowBlue3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                          <marker id="arrowRed3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
+                        </defs>
+                      </svg>
+                    </div>
+                    <div class="config-option-label">Horizontale</div>
+                  </label>
+
+                  <!-- CFG-4: 90° Elbow -->
+                  <label class="config-option" data-config="CFG-4">
+                    <input type="radio" name="dischargeConfig" value="CFG-4">
+                    <div class="config-option-svg">
+                      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="25" y="40" width="20" height="20" rx="2" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.5"/>
+                        <path d="M35 40 L35 28 Q35 22 41 22 L50 22" stroke="#D1D5DB" stroke-width="6" fill="none"/>
+                        <path d="M35 40 L35 28 Q35 22 41 22 L50 22" stroke="#6B7280" stroke-width="1.5" fill="none"/>
+                        <line x1="50" y1="22" x2="66" y2="22" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue4)"/>
+                        <line x1="35" y1="60" x2="35" y2="72" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed4a)"/>
+                        <line x1="25" y1="50" x2="12" y2="50" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed4b)"/>
+                        <text x="68" y="20" font-size="7" fill="#3B82F6">Sortie</text>
+                        <text x="38" y="76" font-size="6" fill="#EF4444">Fy</text>
+                        <text x="4" y="53" font-size="6" fill="#EF4444">Fx</text>
+                        <defs>
+                          <marker id="arrowBlue4" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                          <marker id="arrowRed4a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
+                          <marker id="arrowRed4b" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
+                        </defs>
+                      </svg>
+                    </div>
+                    <div class="config-option-label">Coude 90°</div>
+                  </label>
+
+                  <!-- CFG-5: Collector/Flare -->
+                  <label class="config-option" data-config="CFG-5">
+                    <input type="radio" name="dischargeConfig" value="CFG-5">
+                    <div class="config-option-svg">
+                      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="10" y="30" width="20" height="20" rx="2" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.5"/>
+                        <rect x="27" y="33" width="8" height="14" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.5"/>
+                        <rect x="35" y="25" width="35" height="30" rx="3" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="3 2"/>
+                        <text x="52" y="42" text-anchor="middle" font-size="7" fill="#6B7280">Collecteur</text>
+                        <line x1="10" y1="40" x2="3" y2="40" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed5)"/>
+                        <text x="3" y="36" font-size="6" fill="#EF4444">F (reduite)</text>
+                        <defs>
+                          <marker id="arrowRed5" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
+                        </defs>
+                      </svg>
+                    </div>
+                    <div class="config-option-label">Collecteur (torche)</div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Section 2: Dynamic Load Factor -->
+              <div class="config-section">
+                <h4>Dynamic Load Factor (DLF)</h4>
+                <div class="dlf-options" id="dlfOptions">
+                  <label class="dlf-option active" data-dlf="conservative">
+                    <input type="radio" name="dlfMode" value="conservative" checked>
+                    <div class="dlf-option-value">2.0</div>
+                    <div class="dlf-option-label">Conservatif (defaut)</div>
+                  </label>
+                  <label class="dlf-option" data-dlf="static">
+                    <input type="radio" name="dlfMode" value="static">
+                    <div class="dlf-option-value">1.0</div>
+                    <div class="dlf-option-label">Statique equivalent</div>
+                  </label>
+                  <label class="dlf-option" data-dlf="custom">
+                    <input type="radio" name="dlfMode" value="custom">
+                    <div class="dlf-option-value">?</div>
+                    <div class="dlf-option-label">Personnalise</div>
+                  </label>
+                </div>
+                <div class="dlf-custom-input" id="dlfCustomInput">
+                  <label for="dlfCustomValue">Valeur du DLF :</label>
+                  <input type="number" id="dlfCustomValue" min="0.5" max="5.0" step="0.1" placeholder="2.0">
+                </div>
+                <div class="dlf-warning" id="dlfWarning"></div>
+                <div class="dlf-tooltip">Le DLF amplifie la force brute pour tenir compte du caractere dynamique de l'ouverture de la soupape.</div>
+              </div>
+
+              <!-- Section 3: Enriched Results -->
+              <div class="config-section">
+                <div class="design-force-header">Force de design et composantes directionnelles</div>
+                <div class="force-components-grid" id="forceComponentsGrid">
+                  <div class="force-component highlight">
+                    <div class="force-component-label">F_design</div>
+                    <div class="force-component-value" id="fDesignValue">-</div>
+                    <div class="force-component-unit">daN</div>
+                  </div>
+                  <div class="force-component">
+                    <div class="force-component-label">Fx</div>
+                    <div class="force-component-value" id="fxValue">-</div>
+                    <div class="force-component-unit">daN</div>
+                  </div>
+                  <div class="force-component">
+                    <div class="force-component-label">Fy</div>
+                    <div class="force-component-value" id="fyValue">-</div>
+                    <div class="force-component-unit">daN</div>
+                  </div>
+                  <div class="force-component">
+                    <div class="force-component-label">Fz</div>
+                    <div class="force-component-value" id="fzValue">-</div>
+                    <div class="force-component-unit">daN</div>
+                  </div>
+                </div>
+                <div class="force-diagram" id="forceDiagram">
+                  <!-- SVG diagram will be inserted by JavaScript based on selected config -->
+                </div>
               </div>
             </div>
           </div>
@@ -1615,6 +2279,8 @@
                 <th>Fluide *</th>
                 <th>Orifice *</th>
                 <th>Pression (bar abs) *</th>
+                <th>Config.</th>
+                <th>DLF</th>
                 <th class="action-cell"></th>
               </tr>
             </thead>
@@ -1725,7 +2391,12 @@
                   <th>P1 (bar)</th>
                   <th>Kf</th>
                   <th>A (cm2)</th>
-                  <th>Force (daN)</th>
+                  <th>F brute (daN)</th>
+                  <th>DLF</th>
+                  <th>F design (daN)</th>
+                  <th>Fx</th>
+                  <th>Fy</th>
+                  <th>Fz</th>
                   <th>Statut</th>
                 </tr>
               </thead>
@@ -1773,14 +2444,22 @@
 
       <!-- Formula Reference for Batch -->
       <div class="formula-box" style="margin-top: var(--space-6);">
-        <h5>Formule de calcul</h5>
-        <div class="formula">F = Kf x A x P1</div>
+        <h5>Formules de calcul</h5>
+        <div class="formula">F_brute = Kf x A x P1 &nbsp;&nbsp;|&nbsp;&nbsp; F_design = F_brute x DLF</div>
         <div class="formula-legend">
           <strong>Kf :</strong> Facteur dependant du fluide et du DN |
           <strong>A :</strong> Section d'orifice (cm2) |
           <strong>P1 :</strong> Pression de decharge absolue (bar) |
-          <strong>F :</strong> Force de reaction (daN)
+          <strong>F_brute :</strong> Force brute de reaction (daN) |
+          <strong>DLF :</strong> Dynamic Load Factor |
+          <strong>F_design :</strong> Force de design (daN)
         </div>
+      </div>
+
+      <!-- Method Limitation Warning (Batch) -->
+      <div class="method-warning" style="margin-top: var(--space-4);">
+        <strong>Methode simplifiee</strong>
+        Cette methode utilise des facteurs Kf empiriques. Pour les cas critiques (H2, haute pression &gt; 100 bar, services diphasiques, contre-pression significative), un calcul conforme a l'API 520 Part II est requis.
       </div>
     </div>
   </div>
@@ -1824,6 +2503,59 @@
     const validOrifices = ['D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'T', 'V', 'W'];
 
     // ============================
+    // V2.0 - CONFIGURATIONS TABLE
+    // ============================
+    const configurationsTable = {
+      'CFG-1': {
+        id: 'CFG-1',
+        label: 'Verticale haut',
+        description: 'Decharge verticale ouverte (vers le haut)',
+        components: (fDesign) => ({ fx: 0, fy: -fDesign, fz: 0 })
+      },
+      'CFG-2': {
+        id: 'CFG-2',
+        label: 'Verticale bas',
+        description: 'Decharge verticale ouverte (vers le bas)',
+        components: (fDesign) => ({ fx: 0, fy: fDesign, fz: 0 })
+      },
+      'CFG-3': {
+        id: 'CFG-3',
+        label: 'Horizontale',
+        description: 'Decharge horizontale',
+        components: (fDesign) => ({ fx: -fDesign, fy: 0, fz: 0 })
+      },
+      'CFG-4': {
+        id: 'CFG-4',
+        label: 'Coude 90°',
+        description: 'Decharge avec coude a 90°',
+        components: (fDesign) => {
+          const comp = fDesign / Math.sqrt(2);
+          return { fx: -parseFloat(comp.toFixed(2)), fy: -parseFloat(comp.toFixed(2)), fz: 0 };
+        }
+      },
+      'CFG-5': {
+        id: 'CFG-5',
+        label: 'Collecteur',
+        description: 'Decharge dans collecteur (torche)',
+        components: (fDesign) => ({ fx: -fDesign, fy: 0, fz: 0 })
+      }
+    };
+
+    const validConfigs = ['CFG-1', 'CFG-2', 'CFG-3', 'CFG-4', 'CFG-5'];
+
+    const dlfPresets = {
+      conservative: { value: 2.0, label: 'Conservatif', description: 'Pas d\'analyse dynamique' },
+      static: { value: 1.0, label: 'Statique equivalent', description: 'Cas de charge occasionnel simple' },
+      custom: { value: null, label: 'Personnalise', description: 'Analyse dynamique realisee' }
+    };
+
+    // P1 helper defaults
+    const p1Defaults = {
+      gaz: { surpression: 10 },
+      feu: { surpression: 21 }
+    };
+
+    // ============================
     // APPLICATION STATE
     // ============================
     let appState = {
@@ -1832,7 +2564,11 @@
       psvList: [],
       calculated: false,
       results: [],
-      stats: { total: 0, valid: 0, errors: 0, empty: 0 }
+      stats: { total: 0, valid: 0, errors: 0, empty: 0 },
+      // v2.0 state
+      selectedConfig: 'CFG-1',
+      dlfMode: 'conservative',
+      dlfValue: 2.0
     };
 
     // ============================
@@ -1898,6 +2634,34 @@
     const sessionRestoreBanner = document.getElementById('sessionRestoreBanner');
     const restoreSessionBtn = document.getElementById('restoreSessionBtn');
     const discardSessionBtn = document.getElementById('discardSessionBtn');
+
+    // V2.0 - P1 Calculator Elements
+    const p1CalcToggle = document.getElementById('p1CalcToggle');
+    const p1CalcPanel = document.getElementById('p1CalcPanel');
+    const p1Ptarage = document.getElementById('p1Ptarage');
+    const p1Surpression = document.getElementById('p1Surpression');
+    const p1Patm = document.getElementById('p1Patm');
+    const p1CalcApplyBtn = document.getElementById('p1CalcApplyBtn');
+    const p1CalcResult = document.getElementById('p1CalcResult');
+
+    // V2.0 - Load Example Button
+    const loadExampleBtn = document.getElementById('loadExampleBtn');
+
+    // V2.0 - Configuration Panel Elements
+    const configPanel = document.getElementById('configPanel');
+    const configPanelHeader = document.getElementById('configPanelHeader');
+    const configPanelToggle = document.getElementById('configPanelToggle');
+    const configPanelBody = document.getElementById('configPanelBody');
+    const configOptions = document.getElementById('configOptions');
+    const dlfOptions = document.getElementById('dlfOptions');
+    const dlfCustomInput = document.getElementById('dlfCustomInput');
+    const dlfCustomValue = document.getElementById('dlfCustomValue');
+    const dlfWarning = document.getElementById('dlfWarning');
+    const fDesignValue = document.getElementById('fDesignValue');
+    const fxValue = document.getElementById('fxValue');
+    const fyValue = document.getElementById('fyValue');
+    const fzValue = document.getElementById('fzValue');
+    const forceDiagram = document.getElementById('forceDiagram');
 
     // Toast & Loading
     const toast = document.getElementById('toast');
@@ -2018,6 +2782,9 @@
 
         resultsSection.classList.add('show');
 
+        // V2.0 - Update design force and components
+        updateDesignForce();
+
         if (window.innerWidth < 1024) {
           setTimeout(() => {
             resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2035,12 +2802,39 @@
       orificeInput.value = '';
       pressureInput.value = '';
       resultsSection.classList.remove('show');
+
+      // V2.0 - Reset P1 calculator
+      p1CalcPanel.classList.remove('show');
+      p1CalcToggle.classList.remove('open');
+      p1CalcResult.classList.remove('show');
+      p1Ptarage.value = '';
+      p1Surpression.value = '10';
+      p1Patm.value = '1.013';
+
+      // V2.0 - Reset config panel
+      fDesignValue.textContent = '-';
+      fxValue.textContent = '-';
+      fyValue.textContent = '-';
+      fzValue.textContent = '-';
+      forceDiagram.innerHTML = '';
+
       validateInputs();
     }
 
     function copyResult() {
-      const force = forceValue.textContent;
-      const text = `Force de reaction: ${force} daN`;
+      const fBrute = forceValue.textContent;
+      const fDesign = fDesignValue.textContent;
+      const fx = fxValue.textContent;
+      const fy = fyValue.textContent;
+      const fz = fzValue.textContent;
+      const dlf = getCurrentDLF();
+      const config = configurationsTable[appState.selectedConfig];
+
+      let text = `Force brute: ${fBrute} daN\n`;
+      text += `DLF: ${dlf}\n`;
+      text += `Force de design: ${fDesign} daN\n`;
+      text += `Configuration: ${config.label}\n`;
+      text += `Fx: ${fx} daN | Fy: ${fy} daN | Fz: ${fz} daN`;
 
       navigator.clipboard.writeText(text).then(() => {
         showToast('Resultat copie dans le presse-papier');
@@ -2061,6 +2855,221 @@
         calculateForce();
       }
     });
+
+    // ============================
+    // V2.0 - P1 CALCULATOR
+    // ============================
+    p1CalcToggle.addEventListener('click', () => {
+      const isOpen = p1CalcPanel.classList.toggle('show');
+      p1CalcToggle.classList.toggle('open', isOpen);
+    });
+
+    p1CalcApplyBtn.addEventListener('click', () => {
+      const ptarage = parseFloat(p1Ptarage.value);
+      const surpression = parseFloat(p1Surpression.value);
+      const patm = parseFloat(p1Patm.value);
+
+      if (isNaN(ptarage) || ptarage <= 0) {
+        showToast('P_tarage doit etre superieur a 0', 'error');
+        return;
+      }
+      if (isNaN(surpression) || surpression < 0 || surpression > 100) {
+        showToast('Surpression doit etre entre 0% et 100%', 'error');
+        return;
+      }
+      if (isNaN(patm) || patm < 0.8 || patm > 1.1) {
+        showToast('P_atm doit etre entre 0.8 et 1.1 bar', 'error');
+        return;
+      }
+
+      const p1 = ptarage * (1 + surpression / 100) + patm;
+      pressureInput.value = p1.toFixed(2);
+
+      p1CalcResult.innerHTML = `<strong>P1 = ${ptarage} x (1 + ${surpression}/100) + ${patm} = ${p1.toFixed(2)} bar abs</strong>`;
+      p1CalcResult.classList.add('show');
+
+      validateInputs();
+      showToast('P1 calcule et reporte : ' + p1.toFixed(2) + ' bar abs');
+    });
+
+    // ============================
+    // V2.0 - LOAD EXAMPLE
+    // ============================
+    loadExampleBtn.addEventListener('click', () => {
+      dnInput.value = '100';
+      fluidTypeInput.value = 'gaz';
+      orificeInput.value = 'K';
+      pressureInput.value = '15.5';
+      validateInputs();
+      calculateForce();
+      showToast('Exemple charge : DN 100 / Gaz / Orifice K / 15.5 bar abs');
+    });
+
+    // ============================
+    // V2.0 - CONFIGURATION PANEL
+    // ============================
+    configPanelHeader.addEventListener('click', () => {
+      const isOpen = configPanelBody.classList.toggle('show');
+      configPanelToggle.classList.toggle('open', isOpen);
+    });
+
+    // Discharge configuration selection
+    configOptions.addEventListener('click', (e) => {
+      const option = e.target.closest('.config-option');
+      if (!option) return;
+
+      configOptions.querySelectorAll('.config-option').forEach(o => o.classList.remove('active'));
+      option.classList.add('active');
+      option.querySelector('input[type="radio"]').checked = true;
+
+      appState.selectedConfig = option.dataset.config;
+      updateDesignForce();
+    });
+
+    // DLF mode selection
+    dlfOptions.addEventListener('click', (e) => {
+      const option = e.target.closest('.dlf-option');
+      if (!option) return;
+
+      dlfOptions.querySelectorAll('.dlf-option').forEach(o => o.classList.remove('active'));
+      option.classList.add('active');
+      option.querySelector('input[type="radio"]').checked = true;
+
+      const mode = option.dataset.dlf;
+      appState.dlfMode = mode;
+
+      if (mode === 'custom') {
+        dlfCustomInput.classList.add('show');
+        const val = parseFloat(dlfCustomValue.value);
+        appState.dlfValue = isNaN(val) ? 2.0 : val;
+      } else {
+        dlfCustomInput.classList.remove('show');
+        appState.dlfValue = dlfPresets[mode].value;
+      }
+
+      validateDLF(appState.dlfValue);
+      updateDesignForce();
+    });
+
+    dlfCustomValue.addEventListener('input', () => {
+      const val = parseFloat(dlfCustomValue.value);
+      if (!isNaN(val)) {
+        appState.dlfValue = val;
+        validateDLF(val);
+        updateDesignForce();
+      }
+    });
+
+    function validateDLF(value) {
+      dlfWarning.classList.remove('show', 'warning-low', 'warning-high');
+
+      if (value < 1.0) {
+        dlfWarning.textContent = 'Valeur inhabituelle — a justifier';
+        dlfWarning.classList.add('show', 'warning-low');
+      } else if (value > 3.0) {
+        dlfWarning.textContent = 'Valeur tres elevee — verifier';
+        dlfWarning.classList.add('show', 'warning-high');
+      }
+    }
+
+    function getCurrentDLF() {
+      if (appState.dlfMode === 'custom') {
+        const val = parseFloat(dlfCustomValue.value);
+        return isNaN(val) ? 2.0 : Math.max(0.5, Math.min(5.0, val));
+      }
+      return dlfPresets[appState.dlfMode].value;
+    }
+
+    function updateDesignForce() {
+      const forceText = forceValue.textContent;
+      if (forceText === '-') return;
+
+      const fBrute = parseFloat(forceText);
+      if (isNaN(fBrute)) return;
+
+      const dlf = getCurrentDLF();
+      const fDesign = fBrute * dlf;
+
+      const config = configurationsTable[appState.selectedConfig];
+      const components = config.components(parseFloat(fDesign.toFixed(2)));
+
+      fDesignValue.textContent = fDesign.toFixed(2);
+      fxValue.textContent = components.fx.toFixed(2);
+      fyValue.textContent = components.fy.toFixed(2);
+      fzValue.textContent = components.fz.toFixed(2);
+
+      updateForceDiagram(appState.selectedConfig, fDesign);
+    }
+
+    function updateForceDiagram(configId, fDesign) {
+      const diagrams = {
+        'CFG-1': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-1 : Decharge verticale haut</text>
+          <rect x="80" y="70" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
+          <rect x="85" y="55" width="30" height="20" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
+          <line x1="100" y1="55" x2="100" y2="25" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB)"/>
+          <line x1="100" y1="120" x2="100" y2="148" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR)"/>
+          <text x="115" y="40" font-size="9" fill="#3B82F6">Sortie</text>
+          <text x="115" y="140" font-size="9" font-weight="600" fill="#EF4444">Fy = -${fDesign.toFixed(0)} daN</text>
+          <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
+          <defs><marker id="dArrowB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
+          <marker id="dArrowR" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+        </svg>`,
+        'CFG-2': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-2 : Decharge verticale bas</text>
+          <rect x="80" y="40" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
+          <rect x="85" y="85" width="30" height="20" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
+          <line x1="100" y1="105" x2="100" y2="135" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB2)"/>
+          <line x1="100" y1="40" x2="100" y2="20" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR2)"/>
+          <text x="115" y="130" font-size="9" fill="#3B82F6">Sortie</text>
+          <text x="115" y="30" font-size="9" font-weight="600" fill="#EF4444">Fy = +${fDesign.toFixed(0)} daN</text>
+          <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
+          <defs><marker id="dArrowB2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
+          <marker id="dArrowR2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+        </svg>`,
+        'CFG-3': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-3 : Decharge horizontale</text>
+          <rect x="40" y="55" width="50" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
+          <rect x="85" y="62" width="20" height="26" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
+          <line x1="105" y1="75" x2="155" y2="75" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB3)"/>
+          <line x1="40" y1="75" x2="10" y2="75" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR3)"/>
+          <text x="140" y="68" font-size="9" fill="#3B82F6">Sortie</text>
+          <text x="10" y="100" font-size="9" font-weight="600" fill="#EF4444">Fx = -${fDesign.toFixed(0)} daN</text>
+          <text x="10" y="148" font-size="8" fill="#6B7280">Fy=0, Fz=0</text>
+          <defs><marker id="dArrowB3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
+          <marker id="dArrowR3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+        </svg>`,
+        'CFG-4': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-4 : Coude 90°</text>
+          <rect x="55" y="75" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
+          <path d="M75 75 L75 50 Q75 40 85 40 L110 40" stroke="#D1D5DB" stroke-width="8" fill="none"/>
+          <path d="M75 75 L75 50 Q75 40 85 40 L110 40" stroke="#6B7280" stroke-width="2" fill="none"/>
+          <line x1="110" y1="40" x2="155" y2="40" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB4)"/>
+          <line x1="75" y1="115" x2="75" y2="145" stroke="#EF4444" stroke-width="2.5" marker-end="url(#dArrowR4a)"/>
+          <line x1="55" y1="95" x2="20" y2="95" stroke="#EF4444" stroke-width="2.5" marker-end="url(#dArrowR4b)"/>
+          <text x="145" y="35" font-size="9" fill="#3B82F6">Sortie</text>
+          <text x="85" y="140" font-size="8" font-weight="600" fill="#EF4444">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
+          <text x="5" y="108" font-size="8" font-weight="600" fill="#EF4444">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
+          <text x="10" y="148" font-size="8" fill="#6B7280">Fz=0</text>
+          <defs><marker id="dArrowB4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
+          <marker id="dArrowR4a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker>
+          <marker id="dArrowR4b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+        </svg>`,
+        'CFG-5': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-5 : Collecteur (torche)</text>
+          <rect x="30" y="55" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
+          <rect x="65" y="62" width="15" height="26" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
+          <rect x="80" y="40" width="80" height="70" rx="5" fill="#F9FAFB" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <text x="120" y="78" text-anchor="middle" font-size="9" fill="#6B7280">Collecteur</text>
+          <line x1="30" y1="75" x2="8" y2="75" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR5)"/>
+          <text x="10" y="100" font-size="9" font-weight="600" fill="#EF4444">Fx = -${fDesign.toFixed(0)} daN</text>
+          <text x="10" y="148" font-size="8" fill="#6B7280">Fy=0, Fz=0 (contre-pression reduit F)</text>
+          <defs><marker id="dArrowR5" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+        </svg>`
+      };
+
+      forceDiagram.innerHTML = diagrams[configId] || '';
+    }
 
     // ============================
     // BATCH MODE - INPUT METHOD
@@ -2089,6 +3098,8 @@
         fluidType: '',
         orifice: '',
         pressure: '',
+        config: 'CFG-1',
+        dlf: 2.0,
         status: 'empty',
         errors: {}
       };
@@ -2114,6 +3125,12 @@
         <option value="">--</option>
         ${validOrifices.map(o => `<option value="${o}" ${selected === o ? 'selected' : ''}>${o}</option>`).join('')}
       `;
+    }
+
+    function generateConfigOptions(selected = 'CFG-1') {
+      return validConfigs.map(c =>
+        `<option value="${c}" ${selected === c ? 'selected' : ''}>${configurationsTable[c].label}</option>`
+      ).join('');
     }
 
     function renderBatchRow(psv, index) {
@@ -2162,11 +3179,27 @@
                  class="batch-input"
                  data-field="pressure"
                  value="${psv.pressure || ''}"
-                 placeholder="0.0"
+                 placeholder="ex: 15.5"
                  min="0"
                  max="999.99"
                  step="0.01">
           <div class="field-error" data-error="pressure"></div>
+        </td>
+        <td class="select-cell">
+          <select class="batch-input" data-field="config">
+            ${generateConfigOptions(psv.config || 'CFG-1')}
+          </select>
+        </td>
+        <td class="input-cell">
+          <input type="number"
+                 class="batch-input"
+                 data-field="dlf"
+                 value="${psv.dlf || 2.0}"
+                 placeholder="2.0"
+                 min="0.5"
+                 max="5.0"
+                 step="0.1"
+                 style="width:70px">
         </td>
         <td class="action-cell">
           <button class="delete-row-btn" title="Supprimer cette ligne">&#10005;</button>
@@ -2211,7 +3244,17 @@
           </div>
           <div class="batch-input-card-field full-width">
             <label>Pression (bar abs)</label>
-            <input type="number" class="batch-input-mobile" data-field="pressure" value="${psv.pressure || ''}" placeholder="0.0" min="0" max="999.99" step="0.01">
+            <input type="number" class="batch-input-mobile" data-field="pressure" value="${psv.pressure || ''}" placeholder="ex: 15.5" min="0" max="999.99" step="0.01">
+          </div>
+          <div class="batch-input-card-row">
+            <div class="batch-input-card-field">
+              <label>Config.</label>
+              <select class="batch-input-mobile" data-field="config">${generateConfigOptions(psv.config || 'CFG-1')}</select>
+            </div>
+            <div class="batch-input-card-field">
+              <label>DLF</label>
+              <input type="number" class="batch-input-mobile" data-field="dlf" value="${psv.dlf || 2.0}" placeholder="2.0" min="0.5" max="5.0" step="0.1">
+            </div>
           </div>
         </div>
       `;
@@ -2244,7 +3287,7 @@
           const field = e.target.dataset.field;
           let value = e.target.value;
 
-          if (field === 'pressure' && value) {
+          if ((field === 'pressure' || field === 'dlf') && value) {
             value = parseFloat(value);
           }
 
@@ -2279,7 +3322,7 @@
           const field = e.target.dataset.field;
           let value = e.target.value;
 
-          if (field === 'pressure' && value) {
+          if ((field === 'pressure' || field === 'dlf') && value) {
             value = parseFloat(value);
           }
 
@@ -2523,11 +3566,24 @@
       const pressure = parseFloat(psv.pressure);
       const force = kf * area * pressure;
 
+      // V2.0 - DLF and directional components
+      const dlf = parseFloat(psv.dlf) || 2.0;
+      const configId = psv.config || 'CFG-1';
+      const fDesign = parseFloat((force * dlf).toFixed(2));
+      const config = configurationsTable[configId];
+      const components = config ? config.components(fDesign) : { fx: 0, fy: -fDesign, fz: 0 };
+
       return {
         ...psv,
         kf,
         area,
         force: parseFloat(force.toFixed(2)),
+        dlf,
+        config: configId,
+        fDesign,
+        fx: components.fx,
+        fy: components.fy,
+        fz: components.fz,
         status: 'calculated',
         errors: {}
       };
@@ -2599,7 +3655,12 @@
           <td class="text-right">${result.pressure ? parseFloat(result.pressure).toFixed(2) : '-'}</td>
           <td class="text-right">${result.kf || '-'}</td>
           <td class="text-right">${result.area || '-'}</td>
-          <td class="force-cell text-right">${result.force ? result.force.toFixed(2) : '-'}</td>
+          <td class="text-right">${result.force ? result.force.toFixed(2) : '-'}</td>
+          <td class="text-right">${result.dlf || '-'}</td>
+          <td class="force-cell text-right">${result.fDesign ? result.fDesign.toFixed(2) : '-'}</td>
+          <td class="text-right">${result.fx !== undefined ? result.fx.toFixed(2) : '-'}</td>
+          <td class="text-right">${result.fy !== undefined ? result.fy.toFixed(2) : '-'}</td>
+          <td class="text-right">${result.fz !== undefined ? result.fz.toFixed(2) : '-'}</td>
           <td>
             ${result.status === 'calculated'
               ? '<span class="badge badge-success">Valide</span>'
@@ -2626,15 +3687,18 @@
               : `<span class="badge badge-error">${result.errorMessage || 'Erreur'}</span>`}
           </div>
           <div class="result-card-mobile-force">
-            ${result.force ? result.force.toFixed(2) + ' daN' : '-'}
+            ${result.fDesign ? 'F_design: ' + result.fDesign.toFixed(2) + ' daN' : (result.force ? result.force.toFixed(2) + ' daN' : '-')}
           </div>
           <div class="result-card-mobile-params">
             <div><strong>DN:</strong> ${result.dn || '-'}</div>
             <div><strong>Fluide:</strong> ${result.fluidType === 'vapeur eau' ? 'Vapeur' : (result.fluidType || '-')}</div>
             <div><strong>Orifice:</strong> ${result.orifice || '-'}</div>
             <div><strong>P1:</strong> ${result.pressure ? parseFloat(result.pressure).toFixed(2) + ' bar' : '-'}</div>
-            <div><strong>Kf:</strong> ${result.kf || '-'}</div>
-            <div><strong>A:</strong> ${result.area ? result.area + ' cm2' : '-'}</div>
+            <div><strong>F brute:</strong> ${result.force ? result.force.toFixed(2) + ' daN' : '-'}</div>
+            <div><strong>DLF:</strong> ${result.dlf || '-'}</div>
+            <div><strong>Fx:</strong> ${result.fx !== undefined ? result.fx.toFixed(2) : '-'}</div>
+            <div><strong>Fy:</strong> ${result.fy !== undefined ? result.fy.toFixed(2) : '-'}</div>
+            <div><strong>Fz:</strong> ${result.fz !== undefined ? result.fz.toFixed(2) : '-'}</div>
           </div>
         `;
         resultsCards.appendChild(card);
@@ -2739,7 +3803,12 @@
         'pressure': 'pressure',
         'pression': 'pressure',
         'pressure_bar': 'pressure',
-        'p1': 'pressure'
+        'p1': 'pressure',
+        'config': 'config',
+        'configuration': 'config',
+        'discharge_config': 'config',
+        'dlf': 'dlf',
+        'dynamic_load_factor': 'dlf'
       };
 
       Object.keys(row).forEach(key => {
@@ -2768,6 +3837,16 @@
       return v;
     }
 
+    function normalizeConfig(value) {
+      if (!value) return 'CFG-1';
+      const v = value.toString().trim().toUpperCase();
+      if (v.startsWith('CFG-') && validConfigs.includes(v)) return v;
+      // Try numeric mapping
+      const num = parseInt(v);
+      if (num >= 1 && num <= 5) return 'CFG-' + num;
+      return 'CFG-1';
+    }
+
     function processCSVData(results, fileName) {
       parsedCSVData = [];
       const errors = [];
@@ -2792,6 +3871,8 @@
           fluidType: normalizeFluidType(normalized.fluidType),
           orifice: (normalized.orifice || '').toUpperCase().trim(),
           pressure: normalized.pressure ? parseFloat(normalized.pressure) : '',
+          config: normalizeConfig(normalized.config),
+          dlf: normalized.dlf ? parseFloat(normalized.dlf) : 2.0,
           status: 'pending',
           errors: {},
           lineNum
@@ -2875,6 +3956,8 @@
         fluidType: p.fluidType,
         orifice: p.orifice,
         pressure: p.pressure,
+        config: p.config || 'CFG-1',
+        dlf: p.dlf || 2.0,
         status: 'pending',
         errors: {}
       }));
@@ -2894,17 +3977,17 @@
 
     // Download template
     downloadTemplateBtn.addEventListener('click', () => {
-      const template = `ITEM_ID,LINE_NAME,DN,FLUID_TYPE,ORIFICE,PRESSURE
-PSV-001,Ligne vapeur HP,100,gaz,K,15.5
-PSV-002,Feed H2,150,vapeur eau,M,22.0
-PSV-003,Depart C101,80,gaz,H,18.3
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,`;
+      const template = `ITEM_ID,LINE_NAME,DN,FLUID_TYPE,ORIFICE,PRESSURE,CONFIG,DLF
+PSV-001,Ligne vapeur HP,100,gaz,K,15.5,CFG-1,2.0
+PSV-002,Feed H2,150,vapeur eau,M,22.0,CFG-3,2.0
+PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,`;
 
       const blob = new Blob(['\ufeff' + template], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
@@ -2927,7 +4010,7 @@ PSV-003,Depart C101,80,gaz,H,18.3
         return;
       }
 
-      const headers = ['ITEM_ID', 'LINE_NAME', 'DN', 'FLUID_TYPE', 'ORIFICE', 'PRESSURE_BAR', 'KF', 'AREA_CM2', 'FORCE_DAN', 'STATUS', 'ERROR_MESSAGE'];
+      const headers = ['ITEM_ID', 'LINE_NAME', 'DN', 'FLUID_TYPE', 'ORIFICE', 'PRESSURE_BAR', 'KF', 'AREA_CM2', 'FORCE_DAN', 'CONFIG', 'DLF', 'FORCE_DESIGN_DAN', 'FX_DAN', 'FY_DAN', 'FZ_DAN', 'STATUS', 'ERROR_MESSAGE'];
 
       const rows = appState.results.map(r => [
         r.itemId || '',
@@ -2939,6 +4022,12 @@ PSV-003,Depart C101,80,gaz,H,18.3
         r.kf || '',
         r.area || '',
         r.force ? r.force.toFixed(2) : '',
+        r.config || 'CFG-1',
+        r.dlf || '',
+        r.fDesign ? r.fDesign.toFixed(2) : '',
+        r.fx !== undefined ? r.fx.toFixed(2) : '',
+        r.fy !== undefined ? r.fy.toFixed(2) : '',
+        r.fz !== undefined ? r.fz.toFixed(2) : '',
         r.status === 'calculated' ? 'valid' : 'error',
         r.errorMessage || ''
       ]);
@@ -2981,7 +4070,7 @@ PSV-003,Depart C101,80,gaz,H,18.3
       // Summary
       doc.setFontSize(12);
       doc.text(`Resume : ${appState.results.length} PSV | ${appState.stats.valid} valides | ${appState.stats.errors} erreurs`, 14, 38);
-      doc.text('Formule : F = Kf x A x P1', 14, 45);
+      doc.text('Formules : F_brute = Kf x A x P1  |  F_design = F_brute x DLF', 14, 45);
 
       // Table
       const tableData = appState.results.map(r => [
@@ -2994,23 +4083,28 @@ PSV-003,Depart C101,80,gaz,H,18.3
         r.kf || '-',
         r.area || '-',
         r.force ? r.force.toFixed(2) : '-',
+        r.dlf || '-',
+        r.fDesign ? r.fDesign.toFixed(2) : '-',
+        r.fx !== undefined ? r.fx.toFixed(2) : '-',
+        r.fy !== undefined ? r.fy.toFixed(2) : '-',
+        r.fz !== undefined ? r.fz.toFixed(2) : '-',
         r.status === 'calculated' ? 'Valide' : (r.errorMessage || 'Erreur')
       ]);
 
       doc.autoTable({
         startY: 52,
-        head: [['ITEM ID', 'Nom ligne', 'DN', 'Fluide', 'Orifice', 'P1 (bar)', 'Kf', 'A (cm2)', 'Force (daN)', 'Statut']],
+        head: [['ITEM ID', 'Ligne', 'DN', 'Fluide', 'Orifice', 'P1', 'Kf', 'A', 'F brute', 'DLF', 'F design', 'Fx', 'Fy', 'Fz', 'Statut']],
         body: tableData,
         theme: 'striped',
-        headStyles: { fillColor: [79, 124, 255], fontSize: 9 },
-        bodyStyles: { fontSize: 8 },
+        headStyles: { fillColor: [79, 124, 255], fontSize: 7 },
+        bodyStyles: { fontSize: 7 },
         columnStyles: {
-          0: { cellWidth: 25 },
-          1: { cellWidth: 35 },
-          8: { fontStyle: 'bold' }
+          0: { cellWidth: 20 },
+          1: { cellWidth: 25 },
+          10: { fontStyle: 'bold' }
         },
         didParseCell: function(data) {
-          if (data.section === 'body' && data.column.index === 9) {
+          if (data.section === 'body' && data.column.index === 14) {
             if (data.cell.raw === 'Valide') {
               data.cell.styles.textColor = [5, 150, 105];
             } else {
@@ -3024,7 +4118,8 @@ PSV-003,Depart C101,80,gaz,H,18.3
       const finalY = doc.lastAutoTable.finalY + 10;
       doc.setFontSize(9);
       doc.text('Legende :', 14, finalY);
-      doc.text('Kf : Facteur dependant du fluide et du DN | A : Section d\'orifice (cm2) | P1 : Pression decharge absolue (bar) | F : Force de reaction (daN)', 14, finalY + 5);
+      doc.text('F_brute = Kf x A x P1 | F_design = F_brute x DLF | Fx, Fy, Fz : composantes directionnelles (daN)', 14, finalY + 5);
+      doc.text('DLF : Dynamic Load Factor | Toutes les forces en daN | Pressions en bar absolus', 14, finalY + 10);
 
       // Save
       const timestamp = now.toISOString().slice(0,10).replace(/-/g,'');
@@ -3040,7 +4135,7 @@ PSV-003,Depart C101,80,gaz,H,18.3
         return;
       }
 
-      const headers = ['ITEM_ID', 'LINE_NAME', 'DN', 'FLUID_TYPE', 'ORIFICE', 'P1', 'KF', 'A', 'FORCE', 'STATUS'];
+      const headers = ['ITEM_ID', 'LINE_NAME', 'DN', 'FLUID_TYPE', 'ORIFICE', 'P1', 'KF', 'A', 'F_BRUTE', 'DLF', 'F_DESIGN', 'FX', 'FY', 'FZ', 'STATUS'];
 
       const rows = appState.results.map(r => [
         r.itemId || '',
@@ -3052,6 +4147,11 @@ PSV-003,Depart C101,80,gaz,H,18.3
         r.kf || '',
         r.area || '',
         r.force ? r.force.toFixed(2) : '',
+        r.dlf || '',
+        r.fDesign ? r.fDesign.toFixed(2) : '',
+        r.fx !== undefined ? r.fx.toFixed(2) : '',
+        r.fy !== undefined ? r.fy.toFixed(2) : '',
+        r.fz !== undefined ? r.fz.toFixed(2) : '',
         r.status === 'calculated' ? 'Valide' : 'Erreur'
       ].join('\t'));
 
