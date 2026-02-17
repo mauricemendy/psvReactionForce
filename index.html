@@ -535,6 +535,13 @@
     /* Reference Tables */
     .reference-section {
       margin-top: var(--space-10);
+      clear: both;
+    }
+
+    @media (min-width: 1024px) {
+      .reference-section {
+        margin-left: calc(420px + var(--space-6));
+      }
     }
 
     .reference-section h3 {
@@ -1582,27 +1589,51 @@
     }
 
     /* DLF Selection */
-    .dlf-options {
+    .dlf-section-header {
       display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
+    }
+
+    .dlf-section-header h4 {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .dlf-section-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: var(--color-primary-lighter);
+      color: var(--color-primary-darker);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .dlf-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: var(--space-3);
       margin-bottom: var(--space-3);
-      flex-wrap: wrap;
     }
 
     .dlf-option {
-      flex: 1;
-      min-width: 120px;
       border: 2px solid var(--color-gray-200);
       border-radius: var(--radius-md);
-      padding: var(--space-3);
+      padding: var(--space-3) var(--space-2);
       cursor: pointer;
       text-align: center;
       transition: all var(--transition-fast);
       background: var(--bg-surface);
+      position: relative;
     }
 
     .dlf-option:hover {
       border-color: var(--color-gray-300);
+      background: var(--color-gray-50);
     }
 
     .dlf-option.active {
@@ -1610,14 +1641,26 @@
       background: var(--color-primary-light);
     }
 
+    .dlf-option.active::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      background: var(--color-primary);
+      border-radius: 50%;
+    }
+
     .dlf-option input[type="radio"] {
       display: none;
     }
 
     .dlf-option-value {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
       color: var(--color-gray-900);
+      line-height: 1.2;
     }
 
     .dlf-option.active .dlf-option-value {
@@ -1627,20 +1670,31 @@
     .dlf-option-label {
       font-size: 11px;
       color: var(--color-gray-500);
-      margin-top: 2px;
+      margin-top: 4px;
+      line-height: 1.3;
     }
 
     .dlf-custom-input {
       display: none;
       margin-top: var(--space-3);
+      padding: var(--space-3);
+      background: var(--color-gray-50);
+      border-radius: var(--radius-md);
     }
 
     .dlf-custom-input.show {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .dlf-custom-input label {
+      margin-bottom: 0;
+      white-space: nowrap;
     }
 
     .dlf-custom-input input {
-      width: 120px;
+      width: 100px;
       height: 36px;
       font-size: 14px;
       text-align: center;
@@ -1669,10 +1723,12 @@
     }
 
     .dlf-tooltip {
-      font-size: 12px;
-      color: var(--color-gray-500);
-      font-style: italic;
-      margin-top: var(--space-2);
+      font-size: 11px;
+      color: var(--color-gray-400);
+      margin-top: var(--space-3);
+      padding-top: var(--space-2);
+      border-top: 1px solid var(--color-gray-100);
+      line-height: 1.5;
     }
 
     /* Enriched Results - Design Force */
@@ -1896,8 +1952,8 @@
 
             <!-- Method Limitation Warning -->
             <div class="method-warning">
-              <strong>Methode simplifiee</strong>
-              Cette methode utilise des facteurs Kf empiriques. Pour les cas critiques (H2, haute pression &gt; 100 bar, services diphasiques, contre-pression significative), un calcul conforme a l'API 520 Part II est requis. Les resultats sont conservatifs et adaptes aux estimations de conception et au dimensionnement preliminaire des supports.
+              <strong>Methode simplifiee (Kf)</strong>
+              Resultats conservatifs pour pre-dimensionnement. Pour les cas critiques (H2, &gt;100 bar, diphasique), appliquer l'API 520 Part II.
             </div>
           </div>
 
@@ -1989,104 +2045,151 @@
               <div class="config-section">
                 <h4>Type de configuration de decharge</h4>
                 <div class="config-options" id="configOptions">
-                  <!-- CFG-1: Vertical Up -->
+                  <!-- CFG-1: Vertical Up (Isometric) -->
                   <label class="config-option active" data-config="CFG-1">
                     <input type="radio" name="dischargeConfig" value="CFG-1" checked>
                     <div class="config-option-svg">
                       <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="30" y="35" width="20" height="25" rx="2" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.5"/>
-                        <rect x="33" y="28" width="14" height="10" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.5"/>
-                        <line x1="40" y1="28" x2="40" y2="12" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue)"/>
-                        <line x1="40" y1="60" x2="40" y2="74" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrowRed)"/>
-                        <text x="40" y="8" text-anchor="middle" font-size="7" fill="#3B82F6">Sortie</text>
-                        <text x="40" y="78" text-anchor="middle" font-size="7" fill="#EF4444">F</text>
                         <defs>
                           <marker id="arrowBlue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
                           <marker id="arrowRed" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
                         </defs>
+                        <!-- Pipe base isometric -->
+                        <ellipse cx="40" cy="58" rx="12" ry="5" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.2"/>
+                        <rect x="28" y="42" width="24" height="16" fill="#E5E7EB" stroke="none"/>
+                        <line x1="28" y1="42" x2="28" y2="58" stroke="#6B7280" stroke-width="1.2"/>
+                        <line x1="52" y1="42" x2="52" y2="58" stroke="#6B7280" stroke-width="1.2"/>
+                        <ellipse cx="40" cy="42" rx="12" ry="5" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
+                        <!-- Valve body -->
+                        <rect x="34" y="30" width="12" height="14" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2" rx="1"/>
+                        <ellipse cx="40" cy="30" rx="6" ry="2.5" fill="#C0C7CF" stroke="#6B7280" stroke-width="1"/>
+                        <!-- Discharge up -->
+                        <line x1="40" y1="28" x2="40" y2="10" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue)"/>
+                        <text x="48" y="14" font-size="6.5" fill="#3B82F6" font-weight="600">Sortie</text>
+                        <!-- Reaction force down -->
+                        <line x1="40" y1="63" x2="40" y2="76" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+                        <text x="48" y="74" font-size="6.5" fill="#EF4444" font-weight="600">F</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Verticale haut</div>
                   </label>
 
-                  <!-- CFG-2: Vertical Down -->
+                  <!-- CFG-2: Vertical Down (Isometric) -->
                   <label class="config-option" data-config="CFG-2">
                     <input type="radio" name="dischargeConfig" value="CFG-2">
                     <div class="config-option-svg">
                       <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="30" y="20" width="20" height="25" rx="2" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.5"/>
-                        <rect x="33" y="42" width="14" height="10" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.5"/>
-                        <line x1="40" y1="52" x2="40" y2="68" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue2)"/>
-                        <line x1="40" y1="20" x2="40" y2="6" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrowRed2)"/>
-                        <text x="40" y="74" text-anchor="middle" font-size="7" fill="#3B82F6">Sortie</text>
-                        <text x="40" y="5" text-anchor="middle" font-size="7" fill="#EF4444">F</text>
                         <defs>
                           <marker id="arrowBlue2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
                           <marker id="arrowRed2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
                         </defs>
+                        <!-- Reaction force up -->
+                        <line x1="40" y1="17" x2="40" y2="4" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrowRed2)"/>
+                        <text x="48" y="8" font-size="6.5" fill="#EF4444" font-weight="600">F</text>
+                        <!-- Pipe base isometric -->
+                        <ellipse cx="40" cy="24" rx="12" ry="5" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
+                        <rect x="28" y="24" width="24" height="16" fill="#E5E7EB" stroke="none"/>
+                        <line x1="28" y1="24" x2="28" y2="40" stroke="#6B7280" stroke-width="1.2"/>
+                        <line x1="52" y1="24" x2="52" y2="40" stroke="#6B7280" stroke-width="1.2"/>
+                        <ellipse cx="40" cy="40" rx="12" ry="5" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.2"/>
+                        <!-- Valve nozzle down -->
+                        <rect x="34" y="40" width="12" height="14" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2" rx="1"/>
+                        <ellipse cx="40" cy="54" rx="6" ry="2.5" fill="#C0C7CF" stroke="#6B7280" stroke-width="1"/>
+                        <!-- Discharge down -->
+                        <line x1="40" y1="56" x2="40" y2="74" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue2)"/>
+                        <text x="48" y="72" font-size="6.5" fill="#3B82F6" font-weight="600">Sortie</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Verticale bas</div>
                   </label>
 
-                  <!-- CFG-3: Horizontal -->
+                  <!-- CFG-3: Horizontal (Isometric) -->
                   <label class="config-option" data-config="CFG-3">
                     <input type="radio" name="dischargeConfig" value="CFG-3">
                     <div class="config-option-svg">
                       <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="15" y="30" width="25" height="20" rx="2" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.5"/>
-                        <rect x="37" y="33" width="10" height="14" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.5"/>
-                        <line x1="47" y1="40" x2="65" y2="40" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue3)"/>
-                        <line x1="15" y1="40" x2="3" y2="40" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrowRed3)"/>
-                        <text x="68" y="38" font-size="7" fill="#3B82F6">Sortie</text>
-                        <text x="3" y="47" font-size="7" fill="#EF4444">F</text>
                         <defs>
                           <marker id="arrowBlue3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
                           <marker id="arrowRed3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
                         </defs>
+                        <!-- Horizontal pipe body (isometric cylinder lying on side) -->
+                        <ellipse cx="18" cy="40" rx="5" ry="12" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.2"/>
+                        <rect x="18" y="28" width="22" height="24" fill="#E5E7EB" stroke="none"/>
+                        <line x1="18" y1="28" x2="40" y2="28" stroke="#6B7280" stroke-width="1.2"/>
+                        <line x1="18" y1="52" x2="40" y2="52" stroke="#6B7280" stroke-width="1.2"/>
+                        <ellipse cx="40" cy="40" rx="5" ry="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
+                        <!-- Nozzle -->
+                        <rect x="40" y="34" width="10" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2" rx="1"/>
+                        <!-- Discharge right -->
+                        <line x1="52" y1="40" x2="70" y2="40" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue3)"/>
+                        <text x="60" y="36" font-size="6.5" fill="#3B82F6" font-weight="600">Sortie</text>
+                        <!-- Reaction force left -->
+                        <line x1="13" y1="40" x2="3" y2="40" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrowRed3)"/>
+                        <text x="2" y="50" font-size="6.5" fill="#EF4444" font-weight="600">F</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Horizontale</div>
                   </label>
 
-                  <!-- CFG-4: 90° Elbow -->
+                  <!-- CFG-4: 90° Elbow (Isometric) -->
                   <label class="config-option" data-config="CFG-4">
                     <input type="radio" name="dischargeConfig" value="CFG-4">
                     <div class="config-option-svg">
                       <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="25" y="40" width="20" height="20" rx="2" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.5"/>
-                        <path d="M35 40 L35 28 Q35 22 41 22 L50 22" stroke="#D1D5DB" stroke-width="6" fill="none"/>
-                        <path d="M35 40 L35 28 Q35 22 41 22 L50 22" stroke="#6B7280" stroke-width="1.5" fill="none"/>
-                        <line x1="50" y1="22" x2="66" y2="22" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue4)"/>
-                        <line x1="35" y1="60" x2="35" y2="72" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed4a)"/>
-                        <line x1="25" y1="50" x2="12" y2="50" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed4b)"/>
-                        <text x="68" y="20" font-size="7" fill="#3B82F6">Sortie</text>
-                        <text x="38" y="76" font-size="6" fill="#EF4444">Fy</text>
-                        <text x="4" y="53" font-size="6" fill="#EF4444">Fx</text>
                         <defs>
                           <marker id="arrowBlue4" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
                           <marker id="arrowRed4a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
                           <marker id="arrowRed4b" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
                         </defs>
+                        <!-- Valve body isometric -->
+                        <ellipse cx="28" cy="56" rx="10" ry="4" fill="#E5E7EB" stroke="#6B7280" stroke-width="1"/>
+                        <rect x="18" y="42" width="20" height="14" fill="#E5E7EB" stroke="none"/>
+                        <line x1="18" y1="42" x2="18" y2="56" stroke="#6B7280" stroke-width="1"/>
+                        <line x1="38" y1="42" x2="38" y2="56" stroke="#6B7280" stroke-width="1"/>
+                        <ellipse cx="28" cy="42" rx="10" ry="4" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
+                        <!-- Elbow pipe going up then right -->
+                        <path d="M28 38 L28 24 Q28 18 36 18 L50 18" stroke="#9CA3AF" stroke-width="7" fill="none" stroke-linecap="round"/>
+                        <path d="M28 38 L28 24 Q28 18 36 18 L50 18" stroke="#6B7280" stroke-width="1.2" fill="none"/>
+                        <!-- Discharge right -->
+                        <line x1="50" y1="18" x2="68" y2="18" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue4)"/>
+                        <text x="58" y="14" font-size="6" fill="#3B82F6" font-weight="600">Sortie</text>
+                        <!-- Reaction Fy down -->
+                        <line x1="28" y1="60" x2="28" y2="74" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed4a)"/>
+                        <text x="32" y="73" font-size="5.5" fill="#EF4444" font-weight="600">Fy</text>
+                        <!-- Reaction Fx left -->
+                        <line x1="18" y1="49" x2="6" y2="49" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed4b)"/>
+                        <text x="3" y="46" font-size="5.5" fill="#EF4444" font-weight="600">Fx</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Coude 90°</div>
                   </label>
 
-                  <!-- CFG-5: Collector/Flare -->
+                  <!-- CFG-5: Collector/Flare (Isometric) -->
                   <label class="config-option" data-config="CFG-5">
                     <input type="radio" name="dischargeConfig" value="CFG-5">
                     <div class="config-option-svg">
                       <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="10" y="30" width="20" height="20" rx="2" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.5"/>
-                        <rect x="27" y="33" width="8" height="14" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.5"/>
-                        <rect x="35" y="25" width="35" height="30" rx="3" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="3 2"/>
-                        <text x="52" y="42" text-anchor="middle" font-size="7" fill="#6B7280">Collecteur</text>
-                        <line x1="10" y1="40" x2="3" y2="40" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed5)"/>
-                        <text x="3" y="36" font-size="6" fill="#EF4444">F (reduite)</text>
                         <defs>
                           <marker id="arrowRed5" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
                         </defs>
+                        <!-- Valve body isometric (small, left) -->
+                        <ellipse cx="16" cy="44" rx="7" ry="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="1"/>
+                        <rect x="9" y="34" width="14" height="10" fill="#E5E7EB" stroke="none"/>
+                        <line x1="9" y1="34" x2="9" y2="44" stroke="#6B7280" stroke-width="1"/>
+                        <line x1="23" y1="34" x2="23" y2="44" stroke="#6B7280" stroke-width="1"/>
+                        <ellipse cx="16" cy="34" rx="7" ry="3" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
+                        <!-- Nozzle to collector -->
+                        <rect x="23" y="36" width="6" height="8" fill="#D1D5DB" stroke="#6B7280" stroke-width="1" rx="0.5"/>
+                        <!-- Collector (large pipe isometric) -->
+                        <ellipse cx="48" cy="39" rx="6" ry="18" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.2" stroke-dasharray="3 2"/>
+                        <rect x="48" y="21" width="20" height="36" fill="#F3F4F6" stroke="none"/>
+                        <line x1="48" y1="21" x2="68" y2="21" stroke="#6B7280" stroke-width="1.2" stroke-dasharray="3 2"/>
+                        <line x1="48" y1="57" x2="68" y2="57" stroke="#6B7280" stroke-width="1.2" stroke-dasharray="3 2"/>
+                        <ellipse cx="68" cy="39" rx="6" ry="18" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.2" stroke-dasharray="3 2"/>
+                        <text x="58" y="41" text-anchor="middle" font-size="6" fill="#6B7280">Coll.</text>
+                        <!-- Reaction force left (reduced) -->
+                        <line x1="9" y1="39" x2="2" y2="39" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed5)"/>
+                        <text x="1" y="50" font-size="5" fill="#EF4444" font-weight="600">F (red.)</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Collecteur (torche)</div>
@@ -2096,17 +2199,20 @@
 
               <!-- Section 2: Dynamic Load Factor -->
               <div class="config-section">
-                <h4>Dynamic Load Factor (DLF)</h4>
+                <div class="dlf-section-header">
+                  <h4>Facteur de charge dynamique</h4>
+                  <span class="dlf-section-badge">DLF</span>
+                </div>
                 <div class="dlf-options" id="dlfOptions">
                   <label class="dlf-option active" data-dlf="conservative">
                     <input type="radio" name="dlfMode" value="conservative" checked>
                     <div class="dlf-option-value">2.0</div>
-                    <div class="dlf-option-label">Conservatif (defaut)</div>
+                    <div class="dlf-option-label">Conservatif</div>
                   </label>
                   <label class="dlf-option" data-dlf="static">
                     <input type="radio" name="dlfMode" value="static">
                     <div class="dlf-option-value">1.0</div>
-                    <div class="dlf-option-label">Statique equivalent</div>
+                    <div class="dlf-option-label">Statique eq.</div>
                   </label>
                   <label class="dlf-option" data-dlf="custom">
                     <input type="radio" name="dlfMode" value="custom">
@@ -2115,16 +2221,42 @@
                   </label>
                 </div>
                 <div class="dlf-custom-input" id="dlfCustomInput">
-                  <label for="dlfCustomValue">Valeur du DLF :</label>
+                  <label for="dlfCustomValue">Valeur :</label>
                   <input type="number" id="dlfCustomValue" min="0.5" max="5.0" step="0.1" placeholder="2.0">
                 </div>
                 <div class="dlf-warning" id="dlfWarning"></div>
-                <div class="dlf-tooltip">Le DLF amplifie la force brute pour tenir compte du caractere dynamique de l'ouverture de la soupape.</div>
+                <div class="dlf-tooltip">Amplifie la force brute pour tenir compte de l'ouverture dynamique de la soupape. Valeur par defaut : 2.0</div>
               </div>
 
               <!-- Section 3: Enriched Results -->
               <div class="config-section">
                 <div class="design-force-header">Force de design et composantes directionnelles</div>
+                <!-- Coordinate Triad -->
+                <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); padding: var(--space-3); background: var(--color-gray-50); border-radius: var(--radius-md); border: 1px solid var(--color-gray-200);">
+                  <svg viewBox="0 0 70 70" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <marker id="triadArrowX" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
+                      <marker id="triadArrowY" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#22C55E"/></marker>
+                      <marker id="triadArrowZ" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                    </defs>
+                    <!-- Origin point -->
+                    <circle cx="25" cy="45" r="2.5" fill="#374151"/>
+                    <!-- X axis (right) -->
+                    <line x1="25" y1="45" x2="60" y2="45" stroke="#EF4444" stroke-width="2" marker-end="url(#triadArrowX)"/>
+                    <text x="63" y="49" font-size="10" fill="#EF4444" font-weight="700">X</text>
+                    <!-- Y axis (up) -->
+                    <line x1="25" y1="45" x2="25" y2="10" stroke="#22C55E" stroke-width="2" marker-end="url(#triadArrowY)"/>
+                    <text x="21" y="8" font-size="10" fill="#22C55E" font-weight="700">Y</text>
+                    <!-- Z axis (isometric out towards viewer) -->
+                    <line x1="25" y1="45" x2="6" y2="60" stroke="#3B82F6" stroke-width="2" marker-end="url(#triadArrowZ)"/>
+                    <text x="1" y="68" font-size="10" fill="#3B82F6" font-weight="700">Z</text>
+                  </svg>
+                  <div style="font-size: 12px; color: var(--color-gray-600); line-height: 1.6;">
+                    <div><strong style="color: #EF4444;">X</strong> : Horizontal (axe de la tuyauterie)</div>
+                    <div><strong style="color: #22C55E;">Y</strong> : Vertical (haut positif)</div>
+                    <div><strong style="color: #3B82F6;">Z</strong> : Lateral</div>
+                  </div>
+                </div>
                 <div class="force-components-grid" id="forceComponentsGrid">
                   <div class="force-component highlight">
                     <div class="force-component-label">F_design</div>
