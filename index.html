@@ -1520,7 +1520,7 @@
     /* Discharge Configuration Selector */
     .config-options {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: var(--space-3);
     }
 
@@ -1539,7 +1539,7 @@
     .config-option {
       border: 2px solid var(--color-gray-200);
       border-radius: var(--radius-md);
-      padding: var(--space-3);
+      padding: var(--space-2) var(--space-2) var(--space-3);
       cursor: pointer;
       text-align: center;
       transition: all var(--transition-fast);
@@ -1554,6 +1554,7 @@
     .config-option.active {
       border-color: var(--color-primary);
       background: var(--color-primary-light);
+      box-shadow: 0 0 0 1px var(--color-primary);
     }
 
     .config-option input[type="radio"] {
@@ -1561,9 +1562,14 @@
     }
 
     .config-option-svg {
-      width: 80px;
-      height: 80px;
+      width: 100%;
+      height: 110px;
       margin: 0 auto var(--space-2);
+    }
+
+    .config-option-svg svg {
+      width: 100%;
+      height: 100%;
     }
 
     .config-option-label {
@@ -1575,6 +1581,13 @@
 
     .config-option.active .config-option-label {
       color: var(--color-primary-darker);
+    }
+
+    .config-option-desc {
+      font-size: 9px;
+      color: var(--color-gray-400);
+      margin-top: 2px;
+      line-height: 1.2;
     }
 
     /* DLF Selection */
@@ -1666,27 +1679,108 @@
     .dlf-custom-input {
       display: none;
       margin-top: var(--space-3);
-      padding: var(--space-3);
-      background: var(--color-gray-50);
-      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      background: linear-gradient(135deg, var(--color-gray-50), #f0f4ff);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-gray-200);
     }
 
     .dlf-custom-input.show {
+      display: block;
+    }
+
+    .dlf-custom-row {
       display: flex;
       align-items: center;
       gap: var(--space-3);
+      margin-bottom: var(--space-3);
     }
 
-    .dlf-custom-input label {
+    .dlf-custom-row label {
       margin-bottom: 0;
       white-space: nowrap;
+      font-weight: 600;
+      font-size: 13px;
+      min-width: 55px;
     }
 
-    .dlf-custom-input input {
-      width: 100px;
-      height: 36px;
-      font-size: 14px;
+    .dlf-custom-row input[type="number"] {
+      width: 80px;
+      height: 40px;
+      font-size: 16px;
+      font-weight: 700;
       text-align: center;
+      border: 2px solid var(--color-gray-300);
+      border-radius: var(--radius-md);
+      transition: border-color var(--transition-fast);
+    }
+
+    .dlf-custom-row input[type="number"]:focus {
+      border-color: var(--color-primary);
+      outline: none;
+      box-shadow: 0 0 0 3px var(--color-primary-lighter);
+    }
+
+    .dlf-slider-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .dlf-slider-container input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(to right, #22C55E 0%, #F59E0B 40%, #EF4444 100%);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .dlf-slider-container input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--color-primary);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .dlf-slider-container input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .dlf-slider-container input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--color-primary);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+
+    .dlf-slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--color-gray-400);
+    }
+
+    .dlf-custom-hint {
+      font-size: 11px;
+      color: var(--color-gray-500);
+      padding: var(--space-2) var(--space-3);
+      background: white;
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--color-primary);
+      line-height: 1.4;
     }
 
     .dlf-warning {
@@ -2034,155 +2128,291 @@
               <div class="config-section">
                 <h4>Type de configuration de decharge</h4>
                 <div class="config-options" id="configOptions">
-                  <!-- CFG-1: Vertical Up (Isometric) -->
+
+                  <!-- CFG-1: Vertical Up - Open discharge -->
                   <label class="config-option active" data-config="CFG-1">
                     <input type="radio" name="dischargeConfig" value="CFG-1" checked>
                     <div class="config-option-svg">
-                      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="arrowBlue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="arrowRed" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
+                          <marker id="c1fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                          <marker id="c1fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
                         </defs>
-                        <!-- Pipe base isometric -->
-                        <ellipse cx="40" cy="58" rx="12" ry="5" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.2"/>
-                        <rect x="28" y="42" width="24" height="16" fill="#E5E7EB" stroke="none"/>
-                        <line x1="28" y1="42" x2="28" y2="58" stroke="#6B7280" stroke-width="1.2"/>
-                        <line x1="52" y1="42" x2="52" y2="58" stroke="#6B7280" stroke-width="1.2"/>
-                        <ellipse cx="40" cy="42" rx="12" ry="5" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
-                        <!-- Valve body -->
-                        <rect x="34" y="30" width="12" height="14" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2" rx="1"/>
-                        <ellipse cx="40" cy="30" rx="6" ry="2.5" fill="#C0C7CF" stroke="#6B7280" stroke-width="1"/>
-                        <!-- Discharge up -->
-                        <line x1="40" y1="28" x2="40" y2="10" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue)"/>
-                        <text x="48" y="14" font-size="6.5" fill="#3B82F6" font-weight="600">Sortie</text>
-                        <!-- Reaction force down -->
-                        <line x1="40" y1="63" x2="40" y2="76" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrowRed)"/>
-                        <text x="48" y="74" font-size="6.5" fill="#EF4444" font-weight="600">F</text>
+                        <!-- Process pipe (horizontal) -->
+                        <rect x="8" y="88" width="84" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <!-- Inlet nozzle -->
+                        <rect x="43" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <!-- PSV body -->
+                        <rect x="38" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <text x="50" y="70" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
+                        <!-- Spring bonnet -->
+                        <rect x="42" y="38" width="16" height="18" rx="2" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <line x1="46" y1="42" x2="46" y2="52" stroke="#9CA3AF" stroke-width="0.8" stroke-dasharray="1.5 1"/>
+                        <line x1="54" y1="42" x2="54" y2="52" stroke="#9CA3AF" stroke-width="0.8" stroke-dasharray="1.5 1"/>
+                        <!-- Discharge pipe (vertical up) -->
+                        <rect x="46" y="8" width="8" height="32" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <!-- Open end -->
+                        <line x1="44" y1="8" x2="56" y2="8" stroke="#3B82F6" stroke-width="2"/>
+                        <!-- Flow arrow -->
+                        <line x1="50" y1="30" x2="50" y2="14" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c1fb)"/>
+                        <!-- Reaction force arrow -->
+                        <line x1="50" y1="98" x2="50" y2="114" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c1fr)"/>
+                        <text x="60" y="112" font-size="7" fill="#EF4444" font-weight="700">F</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Verticale haut</div>
+                    <div class="config-option-desc">Decharge ouverte</div>
                   </label>
 
-                  <!-- CFG-2: Vertical Down (Isometric) -->
+                  <!-- CFG-2: Vertical Down -->
                   <label class="config-option" data-config="CFG-2">
                     <input type="radio" name="dischargeConfig" value="CFG-2">
                     <div class="config-option-svg">
-                      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="arrowBlue2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="arrowRed2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
+                          <marker id="c2fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                          <marker id="c2fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
                         </defs>
-                        <!-- Reaction force up -->
-                        <line x1="40" y1="17" x2="40" y2="4" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrowRed2)"/>
-                        <text x="48" y="8" font-size="6.5" fill="#EF4444" font-weight="600">F</text>
-                        <!-- Pipe base isometric -->
-                        <ellipse cx="40" cy="24" rx="12" ry="5" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
-                        <rect x="28" y="24" width="24" height="16" fill="#E5E7EB" stroke="none"/>
-                        <line x1="28" y1="24" x2="28" y2="40" stroke="#6B7280" stroke-width="1.2"/>
-                        <line x1="52" y1="24" x2="52" y2="40" stroke="#6B7280" stroke-width="1.2"/>
-                        <ellipse cx="40" cy="40" rx="12" ry="5" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.2"/>
-                        <!-- Valve nozzle down -->
-                        <rect x="34" y="40" width="12" height="14" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2" rx="1"/>
-                        <ellipse cx="40" cy="54" rx="6" ry="2.5" fill="#C0C7CF" stroke="#6B7280" stroke-width="1"/>
-                        <!-- Discharge down -->
-                        <line x1="40" y1="56" x2="40" y2="74" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue2)"/>
-                        <text x="48" y="72" font-size="6.5" fill="#3B82F6" font-weight="600">Sortie</text>
+                        <!-- Reaction force arrow (up) -->
+                        <line x1="50" y1="18" x2="50" y2="4" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c2fr)"/>
+                        <text x="60" y="10" font-size="7" fill="#EF4444" font-weight="700">F</text>
+                        <!-- Process pipe -->
+                        <rect x="8" y="22" width="84" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <!-- Inlet nozzle -->
+                        <rect x="43" y="28" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <!-- PSV body -->
+                        <rect x="38" y="38" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <text x="50" y="54" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
+                        <!-- Spring bonnet -->
+                        <rect x="42" y="62" width="16" height="18" rx="2" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <!-- Discharge pipe (down) -->
+                        <rect x="46" y="78" width="8" height="28" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <!-- Open end -->
+                        <line x1="44" y1="106" x2="56" y2="106" stroke="#3B82F6" stroke-width="2"/>
+                        <!-- Flow arrow -->
+                        <line x1="50" y1="88" x2="50" y2="102" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c2fb)"/>
                       </svg>
                     </div>
                     <div class="config-option-label">Verticale bas</div>
+                    <div class="config-option-desc">Decharge inversee</div>
                   </label>
 
-                  <!-- CFG-3: Horizontal (Isometric) -->
+                  <!-- CFG-3: Horizontal -->
                   <label class="config-option" data-config="CFG-3">
                     <input type="radio" name="dischargeConfig" value="CFG-3">
                     <div class="config-option-svg">
-                      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="arrowBlue3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="arrowRed3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
+                          <marker id="c3fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                          <marker id="c3fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
                         </defs>
-                        <!-- Horizontal pipe body (isometric cylinder lying on side) -->
-                        <ellipse cx="18" cy="40" rx="5" ry="12" fill="#E5E7EB" stroke="#6B7280" stroke-width="1.2"/>
-                        <rect x="18" y="28" width="22" height="24" fill="#E5E7EB" stroke="none"/>
-                        <line x1="18" y1="28" x2="40" y2="28" stroke="#6B7280" stroke-width="1.2"/>
-                        <line x1="18" y1="52" x2="40" y2="52" stroke="#6B7280" stroke-width="1.2"/>
-                        <ellipse cx="40" cy="40" rx="5" ry="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
-                        <!-- Nozzle -->
-                        <rect x="40" y="34" width="10" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2" rx="1"/>
-                        <!-- Discharge right -->
-                        <line x1="52" y1="40" x2="70" y2="40" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue3)"/>
-                        <text x="60" y="36" font-size="6.5" fill="#3B82F6" font-weight="600">Sortie</text>
-                        <!-- Reaction force left -->
-                        <line x1="13" y1="40" x2="3" y2="40" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrowRed3)"/>
-                        <text x="2" y="50" font-size="6.5" fill="#EF4444" font-weight="600">F</text>
+                        <!-- Process pipe (vertical) -->
+                        <rect x="14" y="10" width="8" height="100" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <!-- Inlet nozzle -->
+                        <rect x="20" y="52" width="12" height="14" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <!-- PSV body -->
+                        <rect x="30" y="46" width="26" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <text x="43" y="62" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
+                        <!-- Discharge pipe (horizontal right) -->
+                        <rect x="54" y="55" width="36" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <!-- Open end -->
+                        <line x1="90" y1="53" x2="90" y2="65" stroke="#3B82F6" stroke-width="2"/>
+                        <!-- Flow arrow -->
+                        <line x1="72" y1="59" x2="86" y2="59" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c3fb)"/>
+                        <!-- Reaction force arrow (left) -->
+                        <line x1="12" y1="59" x2="2" y2="59" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c3fr)"/>
+                        <text x="2" y="72" font-size="7" fill="#EF4444" font-weight="700">F</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Horizontale</div>
+                    <div class="config-option-desc">Decharge laterale</div>
                   </label>
 
-                  <!-- CFG-4: 90° Elbow (Isometric) -->
+                  <!-- CFG-4: 90° Elbow -->
                   <label class="config-option" data-config="CFG-4">
                     <input type="radio" name="dischargeConfig" value="CFG-4">
                     <div class="config-option-svg">
-                      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="arrowBlue4" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="arrowRed4a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
-                          <marker id="arrowRed4b" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
+                          <marker id="c4fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                          <marker id="c4fra" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c4frb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
                         </defs>
-                        <!-- Valve body isometric -->
-                        <ellipse cx="28" cy="56" rx="10" ry="4" fill="#E5E7EB" stroke="#6B7280" stroke-width="1"/>
-                        <rect x="18" y="42" width="20" height="14" fill="#E5E7EB" stroke="none"/>
-                        <line x1="18" y1="42" x2="18" y2="56" stroke="#6B7280" stroke-width="1"/>
-                        <line x1="38" y1="42" x2="38" y2="56" stroke="#6B7280" stroke-width="1"/>
-                        <ellipse cx="28" cy="42" rx="10" ry="4" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
-                        <!-- Elbow pipe going up then right -->
-                        <path d="M28 38 L28 24 Q28 18 36 18 L50 18" stroke="#9CA3AF" stroke-width="7" fill="none" stroke-linecap="round"/>
-                        <path d="M28 38 L28 24 Q28 18 36 18 L50 18" stroke="#6B7280" stroke-width="1.2" fill="none"/>
-                        <!-- Discharge right -->
-                        <line x1="50" y1="18" x2="68" y2="18" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowBlue4)"/>
-                        <text x="58" y="14" font-size="6" fill="#3B82F6" font-weight="600">Sortie</text>
-                        <!-- Reaction Fy down -->
-                        <line x1="28" y1="60" x2="28" y2="74" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed4a)"/>
-                        <text x="32" y="73" font-size="5.5" fill="#EF4444" font-weight="600">Fy</text>
-                        <!-- Reaction Fx left -->
-                        <line x1="18" y1="49" x2="6" y2="49" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed4b)"/>
-                        <text x="3" y="46" font-size="5.5" fill="#EF4444" font-weight="600">Fx</text>
+                        <!-- Process pipe -->
+                        <rect x="8" y="88" width="58" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <!-- Inlet nozzle -->
+                        <rect x="30" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <!-- PSV body -->
+                        <rect x="25" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <text x="37" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
+                        <!-- Vertical rise pipe -->
+                        <rect x="33" y="28" width="8" height="28" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <!-- 90° elbow -->
+                        <path d="M33,30 L33,22 Q33,14 41,14 L56,14" stroke="#93C5FD" stroke-width="1" fill="none"/>
+                        <path d="M41,30 L41,22 Q41,14 49,14 L56,14" stroke="#93C5FD" stroke-width="1" fill="none"/>
+                        <rect x="33" y="14" width="8" height="16" fill="#DBEAFE" stroke="none"/>
+                        <path d="M37,28 Q37,18 47,18" stroke="#93C5FD" stroke-width="0" fill="#DBEAFE"/>
+                        <!-- Horizontal pipe after elbow -->
+                        <rect x="42" y="10" width="48" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <!-- Open end -->
+                        <line x1="90" y1="8" x2="90" y2="20" stroke="#3B82F6" stroke-width="2"/>
+                        <!-- Flow arrow -->
+                        <line x1="70" y1="14" x2="86" y2="14" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c4fb)"/>
+                        <!-- Reaction Fy (down) -->
+                        <line x1="37" y1="98" x2="37" y2="114" stroke="#EF4444" stroke-width="2" marker-end="url(#c4fra)"/>
+                        <text x="44" y="112" font-size="6.5" fill="#EF4444" font-weight="700">Fy</text>
+                        <!-- Reaction Fx (left) -->
+                        <line x1="23" y1="67" x2="8" y2="67" stroke="#EF4444" stroke-width="2" marker-end="url(#c4frb)"/>
+                        <text x="5" y="78" font-size="6.5" fill="#EF4444" font-weight="700">Fx</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Coude 90°</div>
+                    <div class="config-option-desc">Haut puis horizontal</div>
                   </label>
 
-                  <!-- CFG-5: Collector/Flare (Isometric) -->
+                  <!-- CFG-5: Collector/Flare -->
                   <label class="config-option" data-config="CFG-5">
                     <input type="radio" name="dischargeConfig" value="CFG-5">
                     <div class="config-option-svg">
-                      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="arrowRed5" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
+                          <marker id="c5fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
                         </defs>
-                        <!-- Valve body isometric (small, left) -->
-                        <ellipse cx="16" cy="44" rx="7" ry="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="1"/>
-                        <rect x="9" y="34" width="14" height="10" fill="#E5E7EB" stroke="none"/>
-                        <line x1="9" y1="34" x2="9" y2="44" stroke="#6B7280" stroke-width="1"/>
-                        <line x1="23" y1="34" x2="23" y2="44" stroke="#6B7280" stroke-width="1"/>
-                        <ellipse cx="16" cy="34" rx="7" ry="3" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
-                        <!-- Nozzle to collector -->
-                        <rect x="23" y="36" width="6" height="8" fill="#D1D5DB" stroke="#6B7280" stroke-width="1" rx="0.5"/>
-                        <!-- Collector (large pipe isometric) -->
-                        <ellipse cx="48" cy="39" rx="6" ry="18" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.2" stroke-dasharray="3 2"/>
-                        <rect x="48" y="21" width="20" height="36" fill="#F3F4F6" stroke="none"/>
-                        <line x1="48" y1="21" x2="68" y2="21" stroke="#6B7280" stroke-width="1.2" stroke-dasharray="3 2"/>
-                        <line x1="48" y1="57" x2="68" y2="57" stroke="#6B7280" stroke-width="1.2" stroke-dasharray="3 2"/>
-                        <ellipse cx="68" cy="39" rx="6" ry="18" fill="#F3F4F6" stroke="#6B7280" stroke-width="1.2" stroke-dasharray="3 2"/>
-                        <text x="58" y="41" text-anchor="middle" font-size="6" fill="#6B7280">Coll.</text>
-                        <!-- Reaction force left (reduced) -->
-                        <line x1="9" y1="39" x2="2" y2="39" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed5)"/>
-                        <text x="1" y="50" font-size="5" fill="#EF4444" font-weight="600">F (red.)</text>
+                        <!-- Process pipe -->
+                        <rect x="8" y="88" width="50" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <!-- Inlet nozzle -->
+                        <rect x="28" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <!-- PSV body -->
+                        <rect x="23" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <text x="35" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
+                        <!-- Discharge pipe to collector -->
+                        <rect x="45" y="34" width="8" height="22" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="45" y="34" width="22" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <!-- Collector (large vertical pipe, dashed) -->
+                        <rect x="64" y="8" width="26" height="104" rx="4" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="4 3"/>
+                        <text x="77" y="56" text-anchor="middle" font-size="7" fill="#9CA3AF" font-weight="600">Coll.</text>
+                        <text x="77" y="66" text-anchor="middle" font-size="6" fill="#9CA3AF">torche</text>
+                        <!-- Reaction force (left, reduced) -->
+                        <line x1="21" y1="67" x2="5" y2="67" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c5fr)"/>
+                        <text x="2" y="80" font-size="6" fill="#EF4444" font-weight="700">F (red.)</text>
                       </svg>
                     </div>
-                    <div class="config-option-label">Collecteur (torche)</div>
+                    <div class="config-option-label">Collecteur</div>
+                    <div class="config-option-desc">Torche / systeme ferme</div>
                   </label>
+
+                  <!-- CFG-6: Goose-neck (Col de cygne) -->
+                  <label class="config-option" data-config="CFG-6">
+                    <input type="radio" name="dischargeConfig" value="CFG-6">
+                    <div class="config-option-svg">
+                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                          <marker id="c6fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                          <marker id="c6fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                        </defs>
+                        <!-- Process pipe -->
+                        <rect x="8" y="88" width="54" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <!-- Inlet nozzle -->
+                        <rect x="24" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <!-- PSV body -->
+                        <rect x="19" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <text x="31" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
+                        <!-- Vertical rise -->
+                        <rect x="27" y="18" width="8" height="38" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <!-- Top horizontal segment -->
+                        <rect x="33" y="10" width="36" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <!-- Elbow corners (rounded visual) -->
+                        <rect x="27" y="10" width="8" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <!-- Down pipe -->
+                        <rect x="67" y="16" width="8" height="36" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <!-- Open end at bottom -->
+                        <line x1="65" y1="52" x2="77" y2="52" stroke="#3B82F6" stroke-width="2"/>
+                        <!-- Flow arrow (going down at exit) -->
+                        <line x1="71" y1="36" x2="71" y2="48" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c6fb)"/>
+                        <!-- Reaction force (down) -->
+                        <line x1="31" y1="98" x2="31" y2="114" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c6fr)"/>
+                        <text x="40" y="112" font-size="7" fill="#EF4444" font-weight="700">F</text>
+                      </svg>
+                    </div>
+                    <div class="config-option-label">Col de cygne</div>
+                    <div class="config-option-desc">Double coude 180°</div>
+                  </label>
+
+                  <!-- CFG-7: Lateral Z discharge -->
+                  <label class="config-option" data-config="CFG-7">
+                    <input type="radio" name="dischargeConfig" value="CFG-7">
+                    <div class="config-option-svg">
+                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                          <marker id="c7fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                          <marker id="c7fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                        </defs>
+                        <!-- Process pipe (shown in perspective - going into page) -->
+                        <rect x="8" y="88" width="84" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <!-- Perspective hint (pipe goes left-right = X axis) -->
+                        <text x="50" y="85" text-anchor="middle" font-size="6" fill="#9CA3AF">axe X →</text>
+                        <!-- Inlet nozzle -->
+                        <rect x="43" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <!-- PSV body -->
+                        <rect x="38" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <text x="50" y="70" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
+                        <!-- Vertical rise -->
+                        <rect x="46" y="28" width="8" height="28" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <!-- 90° elbow turning towards viewer (Z direction) shown as perspective pipe -->
+                        <rect x="46" y="20" width="8" height="10" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <!-- Pipe going into Z (shown as ellipse/perspective) -->
+                        <ellipse cx="50" cy="20" rx="4" ry="3" fill="#93C5FD" stroke="#60A5FA" stroke-width="1"/>
+                        <!-- Z direction indicator (diagonal to show depth) -->
+                        <line x1="50" y1="20" x2="30" y2="6" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#c7fb)"/>
+                        <text x="18" y="10" font-size="7" fill="#3B82F6" font-weight="600">Z</text>
+                        <!-- Reaction force arrow (opposite Z) -->
+                        <line x1="50" y1="60" x2="74" y2="78" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c7fr)"/>
+                        <text x="72" y="76" font-size="7" fill="#EF4444" font-weight="700">Fz</text>
+                      </svg>
+                    </div>
+                    <div class="config-option-label">Laterale (Z)</div>
+                    <div class="config-option-desc">Perpendiculaire a la ligne</div>
+                  </label>
+
+                  <!-- CFG-8: Inclined 45° discharge -->
+                  <label class="config-option" data-config="CFG-8">
+                    <input type="radio" name="dischargeConfig" value="CFG-8">
+                    <div class="config-option-svg">
+                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                          <marker id="c8fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                          <marker id="c8fra" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c8frb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                        </defs>
+                        <!-- Process pipe -->
+                        <rect x="8" y="88" width="58" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <!-- Inlet nozzle -->
+                        <rect x="28" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <!-- PSV body -->
+                        <rect x="23" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <text x="35" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
+                        <!-- Inclined discharge pipe at 45° -->
+                        <line x1="39" y1="54" x2="82" y2="11" stroke="#93C5FD" stroke-width="9" stroke-linecap="round"/>
+                        <line x1="39" y1="54" x2="82" y2="11" stroke="#DBEAFE" stroke-width="7" stroke-linecap="round"/>
+                        <!-- Open end -->
+                        <line x1="78" y1="7" x2="86" y2="15" stroke="#3B82F6" stroke-width="2"/>
+                        <!-- 45° angle arc -->
+                        <path d="M35,46 Q35,36 42,32" stroke="#9CA3AF" stroke-width="0.8" fill="none" stroke-dasharray="2 1.5"/>
+                        <text x="42" y="42" font-size="7" fill="#9CA3AF">45°</text>
+                        <!-- Flow arrow -->
+                        <line x1="60" y1="33" x2="72" y2="21" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c8fb)"/>
+                        <!-- Reaction Fy (down) -->
+                        <line x1="35" y1="98" x2="35" y2="114" stroke="#EF4444" stroke-width="2" marker-end="url(#c8fra)"/>
+                        <text x="42" y="112" font-size="6.5" fill="#EF4444" font-weight="700">Fy</text>
+                        <!-- Reaction Fx (left) -->
+                        <line x1="21" y1="67" x2="5" y2="67" stroke="#EF4444" stroke-width="2" marker-end="url(#c8frb)"/>
+                        <text x="2" y="78" font-size="6.5" fill="#EF4444" font-weight="700">Fx</text>
+                      </svg>
+                    </div>
+                    <div class="config-option-label">Inclinee 45°</div>
+                    <div class="config-option-desc">Coude a 45 degres</div>
+                  </label>
+
                 </div>
               </div>
 
@@ -2205,21 +2435,39 @@
                   </label>
                   <label class="dlf-option" data-dlf="custom">
                     <input type="radio" name="dlfMode" value="custom">
-                    <div class="dlf-option-value">?</div>
+                    <div class="dlf-option-value">
+                      <svg viewBox="0 0 28 28" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+                        <path d="M20.5 7.5L22 6l-2-2-1.5 1.5M20.5 7.5L10 18l-2 4 4-2L22.5 9.5 20.5 7.5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 12l2 2" stroke="currentColor" stroke-width="1.5"/>
+                      </svg>
+                    </div>
                     <div class="dlf-option-label">Personnalise</div>
                   </label>
                 </div>
                 <div class="dlf-custom-input" id="dlfCustomInput">
-                  <label for="dlfCustomValue">Valeur :</label>
-                  <input type="number" id="dlfCustomValue" min="0.5" max="5.0" step="0.1" placeholder="2.0">
+                  <div class="dlf-custom-row">
+                    <label for="dlfCustomValue">Valeur :</label>
+                    <input type="number" id="dlfCustomValue" min="0.5" max="5.0" step="0.1" placeholder="2.0">
+                    <div class="dlf-slider-container">
+                      <input type="range" id="dlfSlider" min="0.5" max="5.0" step="0.1" value="2.0">
+                      <div class="dlf-slider-labels">
+                        <span>0.5</span>
+                        <span>1.0</span>
+                        <span>2.0</span>
+                        <span>3.0</span>
+                        <span>5.0</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dlf-custom-hint" id="dlfCustomHint">DLF = 2.0 — Valeur conservative standard (pas d'analyse dynamique)</div>
                 </div>
                 <div class="dlf-warning" id="dlfWarning"></div>
-                <div class="dlf-tooltip">Amplifie la force brute pour tenir compte de l'ouverture dynamique de la soupape. Valeur par defaut : 2.0</div>
+                <div class="dlf-tooltip">Le DLF amplifie la force brute pour tenir compte de l'ouverture dynamique de la soupape. Valeur par defaut : 2.0</div>
               </div>
 
               <!-- Section 3: Enriched Results -->
               <div class="config-section">
-                <div class="design-force-header">Force de design et composantes directionnelles</div>
+                <div class="design-force-header">Force de design et composantes directionnelles de la PSV</div>
                 <!-- Coordinate Triad -->
                 <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); padding: var(--space-3); background: var(--color-gray-50); border-radius: var(--radius-md); border: 1px solid var(--color-gray-200);">
                   <svg viewBox="0 0 70 70" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
@@ -2659,10 +2907,31 @@
         label: 'Collecteur',
         description: 'Decharge dans collecteur (torche)',
         components: (fDesign) => ({ fx: -fDesign, fy: 0, fz: 0 })
+      },
+      'CFG-6': {
+        id: 'CFG-6',
+        label: 'Col de cygne',
+        description: 'Double coude 180° (haut-horizontal-bas)',
+        components: (fDesign) => ({ fx: 0, fy: -fDesign, fz: 0 })
+      },
+      'CFG-7': {
+        id: 'CFG-7',
+        label: 'Laterale (Z)',
+        description: 'Decharge perpendiculaire a la ligne (axe Z)',
+        components: (fDesign) => ({ fx: 0, fy: 0, fz: -fDesign })
+      },
+      'CFG-8': {
+        id: 'CFG-8',
+        label: 'Inclinee 45°',
+        description: 'Decharge inclinee a 45 degres',
+        components: (fDesign) => {
+          const comp = fDesign / Math.sqrt(2);
+          return { fx: -parseFloat(comp.toFixed(2)), fy: -parseFloat(comp.toFixed(2)), fz: 0 };
+        }
       }
     };
 
-    const validConfigs = ['CFG-1', 'CFG-2', 'CFG-3', 'CFG-4', 'CFG-5'];
+    const validConfigs = ['CFG-1', 'CFG-2', 'CFG-3', 'CFG-4', 'CFG-5', 'CFG-6', 'CFG-7', 'CFG-8'];
 
     const dlfPresets = {
       conservative: { value: 2.0, label: 'Conservatif', description: 'Pas d\'analyse dynamique' },
@@ -2777,6 +3046,8 @@
     const dlfOptions = document.getElementById('dlfOptions');
     const dlfCustomInput = document.getElementById('dlfCustomInput');
     const dlfCustomValue = document.getElementById('dlfCustomValue');
+    const dlfSlider = document.getElementById('dlfSlider');
+    const dlfCustomHint = document.getElementById('dlfCustomHint');
     const dlfWarning = document.getElementById('dlfWarning');
     const fDesignValue = document.getElementById('fDesignValue');
     const fxValue = document.getElementById('fxValue');
@@ -3063,6 +3334,8 @@
         dlfCustomInput.classList.add('show');
         const val = parseFloat(dlfCustomValue.value);
         appState.dlfValue = isNaN(val) ? 2.0 : val;
+        dlfSlider.value = isNaN(val) ? 2.0 : Math.max(0.5, Math.min(5.0, val));
+        updateDLFHint(appState.dlfValue);
       } else {
         dlfCustomInput.classList.remove('show');
         appState.dlfValue = dlfPresets[mode].value;
@@ -3076,10 +3349,39 @@
       const val = parseFloat(dlfCustomValue.value);
       if (!isNaN(val)) {
         appState.dlfValue = val;
+        dlfSlider.value = Math.max(0.5, Math.min(5.0, val));
+        updateDLFHint(val);
         validateDLF(val);
         updateDesignForce();
       }
     });
+
+    dlfSlider.addEventListener('input', () => {
+      const val = parseFloat(dlfSlider.value);
+      dlfCustomValue.value = val.toFixed(1);
+      appState.dlfValue = val;
+      updateDLFHint(val);
+      validateDLF(val);
+      updateDesignForce();
+    });
+
+    function updateDLFHint(value) {
+      let hint = '';
+      if (value < 1.0) {
+        hint = `DLF = ${value.toFixed(1)} — Valeur inhabituelle, a justifier par analyse`;
+      } else if (value === 1.0) {
+        hint = `DLF = 1.0 — Equivalent statique (cas occasionnel)`;
+      } else if (value <= 1.5) {
+        hint = `DLF = ${value.toFixed(1)} — Analyse dynamique avec amortissement`;
+      } else if (value <= 2.0) {
+        hint = `DLF = ${value.toFixed(1)} — Valeur conservative standard`;
+      } else if (value <= 3.0) {
+        hint = `DLF = ${value.toFixed(1)} — Amplification elevee`;
+      } else {
+        hint = `DLF = ${value.toFixed(1)} — Tres conservatif, verifier la justification`;
+      }
+      dlfCustomHint.textContent = hint;
+    }
 
     function validateDLF(value) {
       dlfWarning.classList.remove('show', 'warning-low', 'warning-high');
@@ -3186,6 +3488,60 @@
           <text x="10" y="100" font-size="9" font-weight="600" fill="#EF4444">Fx = -${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fy=0, Fz=0 (contre-pression reduit F)</text>
           <defs><marker id="dArrowR5" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+        </svg>`,
+        'CFG-6': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-6 : Col de cygne (180°)</text>
+          <rect x="50" y="85" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
+          <text x="70" y="108" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
+          <rect x="65" y="50" width="10" height="37" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
+          <rect x="65" y="40" width="60" height="10" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
+          <rect x="115" y="48" width="10" height="40" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
+          <line x1="120" y1="70" x2="120" y2="100" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB6)"/>
+          <text x="132" y="95" font-size="9" fill="#3B82F6">Sortie</text>
+          <line x1="70" y1="125" x2="70" y2="148" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR6)"/>
+          <text x="80" y="145" font-size="9" font-weight="600" fill="#EF4444">Fy = -${fDesign.toFixed(0)} daN</text>
+          <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
+          <defs><marker id="dArrowB6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
+          <marker id="dArrowR6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+        </svg>`,
+        'CFG-7': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-7 : Decharge laterale (Z)</text>
+          <rect x="60" y="70" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
+          <text x="80" y="98" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
+          <rect x="75" y="50" width="10" height="22" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
+          <ellipse cx="80" cy="50" rx="5" ry="3" fill="#93C5FD" stroke="#60A5FA" stroke-width="1"/>
+          <line x1="80" y1="50" x2="55" y2="30" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB7)"/>
+          <text x="38" y="28" font-size="9" fill="#3B82F6">Z</text>
+          <line x1="80" y1="70" x2="110" y2="95" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR7)"/>
+          <text x="115" y="95" font-size="9" font-weight="600" fill="#EF4444">Fz = -${fDesign.toFixed(0)} daN</text>
+          <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fy=0</text>
+          <line x1="140" y1="130" x2="170" y2="130" stroke="#EF4444" stroke-width="1.5"/>
+          <text x="172" y="133" font-size="7" fill="#6B7280">axe X (tuyauterie)</text>
+          <line x1="140" y1="130" x2="140" y2="110" stroke="#22C55E" stroke-width="1.5"/>
+          <text x="143" y="112" font-size="7" fill="#6B7280">Y</text>
+          <line x1="140" y1="130" x2="122" y2="142" stroke="#3B82F6" stroke-width="1.5"/>
+          <text x="118" y="148" font-size="7" fill="#6B7280">Z</text>
+          <defs><marker id="dArrowB7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
+          <marker id="dArrowR7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+        </svg>`,
+        'CFG-8': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-8 : Inclinee 45°</text>
+          <rect x="50" y="80" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
+          <text x="70" y="103" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
+          <line x1="70" y1="80" x2="140" y2="25" stroke="#DBEAFE" stroke-width="10" stroke-linecap="round"/>
+          <line x1="70" y1="80" x2="140" y2="25" stroke="#93C5FD" stroke-width="1.5"/>
+          <line x1="120" y1="42" x2="140" y2="25" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB8)"/>
+          <text x="142" y="30" font-size="9" fill="#3B82F6">Sortie</text>
+          <path d="M70,72 Q70,62 78,58" stroke="#9CA3AF" stroke-width="1" fill="none" stroke-dasharray="2 1.5"/>
+          <text x="76" y="68" font-size="8" fill="#9CA3AF">45°</text>
+          <line x1="70" y1="120" x2="70" y2="148" stroke="#EF4444" stroke-width="2.5" marker-end="url(#dArrowR8a)"/>
+          <text x="80" y="145" font-size="8" font-weight="600" fill="#EF4444">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
+          <line x1="50" y1="100" x2="15" y2="100" stroke="#EF4444" stroke-width="2.5" marker-end="url(#dArrowR8b)"/>
+          <text x="8" y="115" font-size="8" font-weight="600" fill="#EF4444">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
+          <text x="10" y="148" font-size="8" fill="#6B7280">Fz=0</text>
+          <defs><marker id="dArrowB8" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
+          <marker id="dArrowR8a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker>
+          <marker id="dArrowR8b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
         </svg>`
       };
 
@@ -3964,7 +4320,7 @@
       if (v.startsWith('CFG-') && validConfigs.includes(v)) return v;
       // Try numeric mapping
       const num = parseInt(v);
-      if (num >= 1 && num <= 5) return 'CFG-' + num;
+      if (num >= 1 && num <= 8) return 'CFG-' + num;
       return 'CFG-1';
     }
 

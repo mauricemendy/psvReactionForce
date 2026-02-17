@@ -37,10 +37,13 @@ var PSV_CONFIG = {
     'CFG-2': { id: 'CFG-2', label: 'Verticale bas',    fx: 0,  fy: 1,  fz: 0 },
     'CFG-3': { id: 'CFG-3', label: 'Horizontale',      fx: -1, fy: 0,  fz: 0 },
     'CFG-4': { id: 'CFG-4', label: 'Coude 90°',        fx: -0.707, fy: -0.707, fz: 0 },
-    'CFG-5': { id: 'CFG-5', label: 'Collecteur',       fx: -1, fy: 0,  fz: 0 }
+    'CFG-5': { id: 'CFG-5', label: 'Collecteur',       fx: -1, fy: 0,  fz: 0 },
+    'CFG-6': { id: 'CFG-6', label: 'Col de cygne',     fx: 0,  fy: -1, fz: 0 },
+    'CFG-7': { id: 'CFG-7', label: 'Laterale (Z)',     fx: 0,  fy: 0,  fz: -1 },
+    'CFG-8': { id: 'CFG-8', label: 'Inclinee 45°',     fx: -0.707, fy: -0.707, fz: 0 }
   },
 
-  validConfigs: ['CFG-1', 'CFG-2', 'CFG-3', 'CFG-4', 'CFG-5'],
+  validConfigs: ['CFG-1', 'CFG-2', 'CFG-3', 'CFG-4', 'CFG-5', 'CFG-6', 'CFG-7', 'CFG-8'],
 
   // v2.0 - DLF presets
   dlfPresets: {

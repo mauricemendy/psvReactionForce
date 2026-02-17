@@ -129,10 +129,25 @@ const data = {
     'CFG-5': {
       id: 'CFG-5', label: 'Collecteur',
       components: (fDesign) => ({ fx: -fDesign, fy: 0, fz: 0 })
+    },
+    'CFG-6': {
+      id: 'CFG-6', label: 'Col de cygne',
+      components: (fDesign) => ({ fx: 0, fy: -fDesign, fz: 0 })
+    },
+    'CFG-7': {
+      id: 'CFG-7', label: 'Laterale (Z)',
+      components: (fDesign) => ({ fx: 0, fy: 0, fz: -fDesign })
+    },
+    'CFG-8': {
+      id: 'CFG-8', label: 'Inclinee 45\u00b0',
+      components: (fDesign) => {
+        const comp = fDesign / Math.sqrt(2);
+        return { fx: -parseFloat(comp.toFixed(2)), fy: -parseFloat(comp.toFixed(2)), fz: 0 };
+      }
     }
   },
 
-  validConfigs: ['CFG-1', 'CFG-2', 'CFG-3', 'CFG-4', 'CFG-5'],
+  validConfigs: ['CFG-1', 'CFG-2', 'CFG-3', 'CFG-4', 'CFG-5', 'CFG-6', 'CFG-7', 'CFG-8'],
 
   dlfPresets: {
     conservative: { value: 2.0, label: 'Conservatif' },
@@ -362,11 +377,19 @@ test('CFG-5 : Fx=-F_design, Fy=0, Fz=0 (collecteur)', () => {
   assertEqual(c.fz, 0, 'Fz');
 });
 
-test('Fz = 0 pour toutes les configurations', () => {
-  for (const cfgId of data.validConfigs) {
+test('Fz = 0 pour les configurations dans le plan XY', () => {
+  const xyConfigs = data.validConfigs.filter(c => c !== 'CFG-7');
+  for (const cfgId of xyConfigs) {
     const c = data.configurationsTable[cfgId].components(1000);
     assertEqual(c.fz, 0, `Fz non nul pour ${cfgId}`);
   }
+});
+
+test('CFG-7 (Laterale Z) : Fz = -F_design', () => {
+  const c = data.configurationsTable['CFG-7'].components(1000);
+  assertEqual(c.fx, 0, 'Fx');
+  assertEqual(c.fy, 0, 'Fy');
+  assertEqual(c.fz, -1000, 'Fz');
 });
 
 test('Calcul complet : DN100/Gaz/K/15.5bar/CFG-1/DLF=2.0', () => {
@@ -523,14 +546,14 @@ test('Les anciens champs CSV v1.0 sont toujours supportes', () => {
 // ============================================================
 // 8. COHERENCE DES 5 CONFIGURATIONS
 // ============================================================
-suite('8. Coherence des 5 configurations');
+suite('8. Coherence des 8 configurations');
 
-test('5 configurations definies dans configurationsTable', () => {
-  assertEqual(Object.keys(data.configurationsTable).length, 5);
+test('8 configurations definies dans configurationsTable', () => {
+  assertEqual(Object.keys(data.configurationsTable).length, 8);
 });
 
-test('validConfigs contient exactement 5 elements', () => {
-  assertEqual(data.validConfigs.length, 5);
+test('validConfigs contient exactement 8 elements', () => {
+  assertEqual(data.validConfigs.length, 8);
 });
 
 test('Chaque config a un id, label et components()', () => {
@@ -543,7 +566,7 @@ test('Chaque config a un id, label et components()', () => {
   }
 });
 
-test('Les 5 configs sont dans le HTML (radio buttons)', () => {
+test('Les 8 configs sont dans le HTML (radio buttons)', () => {
   for (const cfgId of data.validConfigs) {
     assert(indexHtml.includes(`value="${cfgId}"`), `Radio ${cfgId} manquant dans HTML`);
     assert(indexHtml.includes(`data-config="${cfgId}"`), `data-config="${cfgId}" manquant`);
