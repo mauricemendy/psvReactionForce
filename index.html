@@ -2006,27 +2006,466 @@
       height: auto;
     }
 
-    /* Print Styles */
+    /* ===========================================
+       PRINT STYLES — Professional PDF Output
+       =========================================== */
     @media print {
-      body {
-        background: white;
+      /* --- Global Reset for Print --- */
+      *,
+      *::before,
+      *::after {
+        box-shadow: none !important;
+        text-shadow: none !important;
       }
 
+      body {
+        background: white !important;
+        color: #111827 !important;
+        font-size: 11pt;
+        line-height: 1.5;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* --- Page Setup --- */
+      @page {
+        size: A4 portrait;
+        margin: 18mm 15mm 20mm 15mm;
+      }
+
+      @page :first {
+        margin-top: 12mm;
+      }
+
+      /* --- Container --- */
+      .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      /* --- Header styling for print --- */
+      .header {
+        background: none !important;
+        border-radius: 0 !important;
+        padding: 0 0 12px 0 !important;
+        margin-bottom: 16px !important;
+        border-bottom: 3px solid #0D9488 !important;
+        text-align: left !important;
+      }
+
+      .header h1 {
+        font-size: 22pt !important;
+        color: #111827 !important;
+        margin-bottom: 4px !important;
+      }
+
+      .header p {
+        font-size: 10pt !important;
+        color: #4B5563 !important;
+        margin: 0 !important;
+        max-width: none !important;
+      }
+
+      /* --- Print Timestamp (shown only in print via JS) --- */
+      .print-timestamp {
+        display: block !important;
+        font-size: 9pt;
+        color: #6B7280;
+        margin-top: 4px;
+      }
+
+      /* --- Hide ALL unnecessary UI elements --- */
       .mode-switcher,
       .action-group,
       .reference-section,
       .input-method-selector,
       .batch-form-actions,
       .export-actions,
-      .session-restore-banner {
+      .session-restore-banner,
+      .batch-section,
+      .empty-state,
+      .p1-calculator-toggle,
+      .p1-calculator-panel,
+      .helper-text,
+      .method-warning,
+      .required,
+      .config-panel-toggle,
+      .dlf-tooltip,
+      .dlf-warning,
+      .dlf-custom-input,
+      .toast,
+      #loadExampleBtn,
+      #resetBtn,
+      #calculateBtn,
+      #copyBtn,
+      #printBtn {
         display: none !important;
       }
 
-      .result-card,
+      /* --- Layout: Force single column --- */
+      .calc-layout {
+        display: block !important;
+      }
+
+      .input-section {
+        margin-bottom: 12px !important;
+      }
+
+      /* --- Parameter Card: Clean for print --- */
+      .param-card {
+        background: none !important;
+        border: 1px solid #D1D5DB !important;
+        border-radius: 4px !important;
+        padding: 12px 16px !important;
+        margin-bottom: 12px !important;
+      }
+
+      .param-card h4 {
+        font-size: 12pt !important;
+        margin-bottom: 10px !important;
+        padding-bottom: 6px !important;
+        color: #0D9488 !important;
+      }
+
+      .param-group {
+        margin-bottom: 6px !important;
+      }
+
+      .param-group label {
+        font-size: 9pt !important;
+        font-weight: 600 !important;
+        color: #374151 !important;
+        margin-bottom: 2px !important;
+        display: inline !important;
+      }
+
+      /* --- Form Elements: Display as plain text --- */
+      select,
+      input[type="number"],
+      input[type="text"] {
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        border: none !important;
+        background: #F9FAFB !important;
+        padding: 4px 8px !important;
+        height: auto !important;
+        font-size: 10pt !important;
+        font-weight: 600 !important;
+        color: #111827 !important;
+        border-radius: 3px !important;
+      }
+
+      .input-with-unit {
+        display: inline-flex !important;
+        gap: 4px !important;
+      }
+
+      .unit-select {
+        width: auto !important;
+        min-width: 60px !important;
+        font-size: 9pt !important;
+        font-weight: 500 !important;
+        background: transparent !important;
+        color: #6B7280 !important;
+      }
+
+      /* --- Formula Box --- */
+      .formula-box {
+        background: #F0F7FF !important;
+        border-left: 3px solid #6B7280 !important;
+        border-radius: 3px !important;
+        padding: 10px 14px !important;
+        margin-top: 10px !important;
+        margin-bottom: 0 !important;
+        page-break-inside: avoid;
+      }
+
+      .formula-box h5 {
+        font-size: 10pt !important;
+      }
+
+      .formula {
+        font-size: 12pt !important;
+      }
+
+      .formula-legend {
+        font-size: 8.5pt !important;
+      }
+
+      /* --- Result Card --- */
+      .result-card {
+        background: none !important;
+        border: 2px solid #0D9488 !important;
+        border-radius: 6px !important;
+        padding: 14px 18px !important;
+        margin-bottom: 12px !important;
+        page-break-inside: avoid;
+      }
+
+      .result-card h3 {
+        font-size: 13pt !important;
+        color: #0D9488 !important;
+      }
+
+      .result-value {
+        font-size: 20pt !important;
+        color: #0D9488 !important;
+      }
+
+      .result-unit {
+        font-size: 11pt !important;
+      }
+
+      .badge {
+        border: 1px solid currentColor !important;
+        padding: 2px 10px !important;
+        font-size: 8pt !important;
+      }
+
+      /* --- Config Panel: Full restructure for print --- */
+      .config-panel {
+        border: 1px solid #D1D5DB !important;
+        border-radius: 4px !important;
+        padding: 14px 18px !important;
+        margin-bottom: 12px !important;
+        page-break-inside: avoid;
+        background: none !important;
+      }
+
+      .config-panel-header {
+        margin-bottom: 10px;
+      }
+
+      .config-panel-header h3 {
+        font-size: 12pt !important;
+        color: #0D9488 !important;
+      }
+
+      .config-panel-body {
+        display: block !important;
+        max-height: none !important;
+        overflow: visible !important;
+        opacity: 1 !important;
+      }
+
+      .config-section {
+        margin-bottom: 14px !important;
+        padding-bottom: 10px !important;
+      }
+
+      .config-section h4 {
+        font-size: 11pt !important;
+        margin-bottom: 8px !important;
+      }
+
+      /* --- Config Options: ONLY show selected config --- */
+      .config-options {
+        display: flex !important;
+        gap: 0 !important;
+        justify-content: flex-start !important;
+      }
+
+      .config-option {
+        display: none !important;
+      }
+
+      .config-option.active {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 14px !important;
+        border: 2px solid #0D9488 !important;
+        background: #F0FDFA !important;
+        border-radius: 6px !important;
+        padding: 10px 18px !important;
+        width: auto !important;
+        max-width: 100% !important;
+      }
+
+      .config-option.active .config-option-svg {
+        width: 90px !important;
+        height: 90px !important;
+        flex-shrink: 0 !important;
+      }
+
+      .config-option.active .config-option-svg svg {
+        width: 90px !important;
+        height: 90px !important;
+      }
+
+      .config-option.active .config-option-label {
+        font-size: 12pt !important;
+        font-weight: 700 !important;
+        color: #111827 !important;
+      }
+
+      .config-option.active .config-option-desc {
+        font-size: 9pt !important;
+        color: #4B5563 !important;
+      }
+
+      .config-option input[type="radio"] {
+        display: none !important;
+      }
+
+      /* --- DLF Section: ONLY show selected value --- */
+      .dlf-section-header {
+        margin-bottom: 6px !important;
+      }
+
+      .dlf-section-header h4 {
+        font-size: 11pt !important;
+      }
+
+      .dlf-options {
+        display: flex !important;
+        gap: 0 !important;
+      }
+
+      .dlf-option {
+        display: none !important;
+      }
+
+      .dlf-option.active {
+        display: inline-flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 10px !important;
+        border: 2px solid #0D9488 !important;
+        background: #F0FDFA !important;
+        border-radius: 6px !important;
+        padding: 6px 16px !important;
+      }
+
+      .dlf-option.active .dlf-option-value {
+        font-size: 16pt !important;
+        color: #0D9488 !important;
+      }
+
+      .dlf-option.active .dlf-option-label {
+        font-size: 10pt !important;
+        color: #374151 !important;
+        margin-top: 0 !important;
+      }
+
+      .dlf-option.active::after {
+        display: none !important;
+      }
+
+      /* --- Force Design Results Section --- */
+      .design-force-header {
+        font-size: 12pt !important;
+        margin-bottom: 10px !important;
+        color: #111827 !important;
+      }
+
+      .force-results-layout {
+        display: grid !important;
+        grid-template-columns: 1fr 220px !important;
+        gap: 16px !important;
+        align-items: start !important;
+      }
+
+      .force-components-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 8px !important;
+      }
+
+      .force-component {
+        padding: 8px !important;
+        border-radius: 4px !important;
+        border: 1px solid #E5E7EB !important;
+        background: #F9FAFB !important;
+      }
+
+      .force-component.highlight {
+        background: #F0FDFA !important;
+        border-color: #0D9488 !important;
+        border-width: 2px !important;
+      }
+
+      .force-component-label {
+        font-size: 8pt !important;
+      }
+
+      .force-component-value {
+        font-size: 14pt !important;
+      }
+
+      .force-component-unit {
+        font-size: 8pt !important;
+      }
+
+      /* --- Force Diagram --- */
+      .force-diagram {
+        padding: 8px !important;
+        background: #F9FAFB !important;
+        border: 1px solid #E5E7EB !important;
+        border-radius: 4px !important;
+        margin-top: 0 !important;
+      }
+
+      .force-diagram svg {
+        max-width: 200px !important;
+        width: 100% !important;
+      }
+
+      /* --- Coordinate triad section --- */
+      .config-section > div[style*="display: flex"] {
+        padding: 6px 10px !important;
+        margin-bottom: 8px !important;
+      }
+
+      .config-section > div[style*="display: flex"] svg {
+        width: 45px !important;
+        height: 45px !important;
+      }
+
+      .config-section > div[style*="display: flex"] div {
+        font-size: 9pt !important;
+      }
+
+      /* --- Page Break Management --- */
+      .result-card {
+        page-break-inside: avoid;
+      }
+
+      .config-panel {
+        page-break-before: auto;
+        page-break-inside: avoid;
+      }
+
+      .config-section:last-child {
+        page-break-inside: avoid;
+      }
+
+      /* --- Print Footer --- */
+      @page {
+        @bottom-center {
+          content: "PSV Reaction Force Calculator";
+          font-size: 8pt;
+          color: #9CA3AF;
+        }
+      }
+
+      /* --- Results Section visibility --- */
+      .results-section {
+        display: block !important;
+      }
+
+      /* --- Batch form container (for batch mode print) --- */
       .batch-form-container {
-        box-shadow: none;
         border: 1px solid var(--color-gray-300);
         page-break-inside: avoid;
+      }
+
+      /* --- Hide scrollbars and overflow in print --- */
+      * {
+        overflow: visible !important;
       }
     }
   </style>
@@ -3367,7 +3806,33 @@
     }
 
     function printResult() {
+      // Add print timestamp to header
+      const header = document.querySelector('.header');
+      let tsEl = header.querySelector('.print-timestamp');
+      if (!tsEl) {
+        tsEl = document.createElement('div');
+        tsEl.className = 'print-timestamp';
+        tsEl.style.display = 'none'; // hidden on screen, shown via @media print
+        header.appendChild(tsEl);
+      }
+      const now = new Date();
+      tsEl.textContent = 'Rapport genere le ' + now.toLocaleDateString('fr-FR') + ' a ' + now.toLocaleTimeString('fr-FR');
+
+      // Ensure config panel body is expanded for print
+      const panelBody = document.getElementById('configPanelBody');
+      const wasCollapsed = panelBody && !panelBody.classList.contains('show') && panelBody.style.display === 'none';
+      if (panelBody) {
+        panelBody.style.display = '';
+        panelBody.classList.add('show');
+      }
+
       window.print();
+
+      // Restore collapsed state if it was collapsed
+      if (wasCollapsed && panelBody) {
+        panelBody.style.display = 'none';
+        panelBody.classList.remove('show');
+      }
     }
 
     calculateBtn.addEventListener('click', calculateForce);

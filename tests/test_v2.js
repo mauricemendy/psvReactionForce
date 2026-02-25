@@ -716,9 +716,9 @@ test('Pas de doublons d\'id dans le HTML', () => {
 // ============================================================
 suite('11. Tests UX supplementaires');
 
-test('Bouton "Charger un exemple" present', () => {
+test('Bouton "Exemple" present', () => {
   assert(indexHtml.includes('id="loadExampleBtn"'), 'Bouton loadExampleBtn manquant');
-  assert(indexHtml.includes('Charger un exemple'), 'Texte "Charger un exemple" manquant');
+  assert(/loadExampleBtn[\s\S]*?Exemple\s*<\/button>/.test(indexHtml), 'Texte "Exemple" manquant dans le bouton');
 });
 
 test('L\'exemple utilise DN 100 / Gaz / Orifice K / 15.5 bar', () => {
