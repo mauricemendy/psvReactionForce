@@ -107,7 +107,7 @@ const EXPORTS = [
   'validNps', 'validRatings', 'validSchedules', 'API_CONST', 'api526AreaMm2',
   'selectMaxOrifice', 'coefficientC', 'coefficientCUS', 'napierKN',
   'criticalFlowPressure', 'ratedFlow', 'outletArea', 'reactionForce',
-  'computeApiSizing', 'buildApiDisclaimer', 'formatDlf',
+  'computeApiSizing', 'buildApiDisclaimer', 'formatDlf', 'subsonicExitState',
   'bargToKPaAbs', 'psigToKPaAbs', 'celsiusToK', 'fahrenheitToK',
   'cm2ToMm2', 'cm2ToIn2', 'api526Key'
 ];
@@ -516,7 +516,73 @@ test('Sortie surdimensionnee : terme de pression borne a 0 + avertissement', () 
   const r = api.reactionForce({ wKgH: 500, tempK: 423.15, M: 28.96, k: 1.4, aeM2: 1.0, dlf: 2 });
   assertEqual(r.pressureTermN, 0, 'terme de pression borne');
   assertClose(r.fStaticN, r.fMomentumN, 1e-9, 'seul le terme de quantite de mouvement subsiste');
-  assert(r.warnings.some(w => /pas bloque/.test(w)), 'un avertissement est attendu');
+  assert(r.warnings.some(w => /non bloque/.test(w)), 'un avertissement est attendu');
+});
+
+test('Regime non bloque : le solveur subsonique respecte les bilans', () => {
+  // Cas typique d'une soupape basse pression : la tuyauterie de sortie
+  // est 5.7x plus large que l'orifice, le col sonique reste a l'orifice.
+  const r = api.computeApiSizing(srsCase({ p1KPa: api.bargToKPaAbs(5 * 1.1), tempK: api.celsiusToK(50) }));
+  const f = r.force, s = f.subsonic;
+  assertEqual(f.choked, false, 'l\'ecoulement ne doit pas etre bloque en sortie');
+  assert(s, 'l\'etat subsonique doit etre resolu');
+
+  // Conservation de l'enthalpie totale : T0 = T_e + v^2/(2 Cp)
+  const cp = 1.4 * 8314 / ((1.4 - 1) * 28.96);
+  assertClose(s.tStaticK + s.v * s.v / (2 * cp), api.celsiusToK(50), 1e-6, 'bilan d\'energie');
+
+  // Conservation du debit : m = rho_e x v_e x A_e, avec P_e = P_atm
+  const rho = api.API_CONST.P_ATM_KPA * 1000 * 28.96 / (8314 * s.tStaticK);
+  assertClose(rho * s.v * r.aeM2, f.mDot, 1e-9, 'bilan de debit');
+});
+
+test('Le nombre de Mach en sortie est toujours inferieur a 1', () => {
+  [1, 2, 5, 8, 9, 9.3].forEach(pset => {
+    const r = api.computeApiSizing(srsCase({ p1KPa: api.bargToKPaAbs(pset * 1.1), tempK: api.celsiusToK(50) }));
+    const s = r.force.subsonic;
+    assert(s && s.mach < 1, `P_set ${pset} barg : Mach = ${s ? s.mach : 'non resolu'}`);
+  });
+});
+
+test('La transition bloque / non bloque est continue (Mach -> 1)', () => {
+  // Juste sous le seuil, la vitesse reelle doit friser la vitesse sonique.
+  let dernierMach = 0;
+  [5, 7, 9, 9.3].forEach(pset => {
+    const r = api.computeApiSizing(srsCase({ p1KPa: api.bargToKPaAbs(pset * 1.1), tempK: api.celsiusToK(50) }));
+    const m = r.force.subsonic.mach;
+    assert(m > dernierMach, `Mach doit croitre avec la pression (${dernierMach} -> ${m})`);
+    dernierMach = m;
+  });
+  assert(dernierMach > 0.95, `au seuil, Mach devrait friser 1, obtenu ${dernierMach}`);
+});
+
+test('En regime bloque, aucun etat subsonique n\'est calcule', () => {
+  const r = api.computeApiSizing(srsCase());
+  assertEqual(r.force.choked, true, 'le cas SRS est bloque');
+  assertEqual(r.force.subsonic, null, 'pas d\'etat subsonique');
+  assertEqual(r.warnings.length, 0, 'aucun avertissement');
+});
+
+test('L\'effort retenu reste celui de la vitesse sonique (majorant)', () => {
+  // Point de non-regression : exposer le regime reel ne doit RIEN changer
+  // au resultat. La marge est conservee volontairement.
+  const r = api.computeApiSizing(srsCase({ p1KPa: api.bargToKPaAbs(5 * 1.1), tempK: api.celsiusToK(50) }));
+  const f = r.force;
+  assertClose(f.fStaticN, f.fMomentumN, 1e-9, 'terme de pression nul, momentum sonique conserve');
+  assertEqual(f.pressureTermN, 0, 'terme de pression borne a 0');
+  const fReel = f.mDot * f.subsonic.v;
+  assert(f.fStaticN > fReel, 'l\'effort retenu doit majorer l\'effort reel');
+});
+
+test('L\'avertissement explique le regime sans conseiller l\'impossible', () => {
+  const r = api.computeApiSizing(srsCase({ p1KPa: api.bargToKPaAbs(5 * 1.1), tempK: api.celsiusToK(50) }));
+  const w = r.warnings.join(' ');
+  assert(/regime normal/.test(w), 'doit dire que c\'est le regime normal');
+  assert(/Mach/.test(w), 'doit donner le nombre de Mach');
+  assert(/majore/.test(w), 'doit dire que l\'effort retenu majore');
+  // La section de sortie est fixee par le corps de soupape (API 526) :
+  // conseiller de la reduire n'a aucun sens.
+  assert(!/section de sortie plus faible/.test(w), 'ne doit plus conseiller de reduire la sortie');
 });
 
 test('Aire de sortie A_e = pi x DI^2 / 4', () => {

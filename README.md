@@ -122,6 +122,34 @@ F_design   = F_statique × DLF
 `A_e` est la section intérieure du NPS de **sortie de la soupape** (schedule STD
 par défaut, sélecteur 10S/STD/40/80).
 
+#### Régime non bloqué en sortie
+
+La tuyauterie de sortie est typiquement plusieurs fois plus large que l'orifice —
+un 2"×3" avec orifice J présente un rapport de 5,7. En dessous d'une certaine
+pression de tarage, le col sonique **reste à l'orifice** et ne s'établit pas à
+l'extrémité du tuyau : la pression de sortie vaut alors l'atmosphère et le terme
+de pression est nul.
+
+L'outil le détecte en résolvant `P_e` sous hypothèse de col en sortie : si le
+résultat tombe sous l'atmosphère, l'hypothèse est physiquement impossible. Sur le
+2"×3" cité, le basculement se situe vers **9,36 barg** — donc une large part des
+soupapes basse pression est concernée. Ce n'est pas une anomalie.
+
+Dans ce régime, l'outil **conserve** le terme de quantité de mouvement calculé à
+la vitesse sonique, conformément à la formule simplifiée de l'API 520 Part II.
+C'est volontairement majorant. La vitesse réelle est résolue séparément — par
+conservation du débit et de l'enthalpie totale, à `P_e = P_atm` — et affichée dans
+les valeurs intermédiaires avec le nombre de Mach et la marge conservée, pour que
+l'ingénieur mesure son conservatisme :
+
+| P_tarage | Mach sortie | Effort retenu | Effort réel | Marge |
+|---|---|---|---|---|
+| 2 barg | 0,31 | 19,2 daN | 6,4 daN | +199 % |
+| 5 barg | 0,61 | 39,0 daN | 25,1 daN | +55 % |
+| 9 barg | 0,97 | 65,3 daN | 63,7 daN | +3 % |
+
+(2"×3" CL300, air à 50 °C, tailpipe 3" STD.)
+
 ### Hypothèses — à reprendre dans toute note de calcul
 
 | Paramètre | Valeur | Justification |
