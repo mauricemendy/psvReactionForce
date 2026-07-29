@@ -61,6 +61,15 @@ var PSV_CONFIG = {
 
   // NON VALIDEE contre la norme API 526 (document payant).
   // Chaque entree porte verified: false jusqu'a confrontation.
+  //
+  // Ou trouver la donnee dans API STD 526-2023 : il n'existe pas de
+  // table unique de dimensions, mais UNE TABLE PAR LETTRE D'ORIFICE.
+  //   Table  3   4   5   6   7   8   9  10  11  12  13  14  15  16  (SI)
+  //   Orif.  D   E   F   G   H   J   K   L   M   N   P   Q   R   T
+  // Lire orifice par orifice, puis inverser vers la cle corps.
+  //
+  // Constat etabli non integre : '1.5x2' est incomplete — 1.5D2 et
+  // 1.5E2 existent. Voir le commentaire detaille dans index.html.
   api526Table: {
     '1x2':   { orifices: ['D', 'E', 'F'],      ratings: [150, 300, 600, 900, 1500, 2500], verified: false },
     '1.5x2': { orifices: ['F', 'G', 'H'],      ratings: [150, 300, 600, 900, 1500, 2500], verified: false },

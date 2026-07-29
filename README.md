@@ -150,6 +150,24 @@ La table est isolée dans un seul bloc littéral (`index.html`, section
 mise à jour consiste à remplacer ce bloc et basculer `verified` à `true` — le
 moteur, l'interface et les tests n'ont pas à être modifiés.
 
+**Où trouver la donnée dans API STD 526-2023 (7ᵉ éd.).** Il n'existe pas de table
+unique de dimensions : la norme consacre **une table par lettre d'orifice**.
+
+| Table (SI) | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Orifice | D | E | F | G | H | J | K | L | M | N | P | Q | R | T |
+
+Les tables 17 à 30 sont vraisemblablement les mêmes en unités US. Seules les
+colonnes NPS entrée / NPS sortie / classe sont utiles ; les cotes centre-à-face
+n'entrent dans aucune des trois équations du moteur.
+
+**Constat établi, pas encore intégré.** L'entrée `1.5x2` est incomplète : elle ne
+déclare que F, G et H alors que `1½D2` et `1½E2` existent. La correction n'a pas
+été appliquée car il reste à déterminer si D et E sont offerts à toutes les
+classes ou seulement à certaines — auquel cas le mécanisme `byRating` s'applique
+et le résultat change. Sans effet sur l'orifice retenu (H reste le maximum), mais
+la liste des candidats affichée est fausse.
+
 ---
 
 ## Tests

@@ -4047,8 +4047,37 @@
     // API 526 (document payant, non disponible au moment du codage).
     // Elle reprend les combinaisons corps/orifice usuelles du marche.
     // Chaque entree porte `verified: false` tant que la norme n'a pas
-    // ete confrontee. Le test d'audit (tests/test_api_sizing.js, suite 6)
+    // ete confrontee. Le test d'audit (tests/test_api_sizing.js, suite 7)
     // liste les entrees restant a valider.
+    //
+    // ---- OU TROUVER LA DONNEE DANS API STD 526-2023 (7e ed.) ----------
+    // Il n'existe PAS de table unique de dimensions. La norme consacre
+    // UNE TABLE PAR LETTRE D'ORIFICE, chacune listant les combinaisons
+    // NPS entree / NPS sortie / classe offertes pour cet orifice :
+    //
+    //   Table  3   4   5   6   7   8   9  10  11  12  13  14  15  16   (SI)
+    //   Orif.  D   E   F   G   H   J   K   L   M   N   P   Q   R   T
+    //
+    //   Les tables 17 a 30 sont vraisemblablement les memes en unites US.
+    //
+    // Pour reconstruire la table ci-dessous : lire les tables 3 a 16
+    // orifice par orifice, puis INVERSER vers la cle corps -> orifices.
+    // Seules les colonnes NPS et classe sont utiles ; les cotes
+    // centre-a-face ne servent a aucune des trois equations du moteur.
+    //
+    // ---- CONSTATS ETABLIS, PAS ENCORE INTEGRES -----------------------
+    // Un echantillon partiel de la norme (une a deux lignes par orifice)
+    // a permis d'etablir deux points, sans permettre la reconstruction :
+    //
+    //   - `2G3` existe : G est bien offert en 2"x3". Deja code, confirme.
+    //   - `1.5D2` et `1.5E2` existent : l'entree '1.5x2' ci-dessous est
+    //     donc INCOMPLETE (elle ne declare que F, G, H). Non corrigee ici
+    //     car l'echantillon ne dit pas si D et E sont offerts a toutes les
+    //     classes ou seulement a certaines — il les montre en 900#, tandis
+    //     qu'il montre F en 150#. Trancher exige les tables 3, 4 et 5.
+    //     Sans effet sur l'orifice retenu (H reste le maximum), mais la
+    //     liste des candidats affichee est fausse, et un eventuel
+    //     `byRating` changerait le resultat.
     //
     // Mise a jour une fois la norme obtenue : remplacer ce SEUL bloc
     // litteral (et son miroir dans config.gs), basculer `verified` a
