@@ -30,8 +30,11 @@
       --color-success-light: #F0FDFA;
       --color-warning: #D97706;
       --color-warning-light: #FEF3C7;
+      --color-warning-dark: #B45309;
       --color-error: #DC2626;
       --color-error-light: #FEE2E2;
+      --color-error-dark: #B91C1C;
+      --color-success-dark: #0F766E;
       --color-info: #6B7280;
 
       /* Neutrals */
@@ -298,7 +301,7 @@
 
     /* Formula Box */
     .formula-box {
-      background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+      background: var(--color-primary-light);
       border-left: 4px solid var(--color-info);
       border-radius: var(--radius-md);
       padding: var(--space-4);
@@ -681,6 +684,180 @@
       display: none;
     }
 
+    /* v3.0 - Mode dimensionnement par enveloppe API 526 / API 520 */
+    .api-section {
+      display: none;
+    }
+
+    .api-section.show {
+      display: block;
+    }
+
+    .api-banner {
+      background: var(--color-warning-light);
+      border: 1px solid var(--color-warning);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-5);
+      font-size: 13px;
+      color: var(--color-gray-700);
+      line-height: 1.6;
+    }
+
+    .api-banner strong {
+      color: var(--color-warning-dark);
+      display: block;
+      margin-bottom: var(--space-1);
+    }
+
+    .api-card-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-left: var(--space-2);
+      vertical-align: middle;
+    }
+
+    .api-card-tag.mech {
+      background: var(--color-gray-100);
+      color: var(--color-gray-700);
+    }
+
+    .api-card-tag.proc {
+      background: var(--color-primary);
+      color: #FFFFFF;
+    }
+
+    .api-field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-3);
+    }
+
+    .api-field-grid .param-group {
+      margin-bottom: 0;
+    }
+
+    .api-orifice-result {
+      background: var(--color-primary-light);
+      border: 1px solid var(--color-primary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .api-orifice-letter {
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--color-primary-dark);
+    }
+
+    .api-orifice-meta {
+      font-size: 13px;
+      color: var(--color-gray-700);
+      line-height: 1.7;
+      margin-top: var(--space-2);
+    }
+
+    .api-rated-note {
+      font-size: 12px;
+      font-style: italic;
+      color: var(--color-gray-600);
+      margin-top: var(--space-1);
+    }
+
+    .api-details {
+      margin-top: var(--space-4);
+      border-top: 1px solid var(--color-gray-200);
+      padding-top: var(--space-3);
+    }
+
+    .api-details summary {
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-gray-700);
+      user-select: none;
+    }
+
+    .api-details table {
+      width: 100%;
+      margin-top: var(--space-3);
+      font-size: 12px;
+      border-collapse: collapse;
+    }
+
+    .api-details td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+
+    .api-details td:first-child {
+      color: var(--color-gray-600);
+    }
+
+    .api-details td:last-child {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+
+    .api-disclaimer {
+      margin-top: var(--space-4);
+    }
+
+    .api-disclaimer textarea {
+      width: 100%;
+      min-height: 140px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11.5px;
+      line-height: 1.6;
+      padding: var(--space-3);
+      border: 1px solid var(--color-gray-300);
+      border-radius: var(--radius-md);
+      resize: vertical;
+      color: var(--color-gray-800);
+      background: var(--color-gray-50);
+    }
+
+    .api-warning-list {
+      list-style: none;
+      padding: 0;
+      margin: var(--space-3) 0 0;
+    }
+
+    .api-warning-list li {
+      background: var(--color-warning-light);
+      border: 1px solid var(--color-warning);
+      border-radius: var(--radius-lg);
+      padding: var(--space-2) var(--space-3);
+      margin-bottom: var(--space-2);
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--color-gray-700);
+    }
+
+    .api-error-box {
+      background: var(--color-error-light);
+      border: 1px solid var(--color-error);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--color-error-dark);
+    }
+
+    @media (max-width: 640px) {
+      .api-field-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     /* Batch Input Method Selector */
     .input-method-selector {
       display: flex;
@@ -838,7 +1015,7 @@
     .batch-table input.invalid,
     .batch-table select.invalid {
       border-color: var(--color-error);
-      background: #FEF2F2;
+      background: #FEE2E2;
     }
 
     .batch-table input.touched:invalid,
@@ -931,7 +1108,7 @@
     }
 
     .csv-errors-list {
-      background: #FEF2F2;
+      background: #FEE2E2;
       border-radius: var(--radius-md);
       padding: var(--space-4);
       margin-bottom: var(--space-4);
@@ -1015,7 +1192,7 @@
     }
 
     .results-table tr.row-error {
-      background: #FEF2F2;
+      background: #FEE2E2;
     }
 
     .results-table tr.row-error td {
@@ -1109,7 +1286,7 @@
     .session-restore-banner {
       display: none;
       background: #FEF3C7;
-      border: 1px solid #F59E0B;
+      border: 1px solid #D97706;
       border-radius: var(--radius-md);
       padding: var(--space-4);
       margin-bottom: var(--space-4);
@@ -1323,7 +1500,7 @@
       }
 
       .result-card-mobile.error {
-        background: #FEF2F2;
+        background: #FEE2E2;
         border-color: var(--color-error);
       }
 
@@ -1422,9 +1599,9 @@
 
     /* Warning Banner - Method Limitations */
     .method-warning {
-      background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
-      border-left: 4px solid var(--color-warning);
-      border-radius: var(--radius-md);
+      background: var(--color-warning-light);
+      border: 1px solid var(--color-warning);
+      border-radius: var(--radius-lg);
       padding: var(--space-4);
       margin-top: var(--space-4);
       font-size: 13px;
@@ -1433,7 +1610,7 @@
     }
 
     .method-warning strong {
-      color: var(--color-gray-900);
+      color: var(--color-warning-dark);
       display: block;
       margin-bottom: var(--space-1);
     }
@@ -1777,7 +1954,7 @@
       display: none;
       margin-top: var(--space-3);
       padding: var(--space-4);
-      background: linear-gradient(135deg, var(--color-gray-50), #f0f4ff);
+      background: var(--color-primary-light);
       border-radius: var(--radius-lg);
       border: 1px solid var(--color-gray-200);
     }
@@ -1831,7 +2008,7 @@
       width: 100%;
       height: 6px;
       border-radius: 3px;
-      background: linear-gradient(to right, #22C55E 0%, #F59E0B 40%, #EF4444 100%);
+      background: linear-gradient(to right, #0D9488 0%, #D97706 40%, #DC2626 100%);
       outline: none;
       cursor: pointer;
     }
@@ -1882,8 +2059,8 @@
 
     .dlf-warning {
       font-size: 12px;
-      padding: var(--space-2) var(--space-3);
-      border-radius: var(--radius-sm);
+      padding: var(--space-3);
+      border-radius: var(--radius-lg);
       margin-top: var(--space-2);
       display: none;
     }
@@ -1894,12 +2071,14 @@
 
     .dlf-warning.warning-low {
       background: var(--color-warning-light);
-      color: var(--color-warning);
+      border: 1px solid var(--color-warning);
+      color: var(--color-warning-dark);
     }
 
     .dlf-warning.warning-high {
       background: var(--color-error-light);
-      color: var(--color-error);
+      border: 1px solid var(--color-error);
+      color: var(--color-error-dark);
     }
 
     .dlf-tooltip {
@@ -2173,7 +2352,7 @@
 
       /* --- Formula Box --- */
       .formula-box {
-        background: #F0F7FF !important;
+        background: #F0FDFA !important;
         border-left: 3px solid #6B7280 !important;
         border-radius: 3px !important;
         padding: 10px 14px !important;
@@ -2482,6 +2661,7 @@
     <div class="mode-switcher">
       <button class="mode-btn active" data-mode="simple" id="modeSimpleBtn">Calcul Simple</button>
       <button class="mode-btn" data-mode="batch" id="modeBatchBtn">Calcul Batch</button>
+      <button class="mode-btn" data-mode="api" id="modeApiBtn">Dimensionnement API</button>
     </div>
 
     <!-- ==================== -->
@@ -2719,29 +2899,29 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c1fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c1fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c1fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c1fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe (horizontal) -->
-                        <rect x="8" y="88" width="84" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="88" width="84" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="43" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="43" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="38" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="38" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="50" y="70" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
                         <!-- Spring bonnet -->
-                        <rect x="42" y="38" width="16" height="18" rx="2" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="42" y="38" width="16" height="18" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <line x1="46" y1="42" x2="46" y2="52" stroke="#9CA3AF" stroke-width="0.8" stroke-dasharray="1.5 1"/>
                         <line x1="54" y1="42" x2="54" y2="52" stroke="#9CA3AF" stroke-width="0.8" stroke-dasharray="1.5 1"/>
                         <!-- Discharge pipe (vertical up) -->
-                        <rect x="46" y="8" width="8" height="32" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="46" y="8" width="8" height="32" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Open end -->
-                        <line x1="44" y1="8" x2="56" y2="8" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="44" y1="8" x2="56" y2="8" stroke="#0D9488" stroke-width="2"/>
                         <!-- Flow arrow -->
-                        <line x1="50" y1="30" x2="50" y2="14" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c1fb)"/>
+                        <line x1="50" y1="30" x2="50" y2="14" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c1fb)"/>
                         <!-- Reaction force arrow -->
-                        <line x1="50" y1="98" x2="50" y2="114" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c1fr)"/>
-                        <text x="60" y="112" font-size="7" fill="#EF4444" font-weight="700">F</text>
+                        <line x1="50" y1="98" x2="50" y2="114" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c1fr)"/>
+                        <text x="60" y="112" font-size="7" fill="#DC2626" font-weight="700">F</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Verticale haut</div>
@@ -2754,27 +2934,27 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c2fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c2fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c2fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c2fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Reaction force arrow (up) -->
-                        <line x1="50" y1="18" x2="50" y2="4" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c2fr)"/>
-                        <text x="60" y="10" font-size="7" fill="#EF4444" font-weight="700">F</text>
+                        <line x1="50" y1="18" x2="50" y2="4" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c2fr)"/>
+                        <text x="60" y="10" font-size="7" fill="#DC2626" font-weight="700">F</text>
                         <!-- Process pipe -->
-                        <rect x="8" y="22" width="84" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="22" width="84" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="43" y="28" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="43" y="28" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="38" y="38" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="38" y="38" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="50" y="54" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
                         <!-- Spring bonnet -->
-                        <rect x="42" y="62" width="16" height="18" rx="2" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="42" y="62" width="16" height="18" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- Discharge pipe (down) -->
-                        <rect x="46" y="78" width="8" height="28" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="46" y="78" width="8" height="28" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Open end -->
-                        <line x1="44" y1="106" x2="56" y2="106" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="44" y1="106" x2="56" y2="106" stroke="#0D9488" stroke-width="2"/>
                         <!-- Flow arrow -->
-                        <line x1="50" y1="88" x2="50" y2="102" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c2fb)"/>
+                        <line x1="50" y1="88" x2="50" y2="102" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c2fb)"/>
                       </svg>
                     </div>
                     <div class="config-option-label">Verticale bas</div>
@@ -2787,25 +2967,25 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c3fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c3fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c3fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c3fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe (vertical) -->
-                        <rect x="14" y="10" width="8" height="100" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="14" y="10" width="8" height="100" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="20" y="52" width="12" height="14" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="20" y="52" width="12" height="14" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="30" y="46" width="26" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="30" y="46" width="26" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="43" y="62" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
                         <!-- Discharge pipe (horizontal right) -->
-                        <rect x="54" y="55" width="36" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="54" y="55" width="36" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Open end -->
-                        <line x1="90" y1="53" x2="90" y2="65" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="90" y1="53" x2="90" y2="65" stroke="#0D9488" stroke-width="2"/>
                         <!-- Flow arrow -->
-                        <line x1="72" y1="59" x2="86" y2="59" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c3fb)"/>
+                        <line x1="72" y1="59" x2="86" y2="59" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c3fb)"/>
                         <!-- Reaction force arrow (left) -->
-                        <line x1="12" y1="59" x2="2" y2="59" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c3fr)"/>
-                        <text x="2" y="72" font-size="7" fill="#EF4444" font-weight="700">F</text>
+                        <line x1="12" y1="59" x2="2" y2="59" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c3fr)"/>
+                        <text x="2" y="72" font-size="7" fill="#DC2626" font-weight="700">F</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Horizontale</div>
@@ -2818,36 +2998,36 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c4fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c4fra" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
-                          <marker id="c4frb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c4fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c4fra" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
+                          <marker id="c4frb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe -->
-                        <rect x="8" y="88" width="58" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="88" width="58" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="30" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="30" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="25" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="25" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="37" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
                         <!-- Vertical rise pipe -->
-                        <rect x="33" y="28" width="8" height="28" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="33" y="28" width="8" height="28" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- 90° elbow -->
-                        <path d="M33,30 L33,22 Q33,14 41,14 L56,14" stroke="#93C5FD" stroke-width="1" fill="none"/>
-                        <path d="M41,30 L41,22 Q41,14 49,14 L56,14" stroke="#93C5FD" stroke-width="1" fill="none"/>
-                        <rect x="33" y="14" width="8" height="16" fill="#DBEAFE" stroke="none"/>
-                        <path d="M37,28 Q37,18 47,18" stroke="#93C5FD" stroke-width="0" fill="#DBEAFE"/>
+                        <path d="M33,30 L33,22 Q33,14 41,14 L56,14" stroke="#0D9488" stroke-width="1" fill="none"/>
+                        <path d="M41,30 L41,22 Q41,14 49,14 L56,14" stroke="#0D9488" stroke-width="1" fill="none"/>
+                        <rect x="33" y="14" width="8" height="16" fill="#F0FDFA" stroke="none"/>
+                        <path d="M37,28 Q37,18 47,18" stroke="#0D9488" stroke-width="0" fill="#F0FDFA"/>
                         <!-- Horizontal pipe after elbow -->
-                        <rect x="42" y="10" width="48" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="42" y="10" width="48" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Open end -->
-                        <line x1="90" y1="8" x2="90" y2="20" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="90" y1="8" x2="90" y2="20" stroke="#0D9488" stroke-width="2"/>
                         <!-- Flow arrow -->
-                        <line x1="70" y1="14" x2="86" y2="14" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c4fb)"/>
+                        <line x1="70" y1="14" x2="86" y2="14" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c4fb)"/>
                         <!-- Reaction Fy (down) -->
-                        <line x1="37" y1="98" x2="37" y2="114" stroke="#EF4444" stroke-width="2" marker-end="url(#c4fra)"/>
-                        <text x="44" y="112" font-size="6.5" fill="#EF4444" font-weight="700">Fy</text>
+                        <line x1="37" y1="98" x2="37" y2="114" stroke="#DC2626" stroke-width="2" marker-end="url(#c4fra)"/>
+                        <text x="44" y="112" font-size="6.5" fill="#DC2626" font-weight="700">Fy</text>
                         <!-- Reaction Fx (left) -->
-                        <line x1="23" y1="67" x2="8" y2="67" stroke="#EF4444" stroke-width="2" marker-end="url(#c4frb)"/>
-                        <text x="5" y="78" font-size="6.5" fill="#EF4444" font-weight="700">Fx</text>
+                        <line x1="23" y1="67" x2="8" y2="67" stroke="#DC2626" stroke-width="2" marker-end="url(#c4frb)"/>
+                        <text x="5" y="78" font-size="6.5" fill="#DC2626" font-weight="700">Fx</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Coude 90°</div>
@@ -2860,25 +3040,25 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c5fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c5fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe -->
-                        <rect x="8" y="88" width="50" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="88" width="50" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="28" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="28" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="23" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="23" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="35" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
                         <!-- Discharge pipe to collector -->
-                        <rect x="45" y="34" width="8" height="22" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
-                        <rect x="45" y="34" width="22" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="45" y="34" width="8" height="22" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
+                        <rect x="45" y="34" width="22" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Collector (large vertical pipe, dashed) -->
                         <rect x="64" y="8" width="26" height="104" rx="4" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="4 3"/>
                         <text x="77" y="56" text-anchor="middle" font-size="7" fill="#9CA3AF" font-weight="600">Coll.</text>
                         <text x="77" y="66" text-anchor="middle" font-size="6" fill="#9CA3AF">torche</text>
                         <!-- Reaction force (left, reduced) -->
-                        <line x1="21" y1="67" x2="5" y2="67" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c5fr)"/>
-                        <text x="2" y="80" font-size="6" fill="#EF4444" font-weight="700">F (red.)</text>
+                        <line x1="21" y1="67" x2="5" y2="67" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c5fr)"/>
+                        <text x="2" y="80" font-size="6" fill="#DC2626" font-weight="700">F (red.)</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Collecteur</div>
@@ -2891,31 +3071,31 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c6fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c6fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c6fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c6fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe -->
-                        <rect x="8" y="88" width="54" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="88" width="54" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="24" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="24" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="19" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="19" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="31" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
                         <!-- Vertical rise -->
-                        <rect x="27" y="18" width="8" height="38" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="27" y="18" width="8" height="38" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Top horizontal segment -->
-                        <rect x="33" y="10" width="36" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="33" y="10" width="36" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Elbow corners (rounded visual) -->
-                        <rect x="27" y="10" width="8" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="27" y="10" width="8" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Down pipe -->
-                        <rect x="67" y="16" width="8" height="36" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="67" y="16" width="8" height="36" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Open end at bottom -->
-                        <line x1="65" y1="52" x2="77" y2="52" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="65" y1="52" x2="77" y2="52" stroke="#0D9488" stroke-width="2"/>
                         <!-- Flow arrow (going down at exit) -->
-                        <line x1="71" y1="36" x2="71" y2="48" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c6fb)"/>
+                        <line x1="71" y1="36" x2="71" y2="48" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c6fb)"/>
                         <!-- Reaction force (down) -->
-                        <line x1="31" y1="98" x2="31" y2="114" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c6fr)"/>
-                        <text x="40" y="112" font-size="7" fill="#EF4444" font-weight="700">F</text>
+                        <line x1="31" y1="98" x2="31" y2="114" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c6fr)"/>
+                        <text x="40" y="112" font-size="7" fill="#DC2626" font-weight="700">F</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Col de cygne</div>
@@ -2928,30 +3108,30 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c7fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c7fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c7fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c7fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe (shown in perspective - going into page) -->
-                        <rect x="8" y="88" width="84" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="88" width="84" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Perspective hint (pipe goes left-right = X axis) -->
                         <text x="50" y="85" text-anchor="middle" font-size="6" fill="#9CA3AF">axe X →</text>
                         <!-- Inlet nozzle -->
-                        <rect x="43" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="43" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="38" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="38" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="50" y="70" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
                         <!-- Vertical rise -->
-                        <rect x="46" y="28" width="8" height="28" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="46" y="28" width="8" height="28" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- 90° elbow turning towards viewer (Z direction) shown as perspective pipe -->
-                        <rect x="46" y="20" width="8" height="10" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="46" y="20" width="8" height="10" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Pipe going into Z (shown as ellipse/perspective) -->
-                        <ellipse cx="50" cy="20" rx="4" ry="3" fill="#93C5FD" stroke="#60A5FA" stroke-width="1"/>
+                        <ellipse cx="50" cy="20" rx="4" ry="3" fill="#CCFBF1" stroke="#0D9488" stroke-width="1"/>
                         <!-- Z direction indicator (diagonal to show depth) -->
-                        <line x1="50" y1="20" x2="30" y2="6" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#c7fb)"/>
-                        <text x="18" y="10" font-size="7" fill="#3B82F6" font-weight="600">Z</text>
+                        <line x1="50" y1="20" x2="30" y2="6" stroke="#0D9488" stroke-width="2.5" marker-end="url(#c7fb)"/>
+                        <text x="18" y="10" font-size="7" fill="#0D9488" font-weight="600">Z</text>
                         <!-- Reaction force arrow (opposite Z) -->
-                        <line x1="50" y1="60" x2="74" y2="78" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c7fr)"/>
-                        <text x="72" y="76" font-size="7" fill="#EF4444" font-weight="700">Fz</text>
+                        <line x1="50" y1="60" x2="74" y2="78" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c7fr)"/>
+                        <text x="72" y="76" font-size="7" fill="#DC2626" font-weight="700">Fz</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Laterale (Z)</div>
@@ -2964,33 +3144,33 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c8fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c8fra" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
-                          <marker id="c8frb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c8fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c8fra" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
+                          <marker id="c8frb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe -->
-                        <rect x="8" y="88" width="58" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="88" width="58" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="28" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="28" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="23" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="23" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="35" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
                         <!-- Inclined discharge pipe at 45° -->
-                        <line x1="39" y1="54" x2="82" y2="11" stroke="#93C5FD" stroke-width="9" stroke-linecap="round"/>
-                        <line x1="39" y1="54" x2="82" y2="11" stroke="#DBEAFE" stroke-width="7" stroke-linecap="round"/>
+                        <line x1="39" y1="54" x2="82" y2="11" stroke="#0D9488" stroke-width="9" stroke-linecap="round"/>
+                        <line x1="39" y1="54" x2="82" y2="11" stroke="#F0FDFA" stroke-width="7" stroke-linecap="round"/>
                         <!-- Open end -->
-                        <line x1="78" y1="7" x2="86" y2="15" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="78" y1="7" x2="86" y2="15" stroke="#0D9488" stroke-width="2"/>
                         <!-- 45° angle arc -->
                         <path d="M35,46 Q35,36 42,32" stroke="#9CA3AF" stroke-width="0.8" fill="none" stroke-dasharray="2 1.5"/>
                         <text x="42" y="42" font-size="7" fill="#9CA3AF">45°</text>
                         <!-- Flow arrow -->
-                        <line x1="60" y1="33" x2="72" y2="21" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c8fb)"/>
+                        <line x1="60" y1="33" x2="72" y2="21" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c8fb)"/>
                         <!-- Reaction Fy (down) -->
-                        <line x1="35" y1="98" x2="35" y2="114" stroke="#EF4444" stroke-width="2" marker-end="url(#c8fra)"/>
-                        <text x="42" y="112" font-size="6.5" fill="#EF4444" font-weight="700">Fy</text>
+                        <line x1="35" y1="98" x2="35" y2="114" stroke="#DC2626" stroke-width="2" marker-end="url(#c8fra)"/>
+                        <text x="42" y="112" font-size="6.5" fill="#DC2626" font-weight="700">Fy</text>
                         <!-- Reaction Fx (left) -->
-                        <line x1="21" y1="67" x2="5" y2="67" stroke="#EF4444" stroke-width="2" marker-end="url(#c8frb)"/>
-                        <text x="2" y="78" font-size="6.5" fill="#EF4444" font-weight="700">Fx</text>
+                        <line x1="21" y1="67" x2="5" y2="67" stroke="#DC2626" stroke-width="2" marker-end="url(#c8frb)"/>
+                        <text x="2" y="78" font-size="6.5" fill="#DC2626" font-weight="700">Fx</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Inclinee 45°</div>
@@ -3056,26 +3236,26 @@
                 <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); padding: var(--space-3); background: var(--color-gray-50); border-radius: var(--radius-md); border: 1px solid var(--color-gray-200);">
                   <svg viewBox="0 0 70 70" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                      <marker id="triadArrowX" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
-                      <marker id="triadArrowY" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#22C55E"/></marker>
-                      <marker id="triadArrowZ" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                      <marker id="triadArrowX" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#DC2626"/></marker>
+                      <marker id="triadArrowY" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                      <marker id="triadArrowZ" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#6B7280"/></marker>
                     </defs>
                     <!-- Origin point -->
                     <circle cx="25" cy="45" r="2.5" fill="#374151"/>
                     <!-- X axis (right) -->
-                    <line x1="25" y1="45" x2="60" y2="45" stroke="#EF4444" stroke-width="2" marker-end="url(#triadArrowX)"/>
-                    <text x="63" y="49" font-size="10" fill="#EF4444" font-weight="700">X</text>
+                    <line x1="25" y1="45" x2="60" y2="45" stroke="#DC2626" stroke-width="2" marker-end="url(#triadArrowX)"/>
+                    <text x="63" y="49" font-size="10" fill="#DC2626" font-weight="700">X</text>
                     <!-- Y axis (up) -->
-                    <line x1="25" y1="45" x2="25" y2="10" stroke="#22C55E" stroke-width="2" marker-end="url(#triadArrowY)"/>
-                    <text x="21" y="8" font-size="10" fill="#22C55E" font-weight="700">Y</text>
+                    <line x1="25" y1="45" x2="25" y2="10" stroke="#0D9488" stroke-width="2" marker-end="url(#triadArrowY)"/>
+                    <text x="21" y="8" font-size="10" fill="#0D9488" font-weight="700">Y</text>
                     <!-- Z axis (isometric out towards viewer) -->
-                    <line x1="25" y1="45" x2="6" y2="60" stroke="#3B82F6" stroke-width="2" marker-end="url(#triadArrowZ)"/>
-                    <text x="1" y="68" font-size="10" fill="#3B82F6" font-weight="700">Z</text>
+                    <line x1="25" y1="45" x2="6" y2="60" stroke="#6B7280" stroke-width="2" marker-end="url(#triadArrowZ)"/>
+                    <text x="1" y="68" font-size="10" fill="#6B7280" font-weight="700">Z</text>
                   </svg>
                   <div style="font-size: 12px; color: var(--color-gray-600); line-height: 1.6;">
-                    <div><strong style="color: #EF4444;">X</strong> : Horizontal (axe de la tuyauterie)</div>
-                    <div><strong style="color: #22C55E;">Y</strong> : Vertical (haut positif)</div>
-                    <div><strong style="color: #3B82F6;">Z</strong> : Lateral</div>
+                    <div><strong style="color: #DC2626;">X</strong> : Horizontal (axe de la tuyauterie)</div>
+                    <div><strong style="color: #0D9488;">Y</strong> : Vertical (haut positif)</div>
+                    <div><strong style="color: #6B7280;">Z</strong> : Lateral</div>
                   </div>
                 </div>
                 <div class="force-results-layout">
@@ -3161,6 +3341,355 @@
             </table>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ================================= -->
+    <!-- API SIZING MODE SECTION (v3.0)    -->
+    <!-- Dimensionnement par enveloppe     -->
+    <!-- API 526 (orifice) + API 520 (W,F) -->
+    <!-- ================================= -->
+    <div class="api-section" id="apiSection">
+
+      <div class="api-banner">
+        <strong>Table conforme a API STD 526-2023 (tables 3 a 16)</strong>
+        Le jeu d'orifices depend de la <em>classe de bride d'entree</em>, et l'orifice maximal
+        <em>diminue</em> quand la classe monte. Reserve : certaines combinaisons basse pression sur
+        grands corps n'existent dans la norme que pour des metallurgies specifiques (inox
+        austenitique, Alloy 20) ; elles sont conservees ici par conservatisme.
+      </div>
+
+      <div class="calc-layout">
+        <!-- Colonne gauche : entrees -->
+        <div class="input-section">
+
+          <!-- ---------- Carte 1 : donnees mecaniques ---------- -->
+          <div class="param-card">
+            <h4>Tuyauterie <span class="api-card-tag mech">Mecanique</span></h4>
+
+            <div class="api-field-grid">
+              <div class="param-group">
+                <label for="apiNpsIn">NPS entree <span class="required">*</span></label>
+                <select id="apiNpsIn" required></select>
+              </div>
+              <div class="param-group">
+                <label for="apiNpsOut">NPS sortie <span class="required">*</span></label>
+                <select id="apiNpsOut" required></select>
+              </div>
+              <div class="param-group">
+                <label for="apiRating">Classe de bride entree <span class="required">*</span></label>
+                <select id="apiRating" required></select>
+              </div>
+              <div class="param-group">
+                <label for="apiSchedule">Schedule sortie</label>
+                <select id="apiSchedule"></select>
+              </div>
+            </div>
+            <span class="helper-text" id="apiAeHint">A_e est calculee sur le diametre interieur du NPS de sortie.</span>
+
+            <div class="param-group" style="margin-top: var(--space-4);">
+              <label for="apiConfig">Configuration de decharge</label>
+              <select id="apiConfig"></select>
+              <span class="helper-text">Determine la decomposition Fx / Fy / Fz de l'effort.</span>
+            </div>
+
+            <!-- DLF -->
+            <div class="param-group">
+              <label>Facteur de charge dynamique (DLF)</label>
+              <div class="dlf-options" id="apiDlfOptions">
+                <label class="dlf-option active" data-dlf="conservative">
+                  <input type="radio" name="apiDlf" value="conservative" checked>
+                  <div class="dlf-option-value">2.0</div>
+                  <div class="dlf-option-label">Conservatif</div>
+                </label>
+                <label class="dlf-option" data-dlf="static">
+                  <input type="radio" name="apiDlf" value="static">
+                  <div class="dlf-option-value">1.0</div>
+                  <div class="dlf-option-label">Statique eq.</div>
+                </label>
+                <label class="dlf-option" data-dlf="custom">
+                  <input type="radio" name="apiDlf" value="custom">
+                  <div class="dlf-option-value">?</div>
+                  <div class="dlf-option-label">Personnalise</div>
+                </label>
+              </div>
+              <div id="apiDlfCustomInput" style="display: none; margin-top: var(--space-3);">
+                <input type="number" id="apiDlfCustomValue" min="0.5" max="4" step="0.1" value="2.0">
+              </div>
+              <div class="method-warning" id="apiDlfWarning" style="display: none;"></div>
+            </div>
+          </div>
+
+          <!-- ---------- Carte 2 : donnees procede ---------- -->
+          <div class="param-card">
+            <h4>Procede <span class="api-card-tag proc">Thermodynamique</span></h4>
+
+            <div class="param-group">
+              <label for="apiFluidPreset">Fluide (pre-remplissage)</label>
+              <select id="apiFluidPreset"></select>
+              <span class="helper-text">M et k sont pre-remplis puis restent modifiables.</span>
+            </div>
+
+            <div class="api-field-grid">
+              <div class="param-group">
+                <label for="apiPset">Pression de tarage <span class="required">*</span></label>
+                <div class="input-with-unit">
+                  <input type="number" id="apiPset" min="0" step="0.1" placeholder="ex: 20">
+                  <select class="unit-select" id="apiPsetUnit">
+                    <option value="barg">barg</option>
+                    <option value="psig">psig</option>
+                  </select>
+                </div>
+              </div>
+              <div class="param-group">
+                <label for="apiOverpressure">Surpression <span class="required">*</span></label>
+                <div class="input-with-unit">
+                  <input type="number" id="apiOverpressure" min="0" max="100" step="1" value="10">
+                  <select class="unit-select" id="apiOverpressurePreset">
+                    <option value="10">10 % std</option>
+                    <option value="21">21 % feu</option>
+                  </select>
+                </div>
+              </div>
+              <div class="param-group">
+                <label for="apiTemp">Temperature de decharge <span class="required">*</span></label>
+                <div class="input-with-unit">
+                  <input type="number" id="apiTemp" step="1" placeholder="ex: 150">
+                  <select class="unit-select" id="apiTempUnit">
+                    <option value="C">°C</option>
+                    <option value="F">°F</option>
+                  </select>
+                </div>
+              </div>
+              <div class="param-group">
+                <label for="apiZ">Compressibilite Z</label>
+                <input type="number" id="apiZ" min="0.1" max="2" step="0.01" value="1.0">
+              </div>
+              <div class="param-group">
+                <label for="apiM">Masse molaire M <span class="required">*</span></label>
+                <input type="number" id="apiM" min="1" step="0.01" placeholder="ex: 28.96">
+              </div>
+              <div class="param-group">
+                <label for="apiK">Exposant isentropique k <span class="required">*</span></label>
+                <input type="number" id="apiK" min="1" max="2" step="0.001" placeholder="ex: 1.40">
+              </div>
+            </div>
+
+            <div class="param-group" style="margin-top: var(--space-3);">
+              <label>
+                <input type="checkbox" id="apiRuptureDisc"> Disque de rupture en amont (Kc = 0.9)
+              </label>
+            </div>
+
+            <div class="param-group" id="apiKshGroup" style="display: none;">
+              <label for="apiKsh">Facteur de surchauffe KSH</label>
+              <input type="number" id="apiKsh" min="0.5" max="1" step="0.001" value="1.0">
+              <span class="helper-text">1.0 = vapeur saturee (enveloppe conservative).</span>
+            </div>
+
+            <div class="method-warning">
+              <strong>Approche par enveloppe</strong>
+              L'orifice reel etant inconnu, l'outil retient le plus gros orifice API 526 admissible
+              par les brides. Le debit obtenu est un <em>Rated Flow</em> majorant, pas le debit requis
+              par le procede. Diphasique et liquides hors perimetre.
+            </div>
+          </div>
+
+          <!-- ---------- Formules ---------- -->
+          <div class="formula-box">
+            <h5>Chaine de calcul</h5>
+            <div class="formula">A. brides &rarr; orifice max (API 526)</div>
+            <div class="formula">B. W = C x Kd x A x P1 x Kb x Kc x &radic;(M / Z T)</div>
+            <div class="formula">C. F = W v<sub>e</sub> / g<sub>c</sub> + (P<sub>e</sub> - P<sub>a</sub>) A<sub>e</sub></div>
+            <div class="formula-legend">
+              <strong>Module A :</strong> API 526 — orifices D a T<br>
+              <strong>Module B :</strong> API 520 Part I — ecoulement critique<br>
+              <strong>Module C :</strong> API 520 Part II — decharge ouverte<br>
+              <strong>F_design :</strong> F_statique x DLF
+            </div>
+          </div>
+
+          <!-- ---------- Actions ---------- -->
+          <div class="action-group" style="flex-direction: column;">
+            <button class="btn btn-primary btn-large" id="apiCalculateBtn" style="width: 100%;">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="4" y="2" width="16" height="20" rx="2"/>
+                <line x1="8" y1="6" x2="16" y2="6"/>
+                <line x1="8" y1="10" x2="16" y2="10"/>
+                <line x1="8" y1="14" x2="16" y2="14"/>
+              </svg>
+              Calculer
+            </button>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary" id="apiResetBtn" style="flex: 1;">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                  <path d="M3 3v5h5"/>
+                </svg>
+                Reinitialiser
+              </button>
+              <button class="btn btn-example" id="apiExampleBtn" style="flex: 1;">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                </svg>
+                Exemple
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colonne droite : resultats -->
+        <div class="empty-state" id="apiEmptyState">
+          <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="4" y="2" width="16" height="20" rx="2"/>
+            <line x1="8" y1="6" x2="16" y2="6"/>
+            <line x1="8" y1="10" x2="16" y2="10"/>
+            <line x1="8" y1="14" x2="12" y2="14"/>
+          </svg>
+          <div class="empty-state-title">Aucun resultat</div>
+          <div class="empty-state-desc">
+            Renseignez les brides et les conditions procede, puis cliquez sur Calculer.
+          </div>
+        </div>
+
+        <div class="results-section" id="apiResultsSection">
+          <div class="result-card">
+            <h3>Resultats du calcul</h3>
+
+            <!-- Erreur eventuelle (combinaison hors API 526) -->
+            <div class="api-error-box" id="apiErrorBox" style="display: none;"></div>
+
+            <div id="apiResultsBody">
+              <!-- 1. Hypothese d'orifice -->
+              <div class="api-orifice-result">
+                <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary-dark);">
+                  Orifice maximum assume selon API 526
+                </div>
+                <div class="api-orifice-letter" id="apiOrificeLetter">-</div>
+                <div class="api-orifice-meta" id="apiOrificeMeta"></div>
+              </div>
+
+              <!-- 2. Debit massique -->
+              <div class="result-item">
+                <span class="result-label">Debit massique nominal (W)</span>
+                <div class="result-value-group">
+                  <span class="result-value" id="apiFlowValue">-</span>
+                  <span class="result-unit">kg/h</span>
+                </div>
+                <div class="api-rated-note">
+                  Rated Capacity — ne pas confondre avec le Required Capacity du procede.
+                </div>
+              </div>
+
+              <!-- 3. Efforts -->
+              <div class="result-item">
+                <span class="result-label">Force statique (F_statique)</span>
+                <div class="result-value-group">
+                  <span class="result-value" id="apiFStaticValue">-</span>
+                  <span class="result-unit">daN</span>
+                </div>
+                <div class="api-rated-note" id="apiFStaticAlt"></div>
+              </div>
+
+              <div class="result-item">
+                <span class="result-label">Force de conception (F_design)</span>
+                <div class="result-value-group">
+                  <span class="result-value" id="apiFDesignValue">-</span>
+                  <span class="result-unit">daN</span>
+                </div>
+                <span class="badge badge-success" id="apiDlfBadge">DLF 2.0</span>
+                <div class="api-rated-note" id="apiFDesignAlt"></div>
+              </div>
+
+              <!-- 4. Composantes -->
+              <div class="result-item">
+                <span class="result-label">Composantes a modeliser (daN)</span>
+                <div class="force-components-grid">
+                  <div class="force-component">
+                    <div class="force-component-label">Fx</div>
+                    <div class="force-component-value" id="apiFxValue">-</div>
+                    <div class="force-component-unit">daN</div>
+                  </div>
+                  <div class="force-component">
+                    <div class="force-component-label">Fy</div>
+                    <div class="force-component-value" id="apiFyValue">-</div>
+                    <div class="force-component-unit">daN</div>
+                  </div>
+                  <div class="force-component">
+                    <div class="force-component-label">Fz</div>
+                    <div class="force-component-value" id="apiFzValue">-</div>
+                    <div class="force-component-unit">daN</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Avertissements -->
+              <ul class="api-warning-list" id="apiWarnings"></ul>
+
+              <!-- 5. Intermediaires -->
+              <details class="api-details">
+                <summary>Valeurs intermediaires (verification manuelle)</summary>
+                <table><tbody id="apiIntermediates"></tbody></table>
+              </details>
+            </div>
+          </div>
+
+          <!-- Bloc de reserves -->
+          <div class="result-card api-disclaimer">
+            <h3>Note a inserer dans le rapport (CAESAR II / AutoPIPE)</h3>
+            <textarea id="apiDisclaimerText" readonly></textarea>
+            <button class="btn btn-secondary" id="apiCopyDisclaimerBtn" style="width: 100%; margin-top: var(--space-3);">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              Copier la note de conception
+            </button>
+          </div>
+
+          <div class="action-group" style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" id="apiCopyBtn" style="flex: 1;">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              Copier les resultats
+            </button>
+            <button class="btn btn-secondary" id="apiPrintBtn" style="flex: 1;">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 6 2 18 2 18 9"/>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                <rect x="6" y="14" width="12" height="8"/>
+              </svg>
+              PDF
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table de reference API 526 -->
+      <div class="reference-section">
+        <h3>Table API 526 embarquee</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Corps (entree x sortie)</th>
+                <th>Classe entree</th>
+                <th>Orifices possibles</th>
+                <th>Orifice max</th>
+                <th>Aire max (cm2)</th>
+              </tr>
+            </thead>
+            <tbody id="api526RefTable"></tbody>
+          </table>
+        </div>
+        <p class="helper-text" style="margin-top: var(--space-3);">
+          Une ligne par couple corps / classe : le jeu d'orifices depend de la classe de bride
+          d'entree. Les orifices V (271 cm2) et W (406 cm2) presents dans la table generale sont
+          hors API 526 et ne sont jamais proposes par ce module.
+        </p>
       </div>
     </div>
 
@@ -3513,6 +4042,204 @@
       feu: { surpression: 21 }
     };
 
+    // ==================================================================
+    // V3.0 - MODULE DE DIMENSIONNEMENT PAR ENVELOPPE (API 526 / API 520)
+    // ==================================================================
+
+    // ------------------------------------------------------------------
+    // Table API 526 - retro-ingenierie de l'orifice depuis les brides
+    // ------------------------------------------------------------------
+    // Source : API STD 526-2023 (7e ed.), tables 3 a 16 (unites SI).
+    // La norme consacre UNE TABLE PAR LETTRE D'ORIFICE :
+    //
+    //   Table  3   4   5   6   7   8   9  10  11  12  13  14  15  16
+    //   Orif.  D   E   F   G   H   J   K   L   M   N   P   Q   R   T
+    //
+    // (Les tables 17 a 30 sont les memes en unites US.) La table
+    // ci-dessous est l'INVERSION de ces 14 tables vers la cle
+    // corps -> orifices, seule forme utile a la retro-ingenierie.
+    //
+    // ---- POINT CAPITAL : le jeu d'orifices depend de la CLASSE -------
+    // Un meme corps n'offre pas les memes orifices a toutes les classes,
+    // et le sens est CONTRE-INTUITIF : plus la classe monte, plus
+    // l'orifice maximal DIMINUE (le corps encaisse la pression au
+    // detriment du passage). Exemple : un 1.5"x2" offre F en 150# mais
+    // seulement D et E en 900#, soit une aire divisee par 4.
+    // C'est `byRating` qui porte cette information, et c'est lui qui
+    // fait foi. `orifices` n'est que l'union, tenue pour l'affichage.
+    //
+    // La norme fait aussi varier le NPS de SORTIE avec la classe : les
+    // orifices D et E passent d'une sortie 2" (150# a 1500#) a une
+    // sortie 3" en 2500#. D'ou leur presence sous deux corps distincts.
+    //
+    // ---- RESERVE ------------------------------------------------------
+    // Certaines combinaisons basse pression (typiquement 150x150 sur les
+    // grands corps) n'existent dans la norme que pour des metallurgies
+    // specifiques (inox austenitique, Alloy 20). Elles sont conservees
+    // ici pour couvrir l'exhaustivite des cas permis : les inclure va
+    // dans le sens conservatif de l'approche par enveloppe, mais un
+    // corps en acier au carbone peut ne pas les proposer.
+    //
+    // Schema d'une entree :
+    //   orifices  : union des lettres du corps (ordre croissant d'aire)
+    //   ratings   : classes de bride d'ENTREE offertes pour ce corps
+    //   byRating  : { <classe entree>: [lettres] } — fait foi
+    //   verified  : confronte a la norme
+    // ------------------------------------------------------------------
+    const api526Table = {
+      '1x2': {
+        orifices: ['D', 'E'], ratings: [150, 300, 600],
+        byRating: { 150: ['D', 'E'], 300: ['D', 'E'], 600: ['D', 'E'] },
+        verified: true
+      },
+      '1.5x2': {
+        orifices: ['D', 'E', 'F'], ratings: [150, 300, 600, 900, 1500],
+        byRating: { 150: ['F'], 300: ['F'], 600: ['F'], 900: ['D', 'E'], 1500: ['D', 'E'] },
+        verified: true
+      },
+      '1.5x3': {
+        orifices: ['D', 'E', 'F', 'G', 'H'], ratings: [150, 300, 600, 900, 1500, 2500],
+        byRating: {
+          150: ['G', 'H'], 300: ['G', 'H'], 600: ['G'],
+          900: ['F', 'G'], 1500: ['F'], 2500: ['D', 'E', 'F']
+        },
+        verified: true
+      },
+      '2x3': {
+        orifices: ['G', 'H', 'J'], ratings: [150, 300, 600, 900, 1500, 2500],
+        byRating: {
+          150: ['H', 'J'], 300: ['H', 'J'], 600: ['H'],
+          900: ['H'], 1500: ['G', 'H'], 2500: ['G']
+        },
+        verified: true
+      },
+      '3x4': {
+        orifices: ['J', 'K', 'L'], ratings: [150, 300, 600, 900, 1500],
+        byRating: {
+          150: ['J', 'K', 'L'], 300: ['J', 'K', 'L'], 600: ['J', 'K'],
+          900: ['J'], 1500: ['J']
+        },
+        verified: true
+      },
+      '3x6': {
+        orifices: ['K'], ratings: [900, 1500],
+        byRating: { 900: ['K'], 1500: ['K'] },
+        verified: true
+      },
+      '4x6': {
+        orifices: ['L', 'M', 'N', 'P'], ratings: [150, 300, 600, 900, 1500],
+        byRating: {
+          150: ['L', 'M', 'N', 'P'], 300: ['L', 'M', 'N', 'P'],
+          600: ['L', 'M', 'N', 'P'], 900: ['L', 'M', 'N', 'P'], 1500: ['L']
+        },
+        verified: true
+      },
+      '6x8': {
+        orifices: ['Q', 'R'], ratings: [150, 300, 600],
+        byRating: { 150: ['Q', 'R'], 300: ['Q', 'R'], 600: ['Q'] },
+        verified: true
+      },
+      '6x10': {
+        orifices: ['R'], ratings: [300, 600],
+        byRating: { 300: ['R'], 600: ['R'] },
+        verified: true
+      },
+      '8x10': {
+        orifices: ['T'], ratings: [150, 300],
+        byRating: { 150: ['T'], 300: ['T'] },
+        verified: true
+      }
+    };
+
+    // Orifices couverts par l'API 526. La nomenclature du Tableau 1
+    // (Standard Effective Orifice Areas and Letter Designations) debute
+    // a D et s'arrete DEFINITIVEMENT a T : c'est la borne superieure
+    // absolue du standard.
+    //
+    // Les lettres U, V et W que l'on rencontre dans des fiches
+    // fournisseurs (« Super Capacity », « Extra-Large ») relevent de
+    // conceptions proprietaires hors API 526 : ni cotes centre-a-face ni
+    // limites pression/temperature previsibles. V et W figurent dans
+    // `areaTable` pour le mode Kf hérité, mais le module de
+    // dimensionnement ne doit JAMAIS les proposer. Le filtrage se fait
+    // par liste blanche ci-dessous, donc tout autre lettre non
+    // standard (U, ou une invention constructeur) est ecartee de meme.
+    const api526Orifices = ['D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'T'];
+
+    // ------------------------------------------------------------------
+    // Aires effectives normalisees — API 526 Tableau 1, valeurs SI (mm2)
+    // ------------------------------------------------------------------
+    // Table DISTINCTE de `areaTable` (exprimee en cm2, utilisee par le
+    // mode Kf herité) et volontairement non fusionnee avec elle :
+    //   - `areaTable` arrondit a 3 chiffres significatifs, ce qui ecarte
+    //     jusqu'a 0.31 % des valeurs du Tableau 1 (T : 16 800 vs 16 774).
+    //     Negligeable physiquement, mais l'outil doit rester recalculable
+    //     a l'identique depuis la norme par un verificateur.
+    //   - modifier `areaTable` changerait les resultats du mode Kf, qui
+    //     a sa propre calibration empirique. Aucune raison d'y toucher.
+    // Valeurs = conversion exacte des aires en in2 du Tableau 1,
+    // arrondie au mm2 (ancrages fournis : D = 71, T = 16 774).
+    const api526AreaMm2 = {
+      'D': 71,    'E': 126,   'F': 198,   'G': 325,   'H': 506,
+      'J': 830,   'K': 1186,  'L': 1841,  'M': 2323,  'N': 2800,
+      'P': 4116,  'Q': 7129,  'R': 10323, 'T': 16774
+    };
+
+    const validNps = ['1', '1.5', '2', '3', '4', '6', '8', '10'];
+    const validRatings = [150, 300, 600, 900, 1500, 2500];
+
+    // ------------------------------------------------------------------
+    // Diametres interieurs de tuyauterie (mm) - ASME B36.10M / B36.19M
+    // Sert au calcul de l'aire de sortie A_e = pi x ID^2 / 4
+    // ------------------------------------------------------------------
+    const pipeIdTable = {
+      '1':   { od: 33.4,  '10S': 27.86,  'STD': 26.64,  '40': 26.64,  '80': 24.30 },
+      '1.5': { od: 48.3,  '10S': 42.76,  'STD': 40.94,  '40': 40.94,  '80': 38.14 },
+      '2':   { od: 60.3,  '10S': 54.76,  'STD': 52.48,  '40': 52.48,  '80': 49.22 },
+      '3':   { od: 88.9,  '10S': 82.80,  'STD': 77.92,  '40': 77.92,  '80': 73.66 },
+      '4':   { od: 114.3, '10S': 108.20, 'STD': 102.26, '40': 102.26, '80': 97.18 },
+      '6':   { od: 168.3, '10S': 161.50, 'STD': 154.08, '40': 154.08, '80': 146.36 },
+      '8':   { od: 219.1, '10S': 211.58, 'STD': 202.74, '40': 202.74, '80': 193.70 },
+      '10':  { od: 273.1, '10S': 264.72, 'STD': 254.56, '40': 254.56, '80': 242.92 }
+    };
+
+    const validSchedules = ['10S', 'STD', '40', '80'];
+
+    // ------------------------------------------------------------------
+    // Pre-remplissage des proprietes fluide (ergonomie uniquement,
+    // toutes les valeurs restent modifiables par l'utilisateur).
+    // M en kg/kmol, k = Cp/Cv a temperature ambiante.
+    // ------------------------------------------------------------------
+    const fluidPresets = {
+      'air':        { label: 'Air',                  M: 28.96,  k: 1.40,  phase: 'gas' },
+      'n2':         { label: 'Azote (N2)',           M: 28.01,  k: 1.40,  phase: 'gas' },
+      'o2':         { label: 'Oxygene (O2)',         M: 32.00,  k: 1.40,  phase: 'gas' },
+      'h2':         { label: 'Hydrogene (H2)',       M: 2.016,  k: 1.41,  phase: 'gas' },
+      'ch4':        { label: 'Methane (CH4)',        M: 16.04,  k: 1.31,  phase: 'gas' },
+      'c2h6':       { label: 'Ethane (C2H6)',        M: 30.07,  k: 1.19,  phase: 'gas' },
+      'c3h8':       { label: 'Propane (C3H8)',       M: 44.10,  k: 1.13,  phase: 'gas' },
+      'co2':        { label: 'Dioxyde de carbone',   M: 44.01,  k: 1.29,  phase: 'gas' },
+      'nh3':        { label: 'Ammoniac (NH3)',       M: 17.03,  k: 1.31,  phase: 'gas' },
+      'steam-sat':  { label: 'Vapeur saturee',       M: 18.015, k: 1.135, phase: 'steam' },
+      'steam-sh':   { label: 'Vapeur surchauffee',   M: 18.015, k: 1.30,  phase: 'steam' }
+    };
+
+    // ------------------------------------------------------------------
+    // Constantes physiques et coefficients par defaut API 520
+    // ------------------------------------------------------------------
+    const API_CONST = {
+      R_UNIVERSAL: 8314,     // J/(kmol.K)
+      P_ATM_KPA: 101.325,    // kPa abs
+      KD_DEFAULT: 0.975,     // coefficient de decharge, soupape API certifiee
+      KB_DEFAULT: 1.0,       // decharge atmospherique : pas de contre-pression
+      KC_NO_DISC: 1.0,       // sans disque de rupture amont
+      KC_WITH_DISC: 0.9,     // avec disque de rupture amont (API 520 Part I)
+      C_SI_FACTOR: 0.03948,  // constante de l'equation gaz, unites SI
+      STEAM_SI_DIVISOR: 190.5, // constante de l'equation vapeur, unites SI
+      NAPIER_MIN_KPA: 10339, // seuil d'application de KN (1500 psia)
+      NAPIER_MAX_KPA: 22057  // pression critique de l'eau (3200 psia)
+    };
+
     // ============================
     // APPLICATION STATE
     // ============================
@@ -3526,8 +4253,362 @@
       // v2.0 state
       selectedConfig: 'CFG-1',
       dlfMode: 'conservative',
-      dlfValue: 2.0
+      dlfValue: 2.0,
+      // v3.0 state - mode dimensionnement API
+      apiResult: null
     };
+
+    // ==================================================================
+    // V3.0 - MOTEUR DE DIMENSIONNEMENT (fonctions pures, unites SI)
+    //
+    // Chaine de calcul en trois modules sequentiels :
+    //   A. selectMaxOrifice() : brides -> orifice maximal API 526
+    //   B. ratedFlow()        : orifice -> debit nominal (API 520 Part I)
+    //   C. reactionForce()    : debit -> effort de decharge (API 520 Part II)
+    //
+    // Hypotheses communes, a rappeler dans toute note de calcul :
+    //   - decharge a l'atmosphere, detente critique (choked flow)
+    //   - pas de calcul iteratif de perte de charge en ligne d'echappement
+    //     (simplification explicitement admise pour un pre-dimensionnement)
+    //   - Kb = 1.0 (aucune contre-pression)
+    // ==================================================================
+
+    // --- Conversions -------------------------------------------------
+    function bargToKPaAbs(barg) { return barg * 100 + API_CONST.P_ATM_KPA; }
+    function psigToKPaAbs(psig) { return psig * 6.894757 + API_CONST.P_ATM_KPA; }
+    function celsiusToK(c) { return c + 273.15; }
+    function fahrenheitToK(f) { return (f - 32) / 1.8 + 273.15; }
+    function cm2ToMm2(cm2) { return cm2 * 100; }
+    function cm2ToIn2(cm2) { return cm2 / 6.4516; }
+
+    /**
+     * Cle de la table API 526 pour un couple de diametres nominaux.
+     */
+    function api526Key(npsIn, npsOut) {
+      return String(npsIn) + 'x' + String(npsOut);
+    }
+
+    // ------------------------------------------------------------------
+    // MODULE A - Retro-ingenierie de l'orifice depuis les brides
+    // ------------------------------------------------------------------
+    /**
+     * Retourne l'orifice d'aire maximale physiquement permis par la
+     * configuration de brides, conformement a l'API 526.
+     *
+     * C'est le coeur de l'approche par enveloppe : en l'absence de donnee
+     * fournisseur, on borne le probleme par le plus gros orifice que le
+     * corps de soupape peut recevoir.
+     *
+     * @returns {{ok: boolean, error?: string, orifice?: string,
+     *            areaCm2?: number, areaMm2?: number, areaIn2?: number,
+     *            candidates?: string[], rejected?: string[],
+     *            verified?: boolean, key?: string}}
+     */
+    function selectMaxOrifice(npsIn, npsOut, rating) {
+      const key = api526Key(npsIn, npsOut);
+      const entry = api526Table[key];
+
+      if (!entry) {
+        return {
+          ok: false,
+          key: key,
+          error: 'Configuration ' + npsIn + '" x ' + npsOut + '" absente de la table API 526. ' +
+                 'Soupape probablement non-standard : cet outil ne la couvre pas.'
+        };
+      }
+
+      const ratingNum = parseInt(rating, 10);
+      if (entry.ratings.indexOf(ratingNum) === -1) {
+        return {
+          ok: false,
+          key: key,
+          error: 'Classe de bride ' + ratingNum + '# non disponible pour un corps ' +
+                 npsIn + '" x ' + npsOut + '" selon API 526 (classes prevues : ' +
+                 entry.ratings.join('#, ') + '#).'
+        };
+      }
+
+      // Surcharge optionnelle : certaines classes restreignent le jeu d'orifices.
+      const candidates = (entry.byRating && entry.byRating[ratingNum])
+        ? entry.byRating[ratingNum]
+        : entry.orifices;
+
+      // Filet de securite par liste blanche : seules les lettres du
+      // Tableau 1 (D a T) sortent d'ici. U, V, W et toute designation
+      // constructeur sont ecartees d'office.
+      const inStandard = candidates.filter(function (o) {
+        return api526Orifices.indexOf(o) !== -1 && typeof api526AreaMm2[o] === 'number';
+      });
+
+      if (inStandard.length === 0) {
+        return { ok: false, key: key, error: 'Aucun orifice API 526 valide pour cette configuration.' };
+      }
+
+      // Regle de decision SRS : retenir l'aire effective la PLUS GRANDE.
+      const maxOrifice = inStandard.reduce(function (best, o) {
+        return api526AreaMm2[o] > api526AreaMm2[best] ? o : best;
+      }, inStandard[0]);
+
+      const areaMm2 = api526AreaMm2[maxOrifice];
+
+      return {
+        ok: true,
+        key: key,
+        orifice: maxOrifice,
+        areaCm2: areaMm2 / 100,
+        areaMm2: areaMm2,
+        areaIn2: areaMm2 / 645.16,
+        candidates: inStandard.slice(),
+        rejected: inStandard.filter(function (o) { return o !== maxOrifice; }),
+        verified: entry.verified === true
+      };
+    }
+
+    // ------------------------------------------------------------------
+    // MODULE B - Debit massique nominal (API 520 Part I)
+    // ------------------------------------------------------------------
+    /**
+     * Coefficient C de l'equation gaz, unites SI.
+     *   C = 0.03948 x sqrt( k x (2/(k+1))^((k+1)/(k-1)) )
+     * Equivaut a la constante 520 des tables US (C_US = 520 x sqrt(...)).
+     *
+     * Cas limite k -> 1 : l'exposant diverge, la limite du terme est 1/e.
+     */
+    function coefficientC(k) {
+      let term;
+      if (Math.abs(k - 1) < 1e-6) {
+        term = 1 / Math.E;
+      } else {
+        term = Math.pow(2 / (k + 1), (k + 1) / (k - 1));
+      }
+      return API_CONST.C_SI_FACTOR * Math.sqrt(k * term);
+    }
+
+    /** Meme coefficient exprime dans les unites US des tables API 520. */
+    function coefficientCUS(k) {
+      return coefficientC(k) / API_CONST.C_SI_FACTOR * 520;
+    }
+
+    /**
+     * Facteur de correction de Napier KN (vapeur d'eau, API 520 Part I).
+     * Vaut 1 en dessous de 10 339 kPa abs (1500 psia).
+     */
+    function napierKN(p1KPa) {
+      if (p1KPa <= API_CONST.NAPIER_MIN_KPA) return 1;
+      return (0.02764 * p1KPa - 1000) / (0.03324 * p1KPa - 1061);
+    }
+
+    /**
+     * Pression critique de detente : en dessous, l'ecoulement est bloque
+     * (choked) et les equations ci-dessous s'appliquent.
+     */
+    function criticalFlowPressure(p1KPa, k) {
+      if (Math.abs(k - 1) < 1e-6) return p1KPa / Math.E;
+      return p1KPa * Math.pow(2 / (k + 1), k / (k - 1));
+    }
+
+    /**
+     * Debit massique nominal (Rated Capacity) en kg/h.
+     *
+     * Gaz / vapeurs (ecoulement critique) :
+     *   W = C x Kd x A x P1 x Kb x Kc x sqrt( M / (Z x T) )
+     * Vapeur d'eau (API 520 Part I, section vapeur) :
+     *   W = A x P1 x Kd x Kb x Kc x KN x KSH / 190.5
+     *
+     * @param {Object} p - areaMm2, p1KPa, tempK, M, k, Z, phase, kd, kb, kc, ksh
+     */
+    function ratedFlow(p) {
+      const kd = typeof p.kd === 'number' ? p.kd : API_CONST.KD_DEFAULT;
+      const kb = typeof p.kb === 'number' ? p.kb : API_CONST.KB_DEFAULT;
+      const kc = typeof p.kc === 'number' ? p.kc : API_CONST.KC_NO_DISC;
+      const warnings = [];
+
+      const pcf = criticalFlowPressure(p.p1KPa, p.k);
+      if (pcf < API_CONST.P_ATM_KPA) {
+        warnings.push('Ecoulement sous-critique : la pression critique de detente (' +
+          pcf.toFixed(1) + ' kPa abs) est inferieure a la pression atmospherique. ' +
+          'Les equations d\'ecoulement bloque ne s\'appliquent pas — resultat non valide.');
+      }
+
+      if (p.phase === 'steam') {
+        // KSH = 1.0 par defaut (vapeur saturee). KSH <= 1 toujours, donc
+        // KSH = 1 maximise W : c'est le choix conservatif de l'approche
+        // par enveloppe. A mentionner dans la note de calcul.
+        const ksh = typeof p.ksh === 'number' ? p.ksh : 1.0;
+        const kn = napierKN(p.p1KPa);
+
+        if (p.p1KPa > API_CONST.NAPIER_MAX_KPA) {
+          warnings.push('P1 depasse la pression critique de l\'eau (22 057 kPa abs) : ' +
+            'la correction de Napier n\'est plus definie.');
+        }
+        if (ksh === 1.0) {
+          warnings.push('KSH = 1.0 (vapeur saturee). Pour de la vapeur surchauffee, ' +
+            'KSH < 1 reduirait le debit : la valeur retenue est conservative.');
+        }
+
+        const w = p.areaMm2 * p.p1KPa * kd * kb * kc * kn * ksh / API_CONST.STEAM_SI_DIVISOR;
+        return { w: w, kn: kn, ksh: ksh, kd: kd, kb: kb, kc: kc, pcf: pcf, warnings: warnings, equation: 'steam' };
+      }
+
+      const c = coefficientC(p.k);
+      const z = typeof p.Z === 'number' && p.Z > 0 ? p.Z : 1.0;
+      const w = c * kd * p.areaMm2 * p.p1KPa * kb * kc * Math.sqrt(p.M / (z * p.tempK));
+
+      return { w: w, c: c, cUS: coefficientCUS(p.k), kd: kd, kb: kb, kc: kc, z: z, pcf: pcf, warnings: warnings, equation: 'gas' };
+    }
+
+    // ------------------------------------------------------------------
+    // MODULE C - Force de reaction (API 520 Part II)
+    // ------------------------------------------------------------------
+    /**
+     * Aire interieure de la tuyauterie de sortie, en m^2.
+     */
+    function outletArea(nps, schedule) {
+      const row = pipeIdTable[String(nps)];
+      if (!row) return null;
+      const idMm = row[schedule];
+      if (typeof idMm !== 'number') return null;
+      return Math.PI * Math.pow(idMm / 1000, 2) / 4;
+    }
+
+    /**
+     * Effort de decharge a l'extremite du tuyau d'echappement.
+     *
+     *   F = W x v_e / g_c + (P_e - P_a) x A_e
+     *
+     * Detente isentropique jusqu'au col sonique :
+     *   T_e,statique = T1 x 2/(k+1)
+     *   v_e          = sqrt( 2 x k x R x T1 / ((k+1) x M) )
+     *   F_momentum   = (W/3600) x v_e
+     *
+     * La pression statique en sortie decoule de la conservation du debit :
+     *   P_e,abs = rho_e x R x T_e / M = m_point x v_e / (k x A_e)
+     * soit l'identite P_e,abs = F_momentum / (k x A_e).
+     *
+     * NOTE DE COHERENCE AVEC L'API 520 PART II :
+     * la norme ecrit F = (W/366) x sqrt(k x T_e / ((k+1) x M)) + A_e x P_e.
+     * Le T_e qui y figure est la temperature de STAGNATION : le facteur 2
+     * de la detente sonique est absorbe dans la constante 366. Verification :
+     * la forme SI equivalente est F_momentum = (W/27.9) x sqrt(k x T1/((k+1) x M)),
+     * qui reproduit 366 a 0.4 % pres (l'arrondi de la norme).
+     *
+     * @param {Object} p - wKgH, tempK, M, k, aeM2, dlf
+     */
+    function reactionForce(p) {
+      const warnings = [];
+      const mDot = p.wKgH / 3600;                                  // kg/s
+      const tExit = p.tempK * 2 / (p.k + 1);                       // K, statique au col
+      const vExit = Math.sqrt(2 * p.k * API_CONST.R_UNIVERSAL * p.tempK / ((p.k + 1) * p.M)); // m/s
+      const fMomentum = mDot * vExit;                              // N
+
+      const peAbsPa = fMomentum / (p.k * p.aeM2);                  // Pa abs
+      const pAtmPa = API_CONST.P_ATM_KPA * 1000;
+      let pressureTerm = (peAbsPa - pAtmPa) * p.aeM2;              // N
+
+      if (peAbsPa < pAtmPa) {
+        warnings.push('Pression statique en sortie (' + (peAbsPa / 1000).toFixed(1) +
+          ' kPa abs) inferieure a l\'atmosphere : l\'ecoulement n\'est pas bloque a ' +
+          'l\'extremite du tuyau. Le terme de pression est borne a 0 (pas de poussee negative). ' +
+          'Envisager une section de sortie plus faible ou un calcul detaille.');
+        pressureTerm = 0;
+      }
+
+      const fStaticN = fMomentum + pressureTerm;
+      const dlf = typeof p.dlf === 'number' ? p.dlf : 2.0;
+      const fDesignN = fStaticN * dlf;
+
+      return {
+        mDot: mDot,
+        tExitK: tExit,
+        vExit: vExit,
+        fMomentumN: fMomentum,
+        peAbsKPa: peAbsPa / 1000,
+        peGaugeKPa: (peAbsPa - pAtmPa) / 1000,
+        pressureTermN: pressureTerm,
+        fStaticN: fStaticN,
+        fStaticDaN: fStaticN / 10,
+        fStaticLbf: fStaticN / 4.4482216,
+        dlf: dlf,
+        fDesignN: fDesignN,
+        fDesignDaN: fDesignN / 10,
+        fDesignLbf: fDesignN / 4.4482216,
+        warnings: warnings
+      };
+    }
+
+    /**
+     * Orchestration des trois modules. Entree = donnees brutes de l'UI
+     * (deja converties en SI par l'appelant), sortie = objet de resultat
+     * complet, y compris les intermediaires necessaires a la verification
+     * manuelle du calcul.
+     */
+    function computeApiSizing(input) {
+      const orifice = selectMaxOrifice(input.npsIn, input.npsOut, input.rating);
+      if (!orifice.ok) return { ok: false, error: orifice.error, stage: 'A' };
+
+      const aeM2 = outletArea(input.npsOut, input.schedule);
+      if (!aeM2) {
+        return { ok: false, stage: 'C', error: 'Diametre interieur inconnu pour ' +
+          input.npsOut + '" schedule ' + input.schedule + '.' };
+      }
+
+      const flow = ratedFlow({
+        areaMm2: orifice.areaMm2,
+        p1KPa: input.p1KPa,
+        tempK: input.tempK,
+        M: input.M,
+        k: input.k,
+        Z: input.Z,
+        phase: input.phase,
+        kc: input.hasRuptureDisc ? API_CONST.KC_WITH_DISC : API_CONST.KC_NO_DISC,
+        ksh: input.ksh
+      });
+
+      const force = reactionForce({
+        wKgH: flow.w,
+        tempK: input.tempK,
+        M: input.M,
+        k: input.k,
+        aeM2: aeM2,
+        dlf: input.dlf
+      });
+
+      return {
+        ok: true,
+        orifice: orifice,
+        flow: flow,
+        force: force,
+        aeM2: aeM2,
+        aeCm2: aeM2 * 1e4,
+        input: input,
+        warnings: flow.warnings.concat(force.warnings),
+        unverifiedTable: !orifice.verified
+      };
+    }
+
+    /**
+     * Bloc de reserves a coller dans les notes de calcul CAESAR II /
+     * AutoPIPE (SRS section 5).
+     */
+    /** Affichage homogene du DLF : 2 -> "2.0", 1.75 -> "1.75". */
+    function formatDlf(v) {
+      return Number.isInteger(v) ? v.toFixed(1) : String(v);
+    }
+
+    function buildApiDisclaimer(result) {
+      const dlf = formatDlf(result.force.dlf);
+      const o = result.orifice;
+      return 'Note de Conception : Les efforts de decharge ont ete evalues via une methode par ' +
+        'enveloppe (Bounding Approach). En l\'absence de donnees fournisseur, la soupape est ' +
+        'assumee conforme a la norme API 526, et l\'orifice maximum physique permis par les ' +
+        'dimensions des brides a ete utilise pour calculer le debit nominal (Rated Flow). ' +
+        'Configuration retenue : ' + result.input.npsIn + '" x ' + result.input.npsOut + '" CL' +
+        result.input.rating + ', orifice ' + o.orifice + ' (A = ' + o.areaCm2.toFixed(2) + ' cm2 / ' +
+        o.areaIn2.toFixed(3) + ' in2). Un facteur de charge dynamique (DLF) de ' + dlf +
+        ' a ete applique. L\'orifice reel de l\'equipement sur site devra etre verifie. ' +
+        'Si l\'orifice s\'avere non-standard et superieur a la borne de l\'API 526, cette ' +
+        'analyse devra etre invalidee et recalculee.';
+    }
 
     // ============================
     // DOM ELEMENTS - SIMPLE MODE
@@ -3549,6 +4630,8 @@
     // ============================
     const modeSimpleBtn = document.getElementById('modeSimpleBtn');
     const modeBatchBtn = document.getElementById('modeBatchBtn');
+    const modeApiBtn = document.getElementById('modeApiBtn');
+    const apiSection = document.getElementById('apiSection');
     const simpleSection = document.getElementById('simpleSection');
     const batchSection = document.getElementById('batchSection');
     const appContainer = document.getElementById('appContainer');
@@ -3669,8 +4752,8 @@
 
       // Update URL
       const url = new URL(window.location);
-      if (mode === 'batch') {
-        url.searchParams.set('mode', 'batch');
+      if (mode === 'batch' || mode === 'api') {
+        url.searchParams.set('mode', mode);
       } else {
         url.searchParams.delete('mode');
       }
@@ -3679,8 +4762,10 @@
       // Update UI
       modeSimpleBtn.classList.toggle('active', mode === 'simple');
       modeBatchBtn.classList.toggle('active', mode === 'batch');
-      simpleSection.classList.toggle('hide', mode === 'batch');
+      modeApiBtn.classList.toggle('active', mode === 'api');
+      simpleSection.classList.toggle('hide', mode !== 'simple');
       batchSection.classList.toggle('show', mode === 'batch');
+      apiSection.classList.toggle('show', mode === 'api');
       appContainer.classList.toggle('batch-mode', mode === 'batch');
 
       // Check for saved session in batch mode
@@ -3691,12 +4776,14 @@
 
     modeSimpleBtn.addEventListener('click', () => switchMode('simple'));
     modeBatchBtn.addEventListener('click', () => switchMode('batch'));
+    modeApiBtn.addEventListener('click', () => switchMode('api'));
 
     // Check URL for mode on load
     function checkUrlMode() {
       const params = new URLSearchParams(window.location.search);
-      if (params.get('mode') === 'batch') {
-        switchMode('batch');
+      const mode = params.get('mode');
+      if (mode === 'batch' || mode === 'api') {
+        switchMode(mode);
       }
     }
 
@@ -4028,53 +5115,53 @@
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-1 : Decharge verticale haut</text>
           <rect x="80" y="70" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <rect x="85" y="55" width="30" height="20" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <line x1="100" y1="55" x2="100" y2="25" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB)"/>
-          <line x1="100" y1="120" x2="100" y2="148" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR)"/>
-          <text x="115" y="40" font-size="9" fill="#3B82F6">Sortie</text>
-          <text x="115" y="140" font-size="9" font-weight="600" fill="#EF4444">Fy = -${fDesign.toFixed(0)} daN</text>
+          <line x1="100" y1="55" x2="100" y2="25" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB)"/>
+          <line x1="100" y1="120" x2="100" y2="148" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR)"/>
+          <text x="115" y="40" font-size="9" fill="#0D9488">Sortie</text>
+          <text x="115" y="140" font-size="9" font-weight="600" fill="#DC2626">Fy = -${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
-          <defs><marker id="dArrowB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-2': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-2 : Decharge verticale bas</text>
           <rect x="80" y="40" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <rect x="85" y="85" width="30" height="20" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <line x1="100" y1="105" x2="100" y2="135" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB2)"/>
-          <line x1="100" y1="40" x2="100" y2="20" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR2)"/>
-          <text x="115" y="130" font-size="9" fill="#3B82F6">Sortie</text>
-          <text x="115" y="30" font-size="9" font-weight="600" fill="#EF4444">Fy = +${fDesign.toFixed(0)} daN</text>
+          <line x1="100" y1="105" x2="100" y2="135" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB2)"/>
+          <line x1="100" y1="40" x2="100" y2="20" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR2)"/>
+          <text x="115" y="130" font-size="9" fill="#0D9488">Sortie</text>
+          <text x="115" y="30" font-size="9" font-weight="600" fill="#DC2626">Fy = +${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
-          <defs><marker id="dArrowB2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-3': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-3 : Decharge horizontale</text>
           <rect x="40" y="55" width="50" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <rect x="85" y="62" width="20" height="26" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <line x1="105" y1="75" x2="155" y2="75" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB3)"/>
-          <line x1="40" y1="75" x2="10" y2="75" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR3)"/>
-          <text x="140" y="68" font-size="9" fill="#3B82F6">Sortie</text>
-          <text x="10" y="100" font-size="9" font-weight="600" fill="#EF4444">Fx = -${fDesign.toFixed(0)} daN</text>
+          <line x1="105" y1="75" x2="155" y2="75" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB3)"/>
+          <line x1="40" y1="75" x2="10" y2="75" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR3)"/>
+          <text x="140" y="68" font-size="9" fill="#0D9488">Sortie</text>
+          <text x="10" y="100" font-size="9" font-weight="600" fill="#DC2626">Fx = -${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fy=0, Fz=0</text>
-          <defs><marker id="dArrowB3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-4': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-4 : Coude 90°</text>
           <rect x="55" y="75" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <path d="M75 75 L75 50 Q75 40 85 40 L110 40" stroke="#D1D5DB" stroke-width="8" fill="none"/>
           <path d="M75 75 L75 50 Q75 40 85 40 L110 40" stroke="#6B7280" stroke-width="2" fill="none"/>
-          <line x1="110" y1="40" x2="155" y2="40" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB4)"/>
-          <line x1="75" y1="115" x2="75" y2="145" stroke="#EF4444" stroke-width="2.5" marker-end="url(#dArrowR4a)"/>
-          <line x1="55" y1="95" x2="20" y2="95" stroke="#EF4444" stroke-width="2.5" marker-end="url(#dArrowR4b)"/>
-          <text x="145" y="35" font-size="9" fill="#3B82F6">Sortie</text>
-          <text x="85" y="140" font-size="8" font-weight="600" fill="#EF4444">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
-          <text x="5" y="108" font-size="8" font-weight="600" fill="#EF4444">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
+          <line x1="110" y1="40" x2="155" y2="40" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB4)"/>
+          <line x1="75" y1="115" x2="75" y2="145" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR4a)"/>
+          <line x1="55" y1="95" x2="20" y2="95" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR4b)"/>
+          <text x="145" y="35" font-size="9" fill="#0D9488">Sortie</text>
+          <text x="85" y="140" font-size="8" font-weight="600" fill="#DC2626">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
+          <text x="5" y="108" font-size="8" font-weight="600" fill="#DC2626">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fz=0</text>
-          <defs><marker id="dArrowB4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR4a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker>
-          <marker id="dArrowR4b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR4a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker>
+          <marker id="dArrowR4b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-5': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-5 : Collecteur (torche)</text>
@@ -4082,64 +5169,64 @@
           <rect x="65" y="62" width="15" height="26" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
           <rect x="80" y="40" width="80" height="70" rx="5" fill="#F9FAFB" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4 3"/>
           <text x="120" y="78" text-anchor="middle" font-size="9" fill="#6B7280">Collecteur</text>
-          <line x1="30" y1="75" x2="8" y2="75" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR5)"/>
-          <text x="10" y="100" font-size="9" font-weight="600" fill="#EF4444">Fx = -${fDesign.toFixed(0)} daN</text>
+          <line x1="30" y1="75" x2="8" y2="75" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR5)"/>
+          <text x="10" y="100" font-size="9" font-weight="600" fill="#DC2626">Fx = -${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fy=0, Fz=0 (contre-pression reduit F)</text>
-          <defs><marker id="dArrowR5" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowR5" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-6': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-6 : Col de cygne (180°)</text>
           <rect x="50" y="85" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <text x="70" y="108" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
-          <rect x="65" y="50" width="10" height="37" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
-          <rect x="65" y="40" width="60" height="10" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
-          <rect x="115" y="48" width="10" height="40" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
-          <line x1="120" y1="70" x2="120" y2="100" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB6)"/>
-          <text x="132" y="95" font-size="9" fill="#3B82F6">Sortie</text>
-          <line x1="70" y1="125" x2="70" y2="148" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR6)"/>
-          <text x="80" y="145" font-size="9" font-weight="600" fill="#EF4444">Fy = -${fDesign.toFixed(0)} daN</text>
+          <rect x="65" y="50" width="10" height="37" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
+          <rect x="65" y="40" width="60" height="10" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
+          <rect x="115" y="48" width="10" height="40" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
+          <line x1="120" y1="70" x2="120" y2="100" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB6)"/>
+          <text x="132" y="95" font-size="9" fill="#0D9488">Sortie</text>
+          <line x1="70" y1="125" x2="70" y2="148" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR6)"/>
+          <text x="80" y="145" font-size="9" font-weight="600" fill="#DC2626">Fy = -${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
-          <defs><marker id="dArrowB6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-7': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-7 : Decharge laterale (Z)</text>
           <rect x="60" y="70" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <text x="80" y="98" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
-          <rect x="75" y="50" width="10" height="22" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
-          <ellipse cx="80" cy="50" rx="5" ry="3" fill="#93C5FD" stroke="#60A5FA" stroke-width="1"/>
-          <line x1="80" y1="50" x2="55" y2="30" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB7)"/>
-          <text x="38" y="28" font-size="9" fill="#3B82F6">Z</text>
-          <line x1="80" y1="70" x2="110" y2="95" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR7)"/>
-          <text x="115" y="95" font-size="9" font-weight="600" fill="#EF4444">Fz = -${fDesign.toFixed(0)} daN</text>
+          <rect x="75" y="50" width="10" height="22" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
+          <ellipse cx="80" cy="50" rx="5" ry="3" fill="#CCFBF1" stroke="#0D9488" stroke-width="1"/>
+          <line x1="80" y1="50" x2="55" y2="30" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB7)"/>
+          <text x="38" y="28" font-size="9" fill="#0D9488">Z</text>
+          <line x1="80" y1="70" x2="110" y2="95" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR7)"/>
+          <text x="115" y="95" font-size="9" font-weight="600" fill="#DC2626">Fz = -${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fy=0</text>
-          <line x1="140" y1="130" x2="170" y2="130" stroke="#EF4444" stroke-width="1.5"/>
+          <line x1="140" y1="130" x2="170" y2="130" stroke="#DC2626" stroke-width="1.5"/>
           <text x="172" y="133" font-size="7" fill="#6B7280">axe X (tuyauterie)</text>
-          <line x1="140" y1="130" x2="140" y2="110" stroke="#22C55E" stroke-width="1.5"/>
+          <line x1="140" y1="130" x2="140" y2="110" stroke="#0D9488" stroke-width="1.5"/>
           <text x="143" y="112" font-size="7" fill="#6B7280">Y</text>
-          <line x1="140" y1="130" x2="122" y2="142" stroke="#3B82F6" stroke-width="1.5"/>
+          <line x1="140" y1="130" x2="122" y2="142" stroke="#0D9488" stroke-width="1.5"/>
           <text x="118" y="148" font-size="7" fill="#6B7280">Z</text>
-          <defs><marker id="dArrowB7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-8': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-8 : Inclinee 45°</text>
           <rect x="50" y="80" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <text x="70" y="103" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
-          <line x1="70" y1="80" x2="140" y2="25" stroke="#DBEAFE" stroke-width="10" stroke-linecap="round"/>
-          <line x1="70" y1="80" x2="140" y2="25" stroke="#93C5FD" stroke-width="1.5"/>
-          <line x1="120" y1="42" x2="140" y2="25" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB8)"/>
-          <text x="142" y="30" font-size="9" fill="#3B82F6">Sortie</text>
+          <line x1="70" y1="80" x2="140" y2="25" stroke="#F0FDFA" stroke-width="10" stroke-linecap="round"/>
+          <line x1="70" y1="80" x2="140" y2="25" stroke="#0D9488" stroke-width="1.5"/>
+          <line x1="120" y1="42" x2="140" y2="25" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB8)"/>
+          <text x="142" y="30" font-size="9" fill="#0D9488">Sortie</text>
           <path d="M70,72 Q70,62 78,58" stroke="#9CA3AF" stroke-width="1" fill="none" stroke-dasharray="2 1.5"/>
           <text x="76" y="68" font-size="8" fill="#9CA3AF">45°</text>
-          <line x1="70" y1="120" x2="70" y2="148" stroke="#EF4444" stroke-width="2.5" marker-end="url(#dArrowR8a)"/>
-          <text x="80" y="145" font-size="8" font-weight="600" fill="#EF4444">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
-          <line x1="50" y1="100" x2="15" y2="100" stroke="#EF4444" stroke-width="2.5" marker-end="url(#dArrowR8b)"/>
-          <text x="8" y="115" font-size="8" font-weight="600" fill="#EF4444">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
+          <line x1="70" y1="120" x2="70" y2="148" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR8a)"/>
+          <text x="80" y="145" font-size="8" font-weight="600" fill="#DC2626">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
+          <line x1="50" y1="100" x2="15" y2="100" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR8b)"/>
+          <text x="8" y="115" font-size="8" font-weight="600" fill="#DC2626">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fz=0</text>
-          <defs><marker id="dArrowB8" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR8a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker>
-          <marker id="dArrowR8b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB8" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR8a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker>
+          <marker id="dArrowR8b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`
       };
 
@@ -5312,6 +6399,470 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
       }
     }, 30000);
 
+    // ==================================================================
+    // V3.0 - CONTROLEUR DU MODE DIMENSIONNEMENT API
+    // ==================================================================
+    const apiEls = {
+      npsIn: document.getElementById('apiNpsIn'),
+      npsOut: document.getElementById('apiNpsOut'),
+      rating: document.getElementById('apiRating'),
+      schedule: document.getElementById('apiSchedule'),
+      config: document.getElementById('apiConfig'),
+      dlfOptions: document.getElementById('apiDlfOptions'),
+      dlfCustomInput: document.getElementById('apiDlfCustomInput'),
+      dlfCustomValue: document.getElementById('apiDlfCustomValue'),
+      dlfWarning: document.getElementById('apiDlfWarning'),
+      fluidPreset: document.getElementById('apiFluidPreset'),
+      pset: document.getElementById('apiPset'),
+      psetUnit: document.getElementById('apiPsetUnit'),
+      overpressure: document.getElementById('apiOverpressure'),
+      overpressurePreset: document.getElementById('apiOverpressurePreset'),
+      temp: document.getElementById('apiTemp'),
+      tempUnit: document.getElementById('apiTempUnit'),
+      M: document.getElementById('apiM'),
+      k: document.getElementById('apiK'),
+      Z: document.getElementById('apiZ'),
+      ruptureDisc: document.getElementById('apiRuptureDisc'),
+      kshGroup: document.getElementById('apiKshGroup'),
+      ksh: document.getElementById('apiKsh'),
+      aeHint: document.getElementById('apiAeHint'),
+      emptyState: document.getElementById('apiEmptyState'),
+      resultsSection: document.getElementById('apiResultsSection'),
+      resultsBody: document.getElementById('apiResultsBody'),
+      errorBox: document.getElementById('apiErrorBox'),
+      orificeLetter: document.getElementById('apiOrificeLetter'),
+      orificeMeta: document.getElementById('apiOrificeMeta'),
+      flowValue: document.getElementById('apiFlowValue'),
+      fStaticValue: document.getElementById('apiFStaticValue'),
+      fStaticAlt: document.getElementById('apiFStaticAlt'),
+      fDesignValue: document.getElementById('apiFDesignValue'),
+      fDesignAlt: document.getElementById('apiFDesignAlt'),
+      dlfBadge: document.getElementById('apiDlfBadge'),
+      fx: document.getElementById('apiFxValue'),
+      fy: document.getElementById('apiFyValue'),
+      fz: document.getElementById('apiFzValue'),
+      warnings: document.getElementById('apiWarnings'),
+      intermediates: document.getElementById('apiIntermediates'),
+      disclaimer: document.getElementById('apiDisclaimerText'),
+      refTable: document.getElementById('api526RefTable'),
+      calculateBtn: document.getElementById('apiCalculateBtn'),
+      resetBtn: document.getElementById('apiResetBtn'),
+      exampleBtn: document.getElementById('apiExampleBtn'),
+      copyBtn: document.getElementById('apiCopyBtn'),
+      copyDisclaimerBtn: document.getElementById('apiCopyDisclaimerBtn'),
+      printBtn: document.getElementById('apiPrintBtn')
+    };
+
+    let apiDlfMode = 'conservative';
+
+    /** Remplit les listes deroulantes depuis les tables de donnees. */
+    function populateApiSelects() {
+      const npsOptions = validNps.map(function (n) {
+        return '<option value="' + n + '">' + n + '"</option>';
+      }).join('');
+      apiEls.npsIn.innerHTML = '<option value="">Selectionner...</option>' + npsOptions;
+      apiEls.npsOut.innerHTML = '<option value="">Selectionner...</option>' + npsOptions;
+
+      apiEls.rating.innerHTML = '<option value="">Selectionner...</option>' +
+        validRatings.map(function (r) {
+          return '<option value="' + r + '">' + r + '#</option>';
+        }).join('');
+
+      apiEls.schedule.innerHTML = validSchedules.map(function (s) {
+        return '<option value="' + s + '"' + (s === 'STD' ? ' selected' : '') + '>Sch ' + s + '</option>';
+      }).join('');
+
+      apiEls.config.innerHTML = validConfigs.map(function (c) {
+        return '<option value="' + c + '">' + configurationsTable[c].label +
+          ' — ' + configurationsTable[c].description + '</option>';
+      }).join('');
+
+      apiEls.fluidPreset.innerHTML = '<option value="">Saisie manuelle</option>' +
+        Object.keys(fluidPresets).map(function (key) {
+          return '<option value="' + key + '">' + fluidPresets[key].label + '</option>';
+        }).join('');
+
+      // Table de reference API 526 : une ligne par couple corps / classe,
+      // puisque l'orifice maximal depend de la classe d'entree.
+      const refRows = [];
+      Object.keys(api526Table).forEach(function (key) {
+        const e = api526Table[key];
+        const parts = key.split('x');
+        e.ratings.forEach(function (rating) {
+          const candidates = (e.byRating && e.byRating[rating]) ? e.byRating[rating] : e.orifices;
+          const maxO = candidates.reduce(function (b, o) {
+            return api526AreaMm2[o] > api526AreaMm2[b] ? o : b;
+          }, candidates[0]);
+          refRows.push('<tr>' +
+            '<td>' + parts[0] + '" x ' + parts[1] + '"</td>' +
+            '<td>' + rating + '#</td>' +
+            '<td>' + candidates.join(', ') + '</td>' +
+            '<td><strong>' + maxO + '</strong></td>' +
+            '<td>' + (api526AreaMm2[maxO] / 100).toFixed(2).replace('.', ',') + '</td>' +
+            '</tr>');
+        });
+      });
+      apiEls.refTable.innerHTML = refRows.join('');
+    }
+
+    /** DLF courant du mode API. */
+    function getApiDLF() {
+      if (apiDlfMode === 'custom') {
+        const v = parseFloat(apiEls.dlfCustomValue.value);
+        return isNaN(v) ? 2.0 : v;
+      }
+      return dlfPresets[apiDlfMode].value;
+    }
+
+    /**
+     * Avertissement exige par la SRS 2.1 : toute valeur < 2.0 doit etre
+     * justifiee par une analyse temporelle (time-history).
+     */
+    function refreshApiDlfWarning() {
+      const v = getApiDLF();
+      if (v < 2.0) {
+        apiEls.dlfWarning.style.display = 'block';
+        apiEls.dlfWarning.innerHTML = '<strong>DLF = ' + v + ' — justification requise</strong>' +
+          'Toute valeur inferieure a 2.0 doit etre justifiee par une analyse dynamique ' +
+          'temporelle (time-history). A defaut, conserver DLF = 2.0.';
+      } else {
+        apiEls.dlfWarning.style.display = 'none';
+      }
+    }
+
+    /** Met a jour l'aide sur A_e a chaque changement de sortie/schedule. */
+    function refreshApiAeHint() {
+      const nps = apiEls.npsOut.value;
+      const sch = apiEls.schedule.value;
+      const row = pipeIdTable[nps];
+      if (!row || typeof row[sch] !== 'number') {
+        apiEls.aeHint.textContent = 'A_e est calculee sur le diametre interieur du NPS de sortie.';
+        return;
+      }
+      const ae = outletArea(nps, sch);
+      apiEls.aeHint.textContent = 'A_e = ' + (ae * 1e4).toFixed(2) + ' cm2 ' +
+        '(DI ' + row[sch].toFixed(2) + ' mm, DE ' + row.od.toFixed(1) + ' mm).';
+    }
+
+    /** Rassemble et convertit les entrees de l'UI en unites SI. */
+    function readApiInputs() {
+      const psetRaw = parseFloat(apiEls.pset.value);
+      const overpressure = parseFloat(apiEls.overpressure.value);
+      const tempRaw = parseFloat(apiEls.temp.value);
+      const M = parseFloat(apiEls.M.value);
+      const k = parseFloat(apiEls.k.value);
+      const Z = parseFloat(apiEls.Z.value);
+
+      const missing = [];
+      if (!apiEls.npsIn.value) missing.push('NPS entree');
+      if (!apiEls.npsOut.value) missing.push('NPS sortie');
+      if (!apiEls.rating.value) missing.push('classe de bride');
+      if (isNaN(psetRaw) || psetRaw <= 0) missing.push('pression de tarage');
+      if (isNaN(overpressure) || overpressure < 0) missing.push('surpression');
+      if (isNaN(tempRaw)) missing.push('temperature');
+      if (isNaN(M) || M <= 0) missing.push('masse molaire');
+      if (isNaN(k) || k < 1) missing.push('exposant isentropique k');
+      if (missing.length) return { ok: false, missing: missing };
+
+      // P1 = P_tarage x (1 + surpression/100) + P_atm — meme definition
+      // que le calculateur P1 du mode simple.
+      const psetAccum = psetRaw * (1 + overpressure / 100);
+      const p1KPa = apiEls.psetUnit.value === 'psig'
+        ? psigToKPaAbs(psetAccum)
+        : bargToKPaAbs(psetAccum);
+
+      const tempK = apiEls.tempUnit.value === 'F'
+        ? fahrenheitToK(tempRaw)
+        : celsiusToK(tempRaw);
+
+      const preset = fluidPresets[apiEls.fluidPreset.value];
+      const phase = preset && preset.phase === 'steam' ? 'steam' : 'gas';
+
+      return {
+        ok: true,
+        npsIn: apiEls.npsIn.value,
+        npsOut: apiEls.npsOut.value,
+        rating: parseInt(apiEls.rating.value, 10),
+        schedule: apiEls.schedule.value,
+        p1KPa: p1KPa,
+        p1Barg: psetAccum,
+        psetRaw: psetRaw,
+        psetUnit: apiEls.psetUnit.value,
+        overpressure: overpressure,
+        tempRaw: tempRaw,
+        tempUnit: apiEls.tempUnit.value,
+        tempK: tempK,
+        M: M,
+        k: k,
+        Z: isNaN(Z) ? 1.0 : Z,
+        phase: phase,
+        ksh: phase === 'steam' ? parseFloat(apiEls.ksh.value) : undefined,
+        hasRuptureDisc: apiEls.ruptureDisc.checked,
+        dlf: getApiDLF(),
+        config: apiEls.config.value
+      };
+    }
+
+    function showApiError(message) {
+      apiEls.emptyState.style.display = 'none';
+      apiEls.resultsSection.classList.add('show');
+      apiEls.errorBox.style.display = 'block';
+      apiEls.errorBox.textContent = message;
+      apiEls.resultsBody.style.display = 'none';
+    }
+
+    function calculateApiSizing() {
+      const input = readApiInputs();
+      if (!input.ok) {
+        showToast('Champs manquants : ' + input.missing.join(', '), 'error');
+        return;
+      }
+
+      const result = computeApiSizing(input);
+      if (!result.ok) {
+        appState.apiResult = null;
+        showApiError(result.error);
+        return;
+      }
+
+      appState.apiResult = result;
+      renderApiResult(result);
+      showToast('Calcul effectue');
+    }
+
+    function renderApiResult(result) {
+      const o = result.orifice;
+      const f = result.force;
+      const flow = result.flow;
+
+      apiEls.emptyState.style.display = 'none';
+      apiEls.resultsSection.classList.add('show');
+      apiEls.errorBox.style.display = 'none';
+      apiEls.resultsBody.style.display = 'block';
+
+      // 1. Hypothese d'orifice
+      apiEls.orificeLetter.textContent = o.orifice;
+      apiEls.orificeMeta.innerHTML =
+        '<strong>Aire = ' + o.areaCm2.toFixed(2) + ' cm2</strong> (' + o.areaIn2.toFixed(3) + ' in2)<br>' +
+        'Corps ' + result.input.npsIn + '" x ' + result.input.npsOut + '" CL' + result.input.rating + ' — ' +
+        'orifices possibles : ' + o.candidates.join(', ') +
+        (o.rejected.length ? ' (ecartes : ' + o.rejected.join(', ') + ')' : '') + '<br>' +
+        '<em>' + (o.verified ? 'Entree validee contre API 526.' : 'Entree NON validee contre API 526.') + '</em>';
+
+      // 2. Debit
+      apiEls.flowValue.textContent = flow.w.toFixed(0);
+
+      // 3. Efforts
+      apiEls.fStaticValue.textContent = f.fStaticDaN.toFixed(1);
+      apiEls.fStaticAlt.textContent = f.fStaticN.toFixed(0) + ' N — ' + f.fStaticLbf.toFixed(0) + ' lbf';
+      apiEls.fDesignValue.textContent = f.fDesignDaN.toFixed(1);
+      apiEls.fDesignAlt.textContent = f.fDesignN.toFixed(0) + ' N — ' + f.fDesignLbf.toFixed(0) + ' lbf';
+      apiEls.dlfBadge.textContent = 'DLF ' + formatDlf(f.dlf);
+      apiEls.dlfBadge.className = 'badge ' + (f.dlf < 2.0 ? 'badge-warning' : 'badge-success');
+
+      // 4. Composantes selon la configuration de decharge
+      const cfg = configurationsTable[result.input.config] || configurationsTable['CFG-1'];
+      const comp = cfg.components(parseFloat(f.fDesignDaN.toFixed(2)));
+      apiEls.fx.textContent = comp.fx.toFixed(2);
+      apiEls.fy.textContent = comp.fy.toFixed(2);
+      apiEls.fz.textContent = comp.fz.toFixed(2);
+
+      // Avertissements
+      const allWarnings = result.warnings.slice();
+      if (result.unverifiedTable) {
+        allWarnings.unshift('La combinaison de brides utilisee provient d\'une table API 526 ' +
+          'non encore validee contre la norme. A verifier avant usage en ingenierie de detail.');
+      }
+      apiEls.warnings.innerHTML = allWarnings.map(function (w) {
+        return '<li>' + w + '</li>';
+      }).join('');
+
+      // 5. Intermediaires
+      const rows = [
+        ['P1 (pression de decharge absolue)', result.input.p1KPa.toFixed(1) + ' kPa abs'],
+        ['P1', (result.input.p1KPa / 100).toFixed(3) + ' bar abs'],
+        ['Pression critique de detente (P_cf)', flow.pcf.toFixed(1) + ' kPa abs'],
+        ['Temperature de decharge (T1)', result.input.tempK.toFixed(2) + ' K'],
+        ['Temperature statique en sortie (T_e)', f.tExitK.toFixed(2) + ' K'],
+        ['Aire d\'orifice (A)', o.areaMm2.toFixed(1) + ' mm2'],
+        ['Aire de sortie (A_e)', result.aeCm2.toFixed(2) + ' cm2'],
+        ['Kd / Kb / Kc', flow.kd + ' / ' + flow.kb + ' / ' + flow.kc]
+      ];
+      if (flow.equation === 'gas') {
+        rows.push(['Coefficient C (SI)', flow.c.toFixed(5)]);
+        rows.push(['Coefficient C (US, table API 520)', flow.cUS.toFixed(1)]);
+        rows.push(['Facteur de compressibilite Z', String(flow.z)]);
+      } else {
+        rows.push(['Equation', 'Vapeur d\'eau (API 520 Part I)']);
+        rows.push(['Correction de Napier KN', flow.kn.toFixed(4)]);
+        rows.push(['Facteur de surchauffe KSH', flow.ksh.toFixed(3)]);
+      }
+      rows.push(['Debit massique (W)', flow.w.toFixed(1) + ' kg/h']);
+      rows.push(['Debit massique', f.mDot.toFixed(4) + ' kg/s']);
+      rows.push(['Vitesse en sortie (v_e)', f.vExit.toFixed(1) + ' m/s']);
+      rows.push(['Pression statique en sortie (P_e)', f.peAbsKPa.toFixed(1) + ' kPa abs']);
+      rows.push(['Terme de quantite de mouvement', f.fMomentumN.toFixed(0) + ' N']);
+      rows.push(['Terme de pression', f.pressureTermN.toFixed(0) + ' N']);
+      rows.push(['F_statique', f.fStaticN.toFixed(0) + ' N']);
+      rows.push(['DLF', formatDlf(f.dlf)]);
+      rows.push(['F_design', f.fDesignN.toFixed(0) + ' N']);
+
+      apiEls.intermediates.innerHTML = rows.map(function (r) {
+        return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>';
+      }).join('');
+
+      // Bloc de reserves
+      apiEls.disclaimer.value = buildApiDisclaimer(result);
+    }
+
+    function buildApiResultText(result) {
+      const o = result.orifice;
+      const f = result.force;
+      const cfg = configurationsTable[result.input.config] || configurationsTable['CFG-1'];
+      const comp = cfg.components(parseFloat(f.fDesignDaN.toFixed(2)));
+      return [
+        'DIMENSIONNEMENT PSV PAR ENVELOPPE (API 526 / API 520)',
+        '',
+        'Configuration : ' + result.input.npsIn + '" x ' + result.input.npsOut + '" CL' + result.input.rating +
+          ' (sortie Sch ' + result.input.schedule + ')',
+        'Orifice maximum assume selon API 526 : ' + o.orifice +
+          ' (Aire = ' + o.areaCm2.toFixed(2) + ' cm2 / ' + o.areaIn2.toFixed(3) + ' in2)',
+        'Orifices possibles : ' + o.candidates.join(', '),
+        '',
+        'P1 = ' + (result.input.p1KPa / 100).toFixed(3) + ' bar abs' +
+          ' (P_set ' + result.input.psetRaw + ' ' + result.input.psetUnit +
+          ' + ' + result.input.overpressure + ' % de surpression)',
+        'T = ' + result.input.tempK.toFixed(2) + ' K   M = ' + result.input.M +
+          '   k = ' + result.input.k + '   Z = ' + result.input.Z,
+        '',
+        'Debit massique nominal W = ' + result.flow.w.toFixed(0) + ' kg/h' +
+          '  (Rated Capacity, pas le Required Capacity du procede)',
+        'F_statique = ' + f.fStaticDaN.toFixed(1) + ' daN (' + f.fStaticN.toFixed(0) + ' N / ' + f.fStaticLbf.toFixed(0) + ' lbf)',
+        'F_design   = ' + f.fDesignDaN.toFixed(1) + ' daN (DLF = ' + formatDlf(f.dlf) + ')',
+        '',
+        'Configuration de decharge : ' + cfg.label + ' — ' + cfg.description,
+        'Fx = ' + comp.fx.toFixed(2) + ' daN   Fy = ' + comp.fy.toFixed(2) + ' daN   Fz = ' + comp.fz.toFixed(2) + ' daN',
+        '',
+        buildApiDisclaimer(result)
+      ].join('\n');
+    }
+
+    function resetApiForm() {
+      apiEls.npsIn.value = '';
+      apiEls.npsOut.value = '';
+      apiEls.rating.value = '';
+      apiEls.schedule.value = 'STD';
+      apiEls.config.value = 'CFG-1';
+      apiEls.fluidPreset.value = '';
+      apiEls.pset.value = '';
+      apiEls.psetUnit.value = 'barg';
+      apiEls.overpressure.value = 10;
+      apiEls.overpressurePreset.value = '10';
+      apiEls.temp.value = '';
+      apiEls.tempUnit.value = 'C';
+      apiEls.M.value = '';
+      apiEls.k.value = '';
+      apiEls.Z.value = 1.0;
+      apiEls.ruptureDisc.checked = false;
+      apiEls.kshGroup.style.display = 'none';
+      apiEls.ksh.value = 1.0;
+      appState.apiResult = null;
+      apiEls.resultsSection.classList.remove('show');
+      apiEls.emptyState.style.display = '';
+      refreshApiAeHint();
+      showToast('Formulaire reinitialise');
+    }
+
+    /** Cas de reference de la specification : 2x3 CL300, air, 20 barg. */
+    function loadApiExample() {
+      apiEls.npsIn.value = '2';
+      apiEls.npsOut.value = '3';
+      apiEls.rating.value = '300';
+      apiEls.schedule.value = 'STD';
+      apiEls.config.value = 'CFG-1';
+      apiEls.fluidPreset.value = 'air';
+      applyFluidPreset();
+      apiEls.pset.value = 20;
+      apiEls.psetUnit.value = 'barg';
+      apiEls.overpressure.value = 10;
+      apiEls.temp.value = 150;
+      apiEls.tempUnit.value = 'C';
+      apiEls.Z.value = 1.0;
+      refreshApiAeHint();
+      calculateApiSizing();
+    }
+
+    function applyFluidPreset() {
+      const preset = fluidPresets[apiEls.fluidPreset.value];
+      if (!preset) {
+        apiEls.kshGroup.style.display = 'none';
+        return;
+      }
+      apiEls.M.value = preset.M;
+      apiEls.k.value = preset.k;
+      apiEls.kshGroup.style.display = preset.phase === 'steam' ? 'block' : 'none';
+    }
+
+    function initApiMode() {
+      populateApiSelects();
+      refreshApiAeHint();
+
+      apiEls.npsOut.addEventListener('change', refreshApiAeHint);
+      apiEls.schedule.addEventListener('change', refreshApiAeHint);
+      apiEls.fluidPreset.addEventListener('change', applyFluidPreset);
+
+      apiEls.overpressurePreset.addEventListener('change', function () {
+        apiEls.overpressure.value = apiEls.overpressurePreset.value;
+      });
+
+      apiEls.dlfOptions.addEventListener('click', function (e) {
+        const option = e.target.closest('.dlf-option');
+        if (!option) return;
+        apiDlfMode = option.dataset.dlf;
+        apiEls.dlfOptions.querySelectorAll('.dlf-option').forEach(function (o) {
+          o.classList.remove('active');
+        });
+        option.classList.add('active');
+        apiEls.dlfCustomInput.style.display = apiDlfMode === 'custom' ? 'block' : 'none';
+        refreshApiDlfWarning();
+        if (appState.apiResult) calculateApiSizing();
+      });
+
+      apiEls.dlfCustomValue.addEventListener('input', function () {
+        refreshApiDlfWarning();
+      });
+
+      apiEls.config.addEventListener('change', function () {
+        if (appState.apiResult) calculateApiSizing();
+      });
+
+      apiEls.calculateBtn.addEventListener('click', calculateApiSizing);
+      apiEls.resetBtn.addEventListener('click', resetApiForm);
+      apiEls.exampleBtn.addEventListener('click', loadApiExample);
+
+      apiEls.copyBtn.addEventListener('click', function () {
+        if (!appState.apiResult) return;
+        navigator.clipboard.writeText(buildApiResultText(appState.apiResult))
+          .then(function () { showToast('Resultats copies'); })
+          .catch(function () { showToast('Copie impossible', 'error'); });
+      });
+
+      apiEls.copyDisclaimerBtn.addEventListener('click', function () {
+        if (!apiEls.disclaimer.value) return;
+        navigator.clipboard.writeText(apiEls.disclaimer.value)
+          .then(function () { showToast('Note de conception copiee'); })
+          .catch(function () { showToast('Copie impossible', 'error'); });
+      });
+
+      apiEls.printBtn.addEventListener('click', function () {
+        const details = apiEls.resultsSection.querySelector('.api-details');
+        const wasClosed = details && !details.open;
+        if (details) details.open = true;
+        window.print();
+        if (details && wasClosed) details.open = false;
+      });
+    }
+
     // ============================
     // INITIALIZATION
     // ============================
@@ -5324,6 +6875,9 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
 
       // Initialize batch form
       initBatchForm();
+
+      // Initialize API sizing mode (v3.0)
+      initApiMode();
     }
 
     // Run on DOM ready
