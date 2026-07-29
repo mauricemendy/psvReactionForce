@@ -3347,10 +3347,11 @@
     <div class="api-section" id="apiSection">
 
       <div class="api-banner">
-        <strong>Table API 526 non validee</strong>
-        Les combinaisons brides / orifices embarquees reprennent les corps de soupape usuels du
-        marche mais <em>n'ont pas encore ete confrontees a la norme API 526</em> (document payant).
-        Verifiez l'orifice retenu avant tout usage en ingenierie de detail.
+        <strong>Table conforme a API STD 526-2023 (tables 3 a 16)</strong>
+        Le jeu d'orifices depend de la <em>classe de bride d'entree</em>, et l'orifice maximal
+        <em>diminue</em> quand la classe monte. Reserve : certaines combinaisons basse pression sur
+        grands corps n'existent dans la norme que pour des metallurgies specifiques (inox
+        austenitique, Alloy 20) ; elles sont conservees ici par conservatisme.
       </div>
 
       <div class="calc-layout">
@@ -3664,25 +3665,25 @@
 
       <!-- Table de reference API 526 -->
       <div class="reference-section">
-        <h3>Table API 526 embarquee (a valider)</h3>
+        <h3>Table API 526 embarquee</h3>
         <div class="table-container">
           <table>
             <thead>
               <tr>
                 <th>Corps (entree x sortie)</th>
+                <th>Classe entree</th>
                 <th>Orifices possibles</th>
                 <th>Orifice max</th>
                 <th>Aire max (cm2)</th>
-                <th>Classes</th>
-                <th>Statut</th>
               </tr>
             </thead>
             <tbody id="api526RefTable"></tbody>
           </table>
         </div>
         <p class="helper-text" style="margin-top: var(--space-3);">
-          Les orifices V (271 cm2) et W (406 cm2) presents dans la table generale sont hors
-          API 526 et ne sont jamais proposes par ce module.
+          Une ligne par couple corps / classe : le jeu d'orifices depend de la classe de bride
+          d'entree. Les orifices V (271 cm2) et W (406 cm2) presents dans la table generale sont
+          hors API 526 et ne sont jamais proposes par ce module.
         </p>
       </div>
     </div>
@@ -4043,63 +4044,106 @@
     // ------------------------------------------------------------------
     // Table API 526 - retro-ingenierie de l'orifice depuis les brides
     // ------------------------------------------------------------------
-    // ATTENTION : cette table n'a PAS ete validee contre la norme
-    // API 526 (document payant, non disponible au moment du codage).
-    // Elle reprend les combinaisons corps/orifice usuelles du marche.
-    // Chaque entree porte `verified: false` tant que la norme n'a pas
-    // ete confrontee. Le test d'audit (tests/test_api_sizing.js, suite 7)
-    // liste les entrees restant a valider.
+    // Source : API STD 526-2023 (7e ed.), tables 3 a 16 (unites SI).
+    // La norme consacre UNE TABLE PAR LETTRE D'ORIFICE :
     //
-    // ---- OU TROUVER LA DONNEE DANS API STD 526-2023 (7e ed.) ----------
-    // Il n'existe PAS de table unique de dimensions. La norme consacre
-    // UNE TABLE PAR LETTRE D'ORIFICE, chacune listant les combinaisons
-    // NPS entree / NPS sortie / classe offertes pour cet orifice :
-    //
-    //   Table  3   4   5   6   7   8   9  10  11  12  13  14  15  16   (SI)
+    //   Table  3   4   5   6   7   8   9  10  11  12  13  14  15  16
     //   Orif.  D   E   F   G   H   J   K   L   M   N   P   Q   R   T
     //
-    //   Les tables 17 a 30 sont vraisemblablement les memes en unites US.
+    // (Les tables 17 a 30 sont les memes en unites US.) La table
+    // ci-dessous est l'INVERSION de ces 14 tables vers la cle
+    // corps -> orifices, seule forme utile a la retro-ingenierie.
     //
-    // Pour reconstruire la table ci-dessous : lire les tables 3 a 16
-    // orifice par orifice, puis INVERSER vers la cle corps -> orifices.
-    // Seules les colonnes NPS et classe sont utiles ; les cotes
-    // centre-a-face ne servent a aucune des trois equations du moteur.
+    // ---- POINT CAPITAL : le jeu d'orifices depend de la CLASSE -------
+    // Un meme corps n'offre pas les memes orifices a toutes les classes,
+    // et le sens est CONTRE-INTUITIF : plus la classe monte, plus
+    // l'orifice maximal DIMINUE (le corps encaisse la pression au
+    // detriment du passage). Exemple : un 1.5"x2" offre F en 150# mais
+    // seulement D et E en 900#, soit une aire divisee par 4.
+    // C'est `byRating` qui porte cette information, et c'est lui qui
+    // fait foi. `orifices` n'est que l'union, tenue pour l'affichage.
     //
-    // ---- CONSTATS ETABLIS, PAS ENCORE INTEGRES -----------------------
-    // Un echantillon partiel de la norme (une a deux lignes par orifice)
-    // a permis d'etablir deux points, sans permettre la reconstruction :
+    // La norme fait aussi varier le NPS de SORTIE avec la classe : les
+    // orifices D et E passent d'une sortie 2" (150# a 1500#) a une
+    // sortie 3" en 2500#. D'ou leur presence sous deux corps distincts.
     //
-    //   - `2G3` existe : G est bien offert en 2"x3". Deja code, confirme.
-    //   - `1.5D2` et `1.5E2` existent : l'entree '1.5x2' ci-dessous est
-    //     donc INCOMPLETE (elle ne declare que F, G, H). Non corrigee ici
-    //     car l'echantillon ne dit pas si D et E sont offerts a toutes les
-    //     classes ou seulement a certaines — il les montre en 900#, tandis
-    //     qu'il montre F en 150#. Trancher exige les tables 3, 4 et 5.
-    //     Sans effet sur l'orifice retenu (H reste le maximum), mais la
-    //     liste des candidats affichee est fausse, et un eventuel
-    //     `byRating` changerait le resultat.
-    //
-    // Mise a jour une fois la norme obtenue : remplacer ce SEUL bloc
-    // litteral (et son miroir dans config.gs), basculer `verified` a
-    // true. Le moteur, l'UI et les tests n'ont pas a etre modifies.
+    // ---- RESERVE ------------------------------------------------------
+    // Certaines combinaisons basse pression (typiquement 150x150 sur les
+    // grands corps) n'existent dans la norme que pour des metallurgies
+    // specifiques (inox austenitique, Alloy 20). Elles sont conservees
+    // ici pour couvrir l'exhaustivite des cas permis : les inclure va
+    // dans le sens conservatif de l'approche par enveloppe, mais un
+    // corps en acier au carbone peut ne pas les proposer.
     //
     // Schema d'une entree :
-    //   orifices  : lettres disponibles pour ce corps (ordre croissant d'aire)
-    //   ratings   : classes de bride d'entree disponibles pour ce corps
-    //   byRating  : surcharge OPTIONNELLE { <classe>: [lettres] } lorsque
-    //               une classe restreint le jeu d'orifices
-    //   verified  : true uniquement apres confrontation a l'API 526
+    //   orifices  : union des lettres du corps (ordre croissant d'aire)
+    //   ratings   : classes de bride d'ENTREE offertes pour ce corps
+    //   byRating  : { <classe entree>: [lettres] } — fait foi
+    //   verified  : confronte a la norme
     // ------------------------------------------------------------------
     const api526Table = {
-      '1x2':   { orifices: ['D', 'E', 'F'],           ratings: [150, 300, 600, 900, 1500, 2500], verified: false },
-      '1.5x2': { orifices: ['F', 'G', 'H'],           ratings: [150, 300, 600, 900, 1500, 2500], verified: false },
-      '1.5x3': { orifices: ['F', 'G', 'H'],           ratings: [150, 300, 600, 900, 1500, 2500], verified: false },
-      '2x3':   { orifices: ['G', 'H', 'J'],           ratings: [150, 300, 600, 900, 1500, 2500], verified: false },
-      '3x4':   { orifices: ['J', 'K', 'L'],           ratings: [150, 300, 600, 900, 1500, 2500], verified: false },
-      '4x6':   { orifices: ['L', 'M', 'N', 'P'],      ratings: [150, 300, 600, 900, 1500],       verified: false },
-      '6x8':   { orifices: ['P', 'Q', 'R'],           ratings: [150, 300, 600, 900],             verified: false },
-      '6x10':  { orifices: ['Q'],                     ratings: [150, 300],                       verified: false },
-      '8x10':  { orifices: ['R', 'T'],                ratings: [150, 300, 600],                  verified: false }
+      '1x2': {
+        orifices: ['D', 'E'], ratings: [150, 300, 600],
+        byRating: { 150: ['D', 'E'], 300: ['D', 'E'], 600: ['D', 'E'] },
+        verified: true
+      },
+      '1.5x2': {
+        orifices: ['D', 'E', 'F'], ratings: [150, 300, 600, 900, 1500],
+        byRating: { 150: ['F'], 300: ['F'], 600: ['F'], 900: ['D', 'E'], 1500: ['D', 'E'] },
+        verified: true
+      },
+      '1.5x3': {
+        orifices: ['D', 'E', 'F', 'G', 'H'], ratings: [150, 300, 600, 900, 1500, 2500],
+        byRating: {
+          150: ['G', 'H'], 300: ['G', 'H'], 600: ['G'],
+          900: ['F', 'G'], 1500: ['F'], 2500: ['D', 'E', 'F']
+        },
+        verified: true
+      },
+      '2x3': {
+        orifices: ['G', 'H', 'J'], ratings: [150, 300, 600, 900, 1500, 2500],
+        byRating: {
+          150: ['H', 'J'], 300: ['H', 'J'], 600: ['H'],
+          900: ['H'], 1500: ['G', 'H'], 2500: ['G']
+        },
+        verified: true
+      },
+      '3x4': {
+        orifices: ['J', 'K', 'L'], ratings: [150, 300, 600, 900, 1500],
+        byRating: {
+          150: ['J', 'K', 'L'], 300: ['J', 'K', 'L'], 600: ['J', 'K'],
+          900: ['J'], 1500: ['J']
+        },
+        verified: true
+      },
+      '3x6': {
+        orifices: ['K'], ratings: [900, 1500],
+        byRating: { 900: ['K'], 1500: ['K'] },
+        verified: true
+      },
+      '4x6': {
+        orifices: ['L', 'M', 'N', 'P'], ratings: [150, 300, 600, 900, 1500],
+        byRating: {
+          150: ['L', 'M', 'N', 'P'], 300: ['L', 'M', 'N', 'P'],
+          600: ['L', 'M', 'N', 'P'], 900: ['L', 'M', 'N', 'P'], 1500: ['L']
+        },
+        verified: true
+      },
+      '6x8': {
+        orifices: ['Q', 'R'], ratings: [150, 300, 600],
+        byRating: { 150: ['Q', 'R'], 300: ['Q', 'R'], 600: ['Q'] },
+        verified: true
+      },
+      '6x10': {
+        orifices: ['R'], ratings: [300, 600],
+        byRating: { 300: ['R'], 600: ['R'] },
+        verified: true
+      },
+      '8x10': {
+        orifices: ['T'], ratings: [150, 300],
+        byRating: { 150: ['T'], 300: ['T'] },
+        verified: true
+      }
     };
 
     // Orifices couverts par l'API 526. V et W existent dans areaTable
@@ -6402,22 +6446,27 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
           return '<option value="' + key + '">' + fluidPresets[key].label + '</option>';
         }).join('');
 
-      // Table de reference API 526
-      apiEls.refTable.innerHTML = Object.keys(api526Table).map(function (key) {
+      // Table de reference API 526 : une ligne par couple corps / classe,
+      // puisque l'orifice maximal depend de la classe d'entree.
+      const refRows = [];
+      Object.keys(api526Table).forEach(function (key) {
         const e = api526Table[key];
-        const maxO = e.orifices.reduce(function (b, o) {
-          return areaTable[o] > areaTable[b] ? o : b;
-        }, e.orifices[0]);
         const parts = key.split('x');
-        return '<tr>' +
-          '<td>' + parts[0] + '" x ' + parts[1] + '"</td>' +
-          '<td>' + e.orifices.join(', ') + '</td>' +
-          '<td><strong>' + maxO + '</strong></td>' +
-          '<td>' + String(areaTable[maxO]).replace('.', ',') + '</td>' +
-          '<td>' + e.ratings.join('#, ') + '#</td>' +
-          '<td>' + (e.verified ? 'Verifie' : 'A valider') + '</td>' +
-          '</tr>';
-      }).join('');
+        e.ratings.forEach(function (rating) {
+          const candidates = (e.byRating && e.byRating[rating]) ? e.byRating[rating] : e.orifices;
+          const maxO = candidates.reduce(function (b, o) {
+            return areaTable[o] > areaTable[b] ? o : b;
+          }, candidates[0]);
+          refRows.push('<tr>' +
+            '<td>' + parts[0] + '" x ' + parts[1] + '"</td>' +
+            '<td>' + rating + '#</td>' +
+            '<td>' + candidates.join(', ') + '</td>' +
+            '<td><strong>' + maxO + '</strong></td>' +
+            '<td>' + String(areaTable[maxO]).replace('.', ',') + '</td>' +
+            '</tr>');
+        });
+      });
+      apiEls.refTable.innerHTML = refRows.join('');
     }
 
     /** DLF courant du mode API. */

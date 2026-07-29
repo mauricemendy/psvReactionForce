@@ -120,6 +120,13 @@ vm.runInContext(
 );
 const api = sandbox.__api;
 
+// config.gs est evalue lui aussi, pour permettre une comparaison profonde
+// des tables plutot qu'une recherche textuelle approximative.
+const cfgSandbox = {};
+vm.createContext(cfgSandbox);
+vm.runInContext(configGs + '\nthis.__cfg = PSV_CONFIG;', cfgSandbox);
+const cfg = cfgSandbox.__cfg;
+
 // Cas de reference partage : specification SRS, corps 2x3 CL300, air.
 function srsCase(overrides) {
   return Object.assign({
@@ -143,10 +150,22 @@ test('Cas de reference SRS : 2x3 CL300 retient l\'orifice J', () => {
   assertClose(r.areaCm2, 8.3, 0.001, 'aire en cm2');
 });
 
-test('Cas SRS : G, H et J sont proposes, G et H sont ecartes', () => {
+test('Cas SRS : en CL300 les candidats sont H et J, H est ecarte', () => {
+  // La SRS annoncait « G, H et J possibles » pour le corps 2x3. La norme
+  // precise : G n'est offert qu'en 1500# et 2500#. En CL300 le corps ne
+  // propose que H et J. L'orifice retenu (J) est inchange.
   const r = api.selectMaxOrifice('2', '3', 300);
-  assertEqual(r.candidates.join(','), 'G,H,J', 'candidats');
-  assertEqual(r.rejected.join(','), 'G,H', 'orifices ecartes');
+  assertEqual(r.candidates.join(','), 'H,J', 'candidats en CL300');
+  assertEqual(r.rejected.join(','), 'H', 'orifices ecartes');
+});
+
+test('G n\'apparait en 2x3 qu\'a partir de la classe 1500', () => {
+  [150, 300, 600, 900].forEach(rating => {
+    assert(api.selectMaxOrifice('2', '3', rating).candidates.indexOf('G') === -1,
+      `G ne doit pas etre propose en CL${rating}`);
+  });
+  assert(api.selectMaxOrifice('2', '3', 1500).candidates.indexOf('G') !== -1, 'G attendu en CL1500');
+  assertEqual(api.selectMaxOrifice('2', '3', 2500).orifice, 'G', 'G seul en CL2500');
 });
 
 test('La regle de decision retient le MAXIMUM, pas le premier', () => {
@@ -175,11 +194,11 @@ test('Combinaison de brides absente de la table -> erreur explicite', () => {
 });
 
 test('Classe de bride indisponible pour ce corps -> erreur explicite', () => {
-  // 6x10 n'existe qu'en 150# et 300#.
+  // 6x10 n'existe qu'en 300# et 600# (API 526-2023, table 15).
   const r = api.selectMaxOrifice('6', '10', 2500);
   assert(!r.ok, 'doit echouer');
   assert(/2500#/.test(r.error), 'le message doit citer la classe demandee');
-  assert(/150#, 300#/.test(r.error), 'le message doit lister les classes prevues');
+  assert(/300#, 600#/.test(r.error), 'le message doit lister les classes prevues');
 });
 
 test('Les classes valides de chaque entree sont toutes acceptees', () => {
@@ -203,17 +222,40 @@ test('Les orifices V et W (hors API 526) ne sont JAMAIS proposes', () => {
   });
 });
 
-test('La surcharge byRating restreint bien le jeu d\'orifices', () => {
-  // Verifie le mecanisme d'extension prevu pour l'integration de la norme.
-  const saved = api.api526Table['3x4'].byRating;
-  api.api526Table['3x4'].byRating = { 2500: ['J'] };
-  try {
-    assertEqual(api.selectMaxOrifice('3', '4', 2500).orifice, 'J', 'classe surchargee');
-    assertEqual(api.selectMaxOrifice('3', '4', 300).orifice, 'L', 'classe non surchargee');
-  } finally {
-    if (saved === undefined) delete api.api526Table['3x4'].byRating;
-    else api.api526Table['3x4'].byRating = saved;
+test('L\'orifice maximal DIMINUE quand la classe de bride monte', () => {
+  // Comportement contre-intuitif mais conforme a la norme : le corps
+  // encaisse la pression au detriment du passage. Verrouille ici parce
+  // qu'un lecteur presse pourrait le prendre pour un bug.
+  const suite3x4 = [150, 300, 600, 900, 1500].map(r => api.selectMaxOrifice('3', '4', r).areaCm2);
+  for (let i = 1; i < suite3x4.length; i++) {
+    assert(suite3x4[i] <= suite3x4[i - 1],
+      `3x4 : l'aire ne doit pas croitre avec la classe (${suite3x4.join(' -> ')})`);
   }
+  assertEqual(api.selectMaxOrifice('3', '4', 150).orifice, 'L', '3x4 CL150');
+  assertEqual(api.selectMaxOrifice('3', '4', 600).orifice, 'K', '3x4 CL600');
+  assertEqual(api.selectMaxOrifice('3', '4', 1500).orifice, 'J', '3x4 CL1500');
+});
+
+test('Le cas 1.5x2 CL900 : E et non H (regression corrigee)', () => {
+  // Avant integration de la norme, la table a plat renvoyait H (5.06 cm2)
+  // pour toute classe. La norme n'offre que D et E a partir de 900#.
+  const r = api.selectMaxOrifice('1.5', '2', 900);
+  assertEqual(r.orifice, 'E', 'orifice retenu en CL900');
+  assertClose(r.areaCm2, 1.26, 0.001, 'aire');
+  assertEqual(api.selectMaxOrifice('1.5', '2', 150).orifice, 'F', 'F en CL150');
+});
+
+test('byRating fait foi partout ou il est defini', () => {
+  Object.keys(api.api526Table).forEach(key => {
+    const entry = api.api526Table[key];
+    const parts = key.split('x');
+    entry.ratings.forEach(rating => {
+      const attendu = entry.byRating[rating];
+      assert(Array.isArray(attendu), `${key} CL${rating} : byRating manquant`);
+      const r = api.selectMaxOrifice(parts[0], parts[1], rating);
+      assertEqual(r.candidates.join(','), attendu.join(','), `${key} CL${rating}`);
+    });
+  });
 });
 
 test('Le rating accepte indifferemment une chaine ou un nombre', () => {
@@ -598,31 +640,26 @@ test('Les presets vapeur portent la masse molaire de l\'eau', () => {
   });
 });
 
-test('api526Table est synchronisee entre index.html et config.gs', () => {
-  Object.keys(api.api526Table).forEach(key => {
-    const e = api.api526Table[key];
-    const re = new RegExp("'" + key.replace(/\./g, '\\.') + "':\\s*\\{[^}]*\\}");
-    const match = configGs.match(re);
-    assert(match, `${key} absent de config.gs`);
-    e.orifices.forEach(o => {
-      assert(match[0].indexOf("'" + o + "'") !== -1, `${key} : orifice ${o} absent de config.gs`);
-    });
-    e.ratings.forEach(r => {
-      assert(match[0].indexOf(String(r)) !== -1, `${key} : classe ${r} absente de config.gs`);
-    });
-  });
+test('api526Table est strictement identique entre index.html et config.gs', () => {
+  // Comparaison PROFONDE : config.gs est reellement evalue, pas cherche
+  // par regex. Une regex s'arreterait a la premiere accolade et ne verrait
+  // pas les byRating imbriques — elle passerait sur une table desynchronisee.
+  assertEqual(JSON.stringify(cfg.api526Table), JSON.stringify(api.api526Table),
+    'les deux tables doivent etre identiques cle a cle');
 });
 
-test('pipeIdTable est synchronisee entre index.html et config.gs', () => {
-  api.validNps.forEach(nps => {
-    const row = api.pipeIdTable[nps];
-    api.validSchedules.forEach(sch => {
-      const v = row[sch].toFixed(2);
-      // config.gs peut ecrire 26.64 ou 28.30 : on tolere la troncature des zeros.
-      assert(configGs.indexOf(v) !== -1 || configGs.indexOf(v.replace(/0$/, '')) !== -1,
-        `NPS ${nps} Sch ${sch} (${v} mm) absent de config.gs`);
-    });
-  });
+test('pipeIdTable est strictement identique entre index.html et config.gs', () => {
+  assertEqual(JSON.stringify(cfg.pipeIdTable), JSON.stringify(api.pipeIdTable),
+    'les deux tables doivent etre identiques');
+});
+
+test('Les autres tables v3.0 sont identiques entre index.html et config.gs', () => {
+  assertEqual(JSON.stringify(cfg.fluidPresets), JSON.stringify(api.fluidPresets), 'fluidPresets');
+  assertEqual(JSON.stringify(cfg.api526Orifices), JSON.stringify(api.api526Orifices), 'api526Orifices');
+  assertEqual(JSON.stringify(cfg.validNps), JSON.stringify(api.validNps), 'validNps');
+  assertEqual(JSON.stringify(cfg.validRatings), JSON.stringify(api.validRatings), 'validRatings');
+  assertEqual(JSON.stringify(cfg.validSchedules), JSON.stringify(api.validSchedules), 'validSchedules');
+  assertEqual(JSON.stringify(cfg.apiConst), JSON.stringify(api.API_CONST), 'constantes API');
 });
 
 test('Les constantes API sont synchronisees entre index.html et config.gs', () => {
@@ -672,7 +709,7 @@ test('La chaine vapeur aboutit et emprunte bien l\'equation vapeur', () => {
   const r = api.computeApiSizing(srsCase({ npsIn: '3', npsOut: '4', rating: 600, phase: 'steam', M: 18.015, k: 1.135 }));
   assert(r.ok, 'le calcul doit aboutir');
   assertEqual(r.flow.equation, 'steam', 'equation vapeur');
-  assertEqual(r.orifice.orifice, 'L', 'orifice max pour 3x4');
+  assertEqual(r.orifice.orifice, 'K', 'orifice max pour 3x4 en CL600');
   assert(r.force.fDesignN > 0, 'effort positif');
 });
 
@@ -697,9 +734,10 @@ test('formatDlf affiche 2 -> "2.0" et preserve les decimales', () => {
   assertEqual(api.formatDlf(1.75), '1.75', 'deux decimales');
 });
 
-test('unverifiedTable signale une table non validee', () => {
+test('unverifiedTable est faux : la table est confrontee a la norme', () => {
   const r = api.computeApiSizing(srsCase());
-  assertEqual(r.unverifiedTable, true, 'la table embarquee n\'est pas validee');
+  assertEqual(r.unverifiedTable, false, 'la table est validee');
+  assertEqual(r.warnings.length, 0, 'plus d\'avertissement de table non validee');
 });
 
 
@@ -707,11 +745,33 @@ test('unverifiedTable signale une table non validee', () => {
 suite('7. Audit API 526 (non bloquant) + non-regression');
 // ============================================================
 
-test('AUDIT : inventaire des entrees API 526 restant a valider', () => {
+test('AUDIT BLOQUANT : toute entree API 526 doit etre validee', () => {
+  // Etait informatif tant que la norme n'etait pas disponible. Maintenant
+  // que la table est confrontee a API STD 526-2023, ce test echoue si une
+  // entree non validee reapparait — c'est le garde-fou contre une
+  // regression silencieuse de la donnee.
   const aValider = Object.keys(api.api526Table).filter(k => !api.api526Table[k].verified);
-  console.log(`      → ${aValider.length}/${Object.keys(api.api526Table).length} entrees non validees : ${aValider.join(', ')}`);
-  console.log('      → a confronter a l\'API 526 avant usage en ingenierie de detail');
-  assert(true); // informatif : ne fait jamais echouer la suite
+  assertEqual(aValider.length, 0,
+    `entrees non validees : ${aValider.join(', ')} — confronter aux tables 3 a 16 de la norme`);
+});
+
+test('Chaque entree declare un byRating complet et coherent', () => {
+  Object.keys(api.api526Table).forEach(key => {
+    const e = api.api526Table[key];
+    assert(e.byRating, `${key} : byRating manquant`);
+
+    const clesByRating = Object.keys(e.byRating).map(Number).sort((a, b) => a - b);
+    const ratings = e.ratings.slice().sort((a, b) => a - b);
+    assertEqual(clesByRating.join(','), ratings.join(','),
+      `${key} : byRating et ratings desynchronises`);
+
+    // `orifices` doit etre exactement l'union des jeux par classe.
+    const union = {};
+    e.ratings.forEach(r => e.byRating[r].forEach(o => { union[o] = true; }));
+    const attendu = api.api526Orifices.filter(o => union[o]);
+    assertEqual(e.orifices.join(','), attendu.join(','),
+      `${key} : orifices n'est pas l'union de byRating`);
+  });
 });
 
 test('Le moteur Kf du mode simple est intact', () => {
@@ -745,8 +805,19 @@ test('La mention Rated Capacity exigee par la SRS est affichee', () => {
   assert(indexHtml.indexOf('Required Capacity') !== -1, 'mise en garde Required Capacity');
 });
 
-test('Le bandeau d\'avertissement sur la table non validee est present', () => {
-  assert(indexHtml.indexOf('Table API 526 non validee') !== -1, 'bandeau UI');
+test('Le bandeau cite l\'edition de reference et la dependance a la classe', () => {
+  assert(indexHtml.indexOf('API STD 526-2023') !== -1, 'edition de reference');
+  assert(indexHtml.indexOf('Table API 526 non validee') === -1,
+    'l\'ancien bandeau « non validee » doit avoir disparu');
+});
+
+test('La table de reference UI detaille une ligne par couple corps / classe', () => {
+  // 10 corps, dont les classes cumulent 40 combinaisons.
+  const attendu = Object.keys(api.api526Table)
+    .reduce((n, k) => n + api.api526Table[k].ratings.length, 0);
+  assert(attendu > Object.keys(api.api526Table).length,
+    'la table de reference doit etre plus fine que le nombre de corps');
+  assert(/e\.ratings\.forEach/.test(jsCode), 'le rendu doit iterer sur les classes');
 });
 
 

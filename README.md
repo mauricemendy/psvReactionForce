@@ -73,8 +73,23 @@ retient celui d'**aire maximale**. C'est le cœur de l'approche par enveloppe :
 en l'absence de donnée fournisseur, on borne le problème par le plus gros
 orifice que le corps de soupape peut recevoir.
 
-Exemple : `2" × 3" CL300` → orifices G, H, J possibles → **J retenu**
+Exemple : `2" × 3" CL300` → orifices H et J possibles → **J retenu**
 (8,3 cm² / 1,287 in²).
+
+**Le jeu d'orifices dépend de la classe de bride d'entrée**, et le sens est
+contre-intuitif : *plus la classe monte, plus l'orifice maximal diminue* — le
+corps encaisse la pression au détriment du passage. Sur un `3" × 4"` :
+
+| Classe | 150 | 300 | 600 | 900 | 1500 |
+|---|---|---|---|---|---|
+| Orifice max | L | L | K | J | J |
+| Aire (cm²) | 18,41 | 18,41 | 11,86 | 8,3 | 8,3 |
+
+Ce n'est pas un défaut : ignorer cette dépendance conduit à surestimer l'orifice
+d'un facteur 4 sur un `1½" × 2"` en 900#.
+
+La norme fait aussi varier le **NPS de sortie** avec la classe : les orifices D
+et E passent d'une sortie 2" (150# à 1500#) à une sortie 3" en 2500#.
 
 **Module B — débit nominal (API 520 Part I)**
 
@@ -137,36 +152,35 @@ la norme) — vérifié par test automatisé.
   invalidée et recalculée.
 - Orifices **V et W** : jamais proposés par ce mode (hors norme).
 
-### ⚠ Table API 526 non encore validée
+### Provenance de la table API 526
 
-Les combinaisons corps / orifice / classe embarquées reprennent les
-configurations usuelles du marché mais **n'ont pas été confrontées à la norme
-API 526** (document payant). Chaque entrée porte `verified: false`, un bandeau
-le signale dans l'interface, et la suite de tests en publie l'inventaire à
-chaque exécution.
-
-La table est isolée dans un seul bloc littéral (`index.html`, section
-`DATA TABLES`, avec son miroir dans `config.gs`). Une fois la norme obtenue, la
-mise à jour consiste à remplacer ce bloc et basculer `verified` à `true` — le
-moteur, l'interface et les tests n'ont pas à être modifiés.
-
-**Où trouver la donnée dans API STD 526-2023 (7ᵉ éd.).** Il n'existe pas de table
-unique de dimensions : la norme consacre **une table par lettre d'orifice**.
+La table embarquée est l'inversion des **tables 3 à 16 d'API STD 526-2023**
+(7ᵉ éd.). Il n'existe pas de table unique de dimensions dans la norme : elle
+consacre **une table par lettre d'orifice**.
 
 | Table (SI) | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Orifice | D | E | F | G | H | J | K | L | M | N | P | Q | R | T |
 
-Les tables 17 à 30 sont vraisemblablement les mêmes en unités US. Seules les
-colonnes NPS entrée / NPS sortie / classe sont utiles ; les cotes centre-à-face
-n'entrent dans aucune des trois équations du moteur.
+Les tables 17 à 30 sont les mêmes en unités US. Seules les colonnes NPS entrée /
+NPS sortie / classe sont utilisées ; les cotes centre-à-face n'entrent dans
+aucune des trois équations du moteur.
 
-**Constat établi, pas encore intégré.** L'entrée `1.5x2` est incomplète : elle ne
-déclare que F, G et H alors que `1½D2` et `1½E2` existent. La correction n'a pas
-été appliquée car il reste à déterminer si D et E sont offerts à toutes les
-classes ou seulement à certaines — auquel cas le mécanisme `byRating` s'applique
-et le résultat change. Sans effet sur l'orifice retenu (H reste le maximum), mais
-la liste des candidats affichée est fausse.
+Elle couvre 10 corps et 39 combinaisons corps × classe, isolée dans un seul bloc
+littéral (`index.html`, section `DATA TABLES`) avec son miroir dans `config.gs`.
+Les deux sont comparées **en profondeur** par la suite de tests — `config.gs` est
+réellement évalué, pas cherché par expression régulière — et un test d'audit
+**bloquant** échoue si une entrée non validée réapparaît.
+
+Dans le code, c'est `byRating` qui fait foi : `orifices` n'est que l'union des
+jeux par classe, tenue pour l'affichage.
+
+**Réserve.** Certaines combinaisons basse pression sur grands corps
+(typiquement 150×150) n'existent dans la norme que pour des métallurgies
+spécifiques — inox austénitique, Alloy 20. Elles sont conservées pour couvrir
+l'exhaustivité des cas permis : les inclure va dans le sens conservatif de
+l'approche par enveloppe, mais un corps en acier au carbone peut ne pas les
+proposer.
 
 ---
 

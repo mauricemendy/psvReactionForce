@@ -59,27 +59,78 @@ var PSV_CONFIG = {
   // est verifiee par tests/test_api_sizing.js, suite 5.
   // ================================================================
 
-  // NON VALIDEE contre la norme API 526 (document payant).
-  // Chaque entree porte verified: false jusqu'a confrontation.
-  //
-  // Ou trouver la donnee dans API STD 526-2023 : il n'existe pas de
-  // table unique de dimensions, mais UNE TABLE PAR LETTRE D'ORIFICE.
-  //   Table  3   4   5   6   7   8   9  10  11  12  13  14  15  16  (SI)
+  // Source : API STD 526-2023 (7e ed.), tables 3 a 16 (SI) — une table
+  // par lettre d'orifice, inversees ici vers la cle corps -> orifices.
+  //   Table  3   4   5   6   7   8   9  10  11  12  13  14  15  16
   //   Orif.  D   E   F   G   H   J   K   L   M   N   P   Q   R   T
-  // Lire orifice par orifice, puis inverser vers la cle corps.
   //
-  // Constat etabli non integre : '1.5x2' est incomplete — 1.5D2 et
-  // 1.5E2 existent. Voir le commentaire detaille dans index.html.
+  // byRating fait foi : le jeu d'orifices depend de la classe d'entree,
+  // et l'orifice maximal DIMINUE quand la classe monte. `orifices`
+  // n'est que l'union, tenue pour l'affichage.
+  // Detail des reserves : voir le commentaire dans index.html.
   api526Table: {
-    '1x2':   { orifices: ['D', 'E', 'F'],      ratings: [150, 300, 600, 900, 1500, 2500], verified: false },
-    '1.5x2': { orifices: ['F', 'G', 'H'],      ratings: [150, 300, 600, 900, 1500, 2500], verified: false },
-    '1.5x3': { orifices: ['F', 'G', 'H'],      ratings: [150, 300, 600, 900, 1500, 2500], verified: false },
-    '2x3':   { orifices: ['G', 'H', 'J'],      ratings: [150, 300, 600, 900, 1500, 2500], verified: false },
-    '3x4':   { orifices: ['J', 'K', 'L'],      ratings: [150, 300, 600, 900, 1500, 2500], verified: false },
-    '4x6':   { orifices: ['L', 'M', 'N', 'P'], ratings: [150, 300, 600, 900, 1500],       verified: false },
-    '6x8':   { orifices: ['P', 'Q', 'R'],      ratings: [150, 300, 600, 900],             verified: false },
-    '6x10':  { orifices: ['Q'],                ratings: [150, 300],                       verified: false },
-    '8x10':  { orifices: ['R', 'T'],           ratings: [150, 300, 600],                  verified: false }
+    '1x2': {
+      orifices: ['D', 'E'], ratings: [150, 300, 600],
+      byRating: { 150: ['D', 'E'], 300: ['D', 'E'], 600: ['D', 'E'] },
+      verified: true
+    },
+    '1.5x2': {
+      orifices: ['D', 'E', 'F'], ratings: [150, 300, 600, 900, 1500],
+      byRating: { 150: ['F'], 300: ['F'], 600: ['F'], 900: ['D', 'E'], 1500: ['D', 'E'] },
+      verified: true
+    },
+    '1.5x3': {
+      orifices: ['D', 'E', 'F', 'G', 'H'], ratings: [150, 300, 600, 900, 1500, 2500],
+      byRating: {
+        150: ['G', 'H'], 300: ['G', 'H'], 600: ['G'],
+        900: ['F', 'G'], 1500: ['F'], 2500: ['D', 'E', 'F']
+      },
+      verified: true
+    },
+    '2x3': {
+      orifices: ['G', 'H', 'J'], ratings: [150, 300, 600, 900, 1500, 2500],
+      byRating: {
+        150: ['H', 'J'], 300: ['H', 'J'], 600: ['H'],
+        900: ['H'], 1500: ['G', 'H'], 2500: ['G']
+      },
+      verified: true
+    },
+    '3x4': {
+      orifices: ['J', 'K', 'L'], ratings: [150, 300, 600, 900, 1500],
+      byRating: {
+        150: ['J', 'K', 'L'], 300: ['J', 'K', 'L'], 600: ['J', 'K'],
+        900: ['J'], 1500: ['J']
+      },
+      verified: true
+    },
+    '3x6': {
+      orifices: ['K'], ratings: [900, 1500],
+      byRating: { 900: ['K'], 1500: ['K'] },
+      verified: true
+    },
+    '4x6': {
+      orifices: ['L', 'M', 'N', 'P'], ratings: [150, 300, 600, 900, 1500],
+      byRating: {
+        150: ['L', 'M', 'N', 'P'], 300: ['L', 'M', 'N', 'P'],
+        600: ['L', 'M', 'N', 'P'], 900: ['L', 'M', 'N', 'P'], 1500: ['L']
+      },
+      verified: true
+    },
+    '6x8': {
+      orifices: ['Q', 'R'], ratings: [150, 300, 600],
+      byRating: { 150: ['Q', 'R'], 300: ['Q', 'R'], 600: ['Q'] },
+      verified: true
+    },
+    '6x10': {
+      orifices: ['R'], ratings: [300, 600],
+      byRating: { 300: ['R'], 600: ['R'] },
+      verified: true
+    },
+    '8x10': {
+      orifices: ['T'], ratings: [150, 300],
+      byRating: { 150: ['T'], 300: ['T'] },
+      verified: true
+    }
   },
 
   // V et W (areaTable) sont hors API 526 : jamais proposes par le module.
