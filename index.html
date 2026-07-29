@@ -4494,6 +4494,48 @@
      *
      * @param {Object} p - wKgH, tempK, M, k, aeM2, dlf
      */
+    /**
+     * Etat reel en sortie lorsque l'ecoulement N'EST PAS bloque a
+     * l'extremite du tuyau (cas courant : la tuyauterie de sortie est
+     * bien plus large que l'orifice, le col sonique reste a l'orifice).
+     *
+     * La pression de sortie vaut alors l'atmosphere. On resout la vitesse
+     * par conservation du debit et de l'enthalpie totale, avec G = m/A_e :
+     *
+     *   G = rho_e x v_e  et  rho_e = P_a x M / (R x T_e)
+     *     => T_e = P_a x M x v_e / (R x G)
+     *   T0 = T_e + v_e^2 / (2 Cp)   avec Cp = k R / ((k-1) M)
+     *
+     * d'ou l'equation du second degre en v_e :
+     *   (k-1)/(2k) x v_e^2 + (P_a/G) x v_e - T0 x R/M = 0
+     *
+     * Racine positive unique (le produit des racines est negatif).
+     * Retourne null si la geometrie ne permet pas de la resoudre.
+     */
+    function subsonicExitState(mDot, aeM2, tempK, M, k) {
+      const G = mDot / aeM2;                       // flux massique, kg/(s.m2)
+      if (!(G > 0)) return null;
+      const R = API_CONST.R_UNIVERSAL;
+      const pAtmPa = API_CONST.P_ATM_KPA * 1000;
+      const b = pAtmPa / G;
+      const c = -tempK * R / M;
+
+      let v;
+      if (Math.abs(k - 1) < 1e-6) {
+        v = -c / b;                                // cas limite : Cp infini
+      } else {
+        const a = (k - 1) / (2 * k);
+        const disc = b * b - 4 * a * c;            // > 0 car c < 0
+        if (!(disc > 0)) return null;
+        v = (-b + Math.sqrt(disc)) / (2 * a);
+      }
+      if (!(v > 0) || !isFinite(v)) return null;
+
+      const tStatic = pAtmPa * M * v / (R * G);
+      const sonic = Math.sqrt(k * R * tStatic / M);
+      return { v: v, tStaticK: tStatic, sonic: sonic, mach: v / sonic };
+    }
+
     function reactionForce(p) {
       const warnings = [];
       const mDot = p.wKgH / 3600;                                  // kg/s
@@ -4504,13 +4546,36 @@
       const peAbsPa = fMomentum / (p.k * p.aeM2);                  // Pa abs
       const pAtmPa = API_CONST.P_ATM_KPA * 1000;
       let pressureTerm = (peAbsPa - pAtmPa) * p.aeM2;              // N
+      const choked = peAbsPa >= pAtmPa;
+      let subsonic = null;
 
-      if (peAbsPa < pAtmPa) {
-        warnings.push('Pression statique en sortie (' + (peAbsPa / 1000).toFixed(1) +
-          ' kPa abs) inferieure a l\'atmosphere : l\'ecoulement n\'est pas bloque a ' +
-          'l\'extremite du tuyau. Le terme de pression est borne a 0 (pas de poussee negative). ' +
-          'Envisager une section de sortie plus faible ou un calcul detaille.');
+      if (!choked) {
+        // Regime attendu des que la tuyauterie de sortie est nettement
+        // plus large que l'orifice : le col sonique reste a l'orifice et
+        // la sortie debouche a l'atmosphere. Le terme de pression est
+        // alors legitimement nul — ce n'est pas une anomalie de calcul.
+        //
+        // On CONSERVE le terme de quantite de mouvement calcule a la
+        // vitesse sonique, conformement a la formule simplifiee de
+        // l'API 520 Part II. C'est majorant : la vitesse reelle en
+        // sortie est plus faible. L'ecart est expose dans les valeurs
+        // intermediaires pour que l'ingenieur mesure sa marge.
         pressureTerm = 0;
+        subsonic = subsonicExitState(mDot, p.aeM2, p.tempK, p.M, p.k);
+
+        let msg = 'Ecoulement non bloque a l\'extremite du tuyau : la section de sortie (' +
+          (p.aeM2 * 1e4).toFixed(1) + ' cm2) est trop large pour que le col sonique s\'y ' +
+          'etablisse — il reste a l\'orifice. La pression de sortie vaut donc l\'atmosphere ' +
+          'et le terme de pression est nul. C\'est le regime normal des soupapes basse ' +
+          'pression sur tuyauterie d\'echappement standard, pas une anomalie.';
+        if (subsonic) {
+          const fReel = mDot * subsonic.v;
+          msg += ' L\'effort retenu (' + (fMomentum / 10).toFixed(1) + ' daN) conserve la vitesse ' +
+            'sonique et majore donc le reel (Mach ' + subsonic.mach.toFixed(2) + ', ' +
+            subsonic.v.toFixed(0) + ' m/s, soit ' + (fReel / 10).toFixed(1) + ' daN) : la marge ' +
+            'est conservee volontairement.';
+        }
+        warnings.push(msg);
       }
 
       const fStaticN = fMomentum + pressureTerm;
@@ -4525,6 +4590,8 @@
         peAbsKPa: peAbsPa / 1000,
         peGaugeKPa: (peAbsPa - pAtmPa) / 1000,
         pressureTermN: pressureTerm,
+        choked: choked,
+        subsonic: subsonic,
         fStaticN: fStaticN,
         fStaticDaN: fStaticN / 10,
         fStaticLbf: fStaticN / 4.4482216,
@@ -6699,8 +6766,22 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
       }
       rows.push(['Debit massique (W)', flow.w.toFixed(1) + ' kg/h']);
       rows.push(['Debit massique', f.mDot.toFixed(4) + ' kg/s']);
-      rows.push(['Vitesse en sortie (v_e)', f.vExit.toFixed(1) + ' m/s']);
-      rows.push(['Pression statique en sortie (P_e)', f.peAbsKPa.toFixed(1) + ' kPa abs']);
+      rows.push(['Vitesse en sortie (v_e, sonique)', f.vExit.toFixed(1) + ' m/s']);
+      rows.push(['Regime a l\'extremite du tuyau', f.choked ? 'bloque (sonique)' : 'non bloque (subsonique)']);
+      if (f.choked) {
+        rows.push(['Pression statique en sortie (P_e)', f.peAbsKPa.toFixed(1) + ' kPa abs']);
+      } else {
+        rows.push(['Pression statique en sortie (P_e)', API_CONST.P_ATM_KPA.toFixed(3) + ' kPa abs (atmosphere)']);
+        rows.push(['P_e si le col etait en sortie', f.peAbsKPa.toFixed(1) + ' kPa abs — inferieure a l\'atmosphere, donc impossible']);
+        if (f.subsonic) {
+          rows.push(['Vitesse reelle en sortie', f.subsonic.v.toFixed(1) + ' m/s']);
+          rows.push(['Nombre de Mach en sortie', f.subsonic.mach.toFixed(3)]);
+          rows.push(['Temperature statique reelle en sortie', f.subsonic.tStaticK.toFixed(2) + ' K']);
+          const fReel = f.mDot * f.subsonic.v;
+          rows.push(['Effort si vitesse reelle retenue', fReel.toFixed(0) + ' N (' + (fReel / 10).toFixed(1) + ' daN)']);
+          rows.push(['Marge conservee', '+' + ((f.fMomentumN / fReel - 1) * 100).toFixed(0) + ' %']);
+        }
+      }
       rows.push(['Terme de quantite de mouvement', f.fMomentumN.toFixed(0) + ' N']);
       rows.push(['Terme de pression', f.pressureTermN.toFixed(0) + ' N']);
       rows.push(['F_statique', f.fStaticN.toFixed(0) + ' N']);
