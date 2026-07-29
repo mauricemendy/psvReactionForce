@@ -30,8 +30,11 @@
       --color-success-light: #F0FDFA;
       --color-warning: #D97706;
       --color-warning-light: #FEF3C7;
+      --color-warning-dark: #B45309;
       --color-error: #DC2626;
       --color-error-light: #FEE2E2;
+      --color-error-dark: #B91C1C;
+      --color-success-dark: #0F766E;
       --color-info: #6B7280;
 
       /* Neutrals */
@@ -298,7 +301,7 @@
 
     /* Formula Box */
     .formula-box {
-      background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+      background: var(--color-primary-light);
       border-left: 4px solid var(--color-info);
       border-radius: var(--radius-md);
       padding: var(--space-4);
@@ -691,9 +694,9 @@
     }
 
     .api-banner {
-      background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
-      border-left: 4px solid var(--color-danger, #EF4444);
-      border-radius: var(--radius-md);
+      background: var(--color-warning-light);
+      border: 1px solid var(--color-warning);
+      border-radius: var(--radius-lg);
       padding: var(--space-4);
       margin-bottom: var(--space-5);
       font-size: 13px;
@@ -702,7 +705,7 @@
     }
 
     .api-banner strong {
-      color: var(--color-gray-900);
+      color: var(--color-warning-dark);
       display: block;
       margin-bottom: var(--space-1);
     }
@@ -720,13 +723,13 @@
     }
 
     .api-card-tag.mech {
-      background: #E0E7FF;
-      color: #3730A3;
+      background: var(--color-gray-100);
+      color: var(--color-gray-700);
     }
 
     .api-card-tag.proc {
-      background: #D1FAE5;
-      color: #065F46;
+      background: var(--color-primary);
+      color: #FFFFFF;
     }
 
     .api-field-grid {
@@ -740,9 +743,9 @@
     }
 
     .api-orifice-result {
-      background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
-      border: 1px solid #C7D2FE;
-      border-radius: var(--radius-md);
+      background: var(--color-primary-light);
+      border: 1px solid var(--color-primary);
+      border-radius: var(--radius-lg);
       padding: var(--space-4);
       margin-bottom: var(--space-4);
     }
@@ -751,7 +754,7 @@
       font-size: 40px;
       font-weight: 800;
       line-height: 1;
-      color: #3730A3;
+      color: var(--color-primary-dark);
     }
 
     .api-orifice-meta {
@@ -764,13 +767,13 @@
     .api-rated-note {
       font-size: 12px;
       font-style: italic;
-      color: var(--color-gray-600, #52525B);
+      color: var(--color-gray-600);
       margin-top: var(--space-1);
     }
 
     .api-details {
       margin-top: var(--space-4);
-      border-top: 1px solid var(--color-gray-200, #E4E4E7);
+      border-top: 1px solid var(--color-gray-200);
       padding-top: var(--space-3);
     }
 
@@ -791,11 +794,11 @@
 
     .api-details td {
       padding: 6px 8px;
-      border-bottom: 1px solid var(--color-gray-100, #F4F4F5);
+      border-bottom: 1px solid var(--color-gray-100);
     }
 
     .api-details td:first-child {
-      color: var(--color-gray-600, #52525B);
+      color: var(--color-gray-600);
     }
 
     .api-details td:last-child {
@@ -815,11 +818,11 @@
       font-size: 11.5px;
       line-height: 1.6;
       padding: var(--space-3);
-      border: 1px solid var(--color-gray-300, #D4D4D8);
+      border: 1px solid var(--color-gray-300);
       border-radius: var(--radius-md);
       resize: vertical;
-      color: var(--color-gray-800, #27272A);
-      background: var(--color-gray-50, #FAFAFA);
+      color: var(--color-gray-800);
+      background: var(--color-gray-50);
     }
 
     .api-warning-list {
@@ -829,9 +832,9 @@
     }
 
     .api-warning-list li {
-      background: #FFFBEB;
-      border-left: 3px solid var(--color-warning);
-      border-radius: var(--radius-sm, 4px);
+      background: var(--color-warning-light);
+      border: 1px solid var(--color-warning);
+      border-radius: var(--radius-lg);
       padding: var(--space-2) var(--space-3);
       margin-bottom: var(--space-2);
       font-size: 12px;
@@ -840,13 +843,13 @@
     }
 
     .api-error-box {
-      background: #FEF2F2;
-      border-left: 4px solid var(--color-danger, #EF4444);
-      border-radius: var(--radius-md);
+      background: var(--color-error-light);
+      border: 1px solid var(--color-error);
+      border-radius: var(--radius-lg);
       padding: var(--space-4);
       font-size: 13px;
       line-height: 1.6;
-      color: #991B1B;
+      color: var(--color-error-dark);
     }
 
     @media (max-width: 640px) {
@@ -1012,7 +1015,7 @@
     .batch-table input.invalid,
     .batch-table select.invalid {
       border-color: var(--color-error);
-      background: #FEF2F2;
+      background: #FEE2E2;
     }
 
     .batch-table input.touched:invalid,
@@ -1105,7 +1108,7 @@
     }
 
     .csv-errors-list {
-      background: #FEF2F2;
+      background: #FEE2E2;
       border-radius: var(--radius-md);
       padding: var(--space-4);
       margin-bottom: var(--space-4);
@@ -1189,7 +1192,7 @@
     }
 
     .results-table tr.row-error {
-      background: #FEF2F2;
+      background: #FEE2E2;
     }
 
     .results-table tr.row-error td {
@@ -1283,7 +1286,7 @@
     .session-restore-banner {
       display: none;
       background: #FEF3C7;
-      border: 1px solid #F59E0B;
+      border: 1px solid #D97706;
       border-radius: var(--radius-md);
       padding: var(--space-4);
       margin-bottom: var(--space-4);
@@ -1497,7 +1500,7 @@
       }
 
       .result-card-mobile.error {
-        background: #FEF2F2;
+        background: #FEE2E2;
         border-color: var(--color-error);
       }
 
@@ -1596,9 +1599,9 @@
 
     /* Warning Banner - Method Limitations */
     .method-warning {
-      background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
-      border-left: 4px solid var(--color-warning);
-      border-radius: var(--radius-md);
+      background: var(--color-warning-light);
+      border: 1px solid var(--color-warning);
+      border-radius: var(--radius-lg);
       padding: var(--space-4);
       margin-top: var(--space-4);
       font-size: 13px;
@@ -1607,7 +1610,7 @@
     }
 
     .method-warning strong {
-      color: var(--color-gray-900);
+      color: var(--color-warning-dark);
       display: block;
       margin-bottom: var(--space-1);
     }
@@ -1951,7 +1954,7 @@
       display: none;
       margin-top: var(--space-3);
       padding: var(--space-4);
-      background: linear-gradient(135deg, var(--color-gray-50), #f0f4ff);
+      background: var(--color-primary-light);
       border-radius: var(--radius-lg);
       border: 1px solid var(--color-gray-200);
     }
@@ -2005,7 +2008,7 @@
       width: 100%;
       height: 6px;
       border-radius: 3px;
-      background: linear-gradient(to right, #22C55E 0%, #F59E0B 40%, #EF4444 100%);
+      background: linear-gradient(to right, #0D9488 0%, #D97706 40%, #DC2626 100%);
       outline: none;
       cursor: pointer;
     }
@@ -2056,8 +2059,8 @@
 
     .dlf-warning {
       font-size: 12px;
-      padding: var(--space-2) var(--space-3);
-      border-radius: var(--radius-sm);
+      padding: var(--space-3);
+      border-radius: var(--radius-lg);
       margin-top: var(--space-2);
       display: none;
     }
@@ -2068,12 +2071,14 @@
 
     .dlf-warning.warning-low {
       background: var(--color-warning-light);
-      color: var(--color-warning);
+      border: 1px solid var(--color-warning);
+      color: var(--color-warning-dark);
     }
 
     .dlf-warning.warning-high {
       background: var(--color-error-light);
-      color: var(--color-error);
+      border: 1px solid var(--color-error);
+      color: var(--color-error-dark);
     }
 
     .dlf-tooltip {
@@ -2347,7 +2352,7 @@
 
       /* --- Formula Box --- */
       .formula-box {
-        background: #F0F7FF !important;
+        background: #F0FDFA !important;
         border-left: 3px solid #6B7280 !important;
         border-radius: 3px !important;
         padding: 10px 14px !important;
@@ -2894,29 +2899,29 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c1fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c1fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c1fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c1fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe (horizontal) -->
-                        <rect x="8" y="88" width="84" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="88" width="84" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="43" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="43" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="38" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="38" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="50" y="70" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
                         <!-- Spring bonnet -->
-                        <rect x="42" y="38" width="16" height="18" rx="2" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="42" y="38" width="16" height="18" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <line x1="46" y1="42" x2="46" y2="52" stroke="#9CA3AF" stroke-width="0.8" stroke-dasharray="1.5 1"/>
                         <line x1="54" y1="42" x2="54" y2="52" stroke="#9CA3AF" stroke-width="0.8" stroke-dasharray="1.5 1"/>
                         <!-- Discharge pipe (vertical up) -->
-                        <rect x="46" y="8" width="8" height="32" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="46" y="8" width="8" height="32" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Open end -->
-                        <line x1="44" y1="8" x2="56" y2="8" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="44" y1="8" x2="56" y2="8" stroke="#0D9488" stroke-width="2"/>
                         <!-- Flow arrow -->
-                        <line x1="50" y1="30" x2="50" y2="14" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c1fb)"/>
+                        <line x1="50" y1="30" x2="50" y2="14" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c1fb)"/>
                         <!-- Reaction force arrow -->
-                        <line x1="50" y1="98" x2="50" y2="114" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c1fr)"/>
-                        <text x="60" y="112" font-size="7" fill="#EF4444" font-weight="700">F</text>
+                        <line x1="50" y1="98" x2="50" y2="114" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c1fr)"/>
+                        <text x="60" y="112" font-size="7" fill="#DC2626" font-weight="700">F</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Verticale haut</div>
@@ -2929,27 +2934,27 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c2fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c2fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c2fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c2fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Reaction force arrow (up) -->
-                        <line x1="50" y1="18" x2="50" y2="4" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c2fr)"/>
-                        <text x="60" y="10" font-size="7" fill="#EF4444" font-weight="700">F</text>
+                        <line x1="50" y1="18" x2="50" y2="4" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c2fr)"/>
+                        <text x="60" y="10" font-size="7" fill="#DC2626" font-weight="700">F</text>
                         <!-- Process pipe -->
-                        <rect x="8" y="22" width="84" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="22" width="84" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="43" y="28" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="43" y="28" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="38" y="38" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="38" y="38" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="50" y="54" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
                         <!-- Spring bonnet -->
-                        <rect x="42" y="62" width="16" height="18" rx="2" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="42" y="62" width="16" height="18" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- Discharge pipe (down) -->
-                        <rect x="46" y="78" width="8" height="28" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="46" y="78" width="8" height="28" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Open end -->
-                        <line x1="44" y1="106" x2="56" y2="106" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="44" y1="106" x2="56" y2="106" stroke="#0D9488" stroke-width="2"/>
                         <!-- Flow arrow -->
-                        <line x1="50" y1="88" x2="50" y2="102" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c2fb)"/>
+                        <line x1="50" y1="88" x2="50" y2="102" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c2fb)"/>
                       </svg>
                     </div>
                     <div class="config-option-label">Verticale bas</div>
@@ -2962,25 +2967,25 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c3fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c3fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c3fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c3fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe (vertical) -->
-                        <rect x="14" y="10" width="8" height="100" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="14" y="10" width="8" height="100" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="20" y="52" width="12" height="14" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="20" y="52" width="12" height="14" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="30" y="46" width="26" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="30" y="46" width="26" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="43" y="62" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
                         <!-- Discharge pipe (horizontal right) -->
-                        <rect x="54" y="55" width="36" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="54" y="55" width="36" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Open end -->
-                        <line x1="90" y1="53" x2="90" y2="65" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="90" y1="53" x2="90" y2="65" stroke="#0D9488" stroke-width="2"/>
                         <!-- Flow arrow -->
-                        <line x1="72" y1="59" x2="86" y2="59" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c3fb)"/>
+                        <line x1="72" y1="59" x2="86" y2="59" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c3fb)"/>
                         <!-- Reaction force arrow (left) -->
-                        <line x1="12" y1="59" x2="2" y2="59" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c3fr)"/>
-                        <text x="2" y="72" font-size="7" fill="#EF4444" font-weight="700">F</text>
+                        <line x1="12" y1="59" x2="2" y2="59" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c3fr)"/>
+                        <text x="2" y="72" font-size="7" fill="#DC2626" font-weight="700">F</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Horizontale</div>
@@ -2993,36 +2998,36 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c4fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c4fra" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
-                          <marker id="c4frb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c4fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c4fra" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
+                          <marker id="c4frb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe -->
-                        <rect x="8" y="88" width="58" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="88" width="58" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="30" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="30" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="25" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="25" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="37" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
                         <!-- Vertical rise pipe -->
-                        <rect x="33" y="28" width="8" height="28" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="33" y="28" width="8" height="28" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- 90° elbow -->
-                        <path d="M33,30 L33,22 Q33,14 41,14 L56,14" stroke="#93C5FD" stroke-width="1" fill="none"/>
-                        <path d="M41,30 L41,22 Q41,14 49,14 L56,14" stroke="#93C5FD" stroke-width="1" fill="none"/>
-                        <rect x="33" y="14" width="8" height="16" fill="#DBEAFE" stroke="none"/>
-                        <path d="M37,28 Q37,18 47,18" stroke="#93C5FD" stroke-width="0" fill="#DBEAFE"/>
+                        <path d="M33,30 L33,22 Q33,14 41,14 L56,14" stroke="#0D9488" stroke-width="1" fill="none"/>
+                        <path d="M41,30 L41,22 Q41,14 49,14 L56,14" stroke="#0D9488" stroke-width="1" fill="none"/>
+                        <rect x="33" y="14" width="8" height="16" fill="#F0FDFA" stroke="none"/>
+                        <path d="M37,28 Q37,18 47,18" stroke="#0D9488" stroke-width="0" fill="#F0FDFA"/>
                         <!-- Horizontal pipe after elbow -->
-                        <rect x="42" y="10" width="48" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="42" y="10" width="48" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Open end -->
-                        <line x1="90" y1="8" x2="90" y2="20" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="90" y1="8" x2="90" y2="20" stroke="#0D9488" stroke-width="2"/>
                         <!-- Flow arrow -->
-                        <line x1="70" y1="14" x2="86" y2="14" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c4fb)"/>
+                        <line x1="70" y1="14" x2="86" y2="14" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c4fb)"/>
                         <!-- Reaction Fy (down) -->
-                        <line x1="37" y1="98" x2="37" y2="114" stroke="#EF4444" stroke-width="2" marker-end="url(#c4fra)"/>
-                        <text x="44" y="112" font-size="6.5" fill="#EF4444" font-weight="700">Fy</text>
+                        <line x1="37" y1="98" x2="37" y2="114" stroke="#DC2626" stroke-width="2" marker-end="url(#c4fra)"/>
+                        <text x="44" y="112" font-size="6.5" fill="#DC2626" font-weight="700">Fy</text>
                         <!-- Reaction Fx (left) -->
-                        <line x1="23" y1="67" x2="8" y2="67" stroke="#EF4444" stroke-width="2" marker-end="url(#c4frb)"/>
-                        <text x="5" y="78" font-size="6.5" fill="#EF4444" font-weight="700">Fx</text>
+                        <line x1="23" y1="67" x2="8" y2="67" stroke="#DC2626" stroke-width="2" marker-end="url(#c4frb)"/>
+                        <text x="5" y="78" font-size="6.5" fill="#DC2626" font-weight="700">Fx</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Coude 90°</div>
@@ -3035,25 +3040,25 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c5fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c5fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe -->
-                        <rect x="8" y="88" width="50" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="88" width="50" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="28" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="28" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="23" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="23" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="35" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
                         <!-- Discharge pipe to collector -->
-                        <rect x="45" y="34" width="8" height="22" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
-                        <rect x="45" y="34" width="22" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="45" y="34" width="8" height="22" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
+                        <rect x="45" y="34" width="22" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Collector (large vertical pipe, dashed) -->
                         <rect x="64" y="8" width="26" height="104" rx="4" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="4 3"/>
                         <text x="77" y="56" text-anchor="middle" font-size="7" fill="#9CA3AF" font-weight="600">Coll.</text>
                         <text x="77" y="66" text-anchor="middle" font-size="6" fill="#9CA3AF">torche</text>
                         <!-- Reaction force (left, reduced) -->
-                        <line x1="21" y1="67" x2="5" y2="67" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c5fr)"/>
-                        <text x="2" y="80" font-size="6" fill="#EF4444" font-weight="700">F (red.)</text>
+                        <line x1="21" y1="67" x2="5" y2="67" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c5fr)"/>
+                        <text x="2" y="80" font-size="6" fill="#DC2626" font-weight="700">F (red.)</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Collecteur</div>
@@ -3066,31 +3071,31 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c6fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c6fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c6fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c6fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe -->
-                        <rect x="8" y="88" width="54" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="88" width="54" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="24" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="24" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="19" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="19" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="31" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
                         <!-- Vertical rise -->
-                        <rect x="27" y="18" width="8" height="38" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="27" y="18" width="8" height="38" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Top horizontal segment -->
-                        <rect x="33" y="10" width="36" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="33" y="10" width="36" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Elbow corners (rounded visual) -->
-                        <rect x="27" y="10" width="8" height="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="27" y="10" width="8" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Down pipe -->
-                        <rect x="67" y="16" width="8" height="36" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="67" y="16" width="8" height="36" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Open end at bottom -->
-                        <line x1="65" y1="52" x2="77" y2="52" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="65" y1="52" x2="77" y2="52" stroke="#0D9488" stroke-width="2"/>
                         <!-- Flow arrow (going down at exit) -->
-                        <line x1="71" y1="36" x2="71" y2="48" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c6fb)"/>
+                        <line x1="71" y1="36" x2="71" y2="48" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c6fb)"/>
                         <!-- Reaction force (down) -->
-                        <line x1="31" y1="98" x2="31" y2="114" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c6fr)"/>
-                        <text x="40" y="112" font-size="7" fill="#EF4444" font-weight="700">F</text>
+                        <line x1="31" y1="98" x2="31" y2="114" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c6fr)"/>
+                        <text x="40" y="112" font-size="7" fill="#DC2626" font-weight="700">F</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Col de cygne</div>
@@ -3103,30 +3108,30 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c7fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c7fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c7fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c7fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe (shown in perspective - going into page) -->
-                        <rect x="8" y="88" width="84" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="88" width="84" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Perspective hint (pipe goes left-right = X axis) -->
                         <text x="50" y="85" text-anchor="middle" font-size="6" fill="#9CA3AF">axe X →</text>
                         <!-- Inlet nozzle -->
-                        <rect x="43" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="43" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="38" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="38" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="50" y="70" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
                         <!-- Vertical rise -->
-                        <rect x="46" y="28" width="8" height="28" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="46" y="28" width="8" height="28" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- 90° elbow turning towards viewer (Z direction) shown as perspective pipe -->
-                        <rect x="46" y="20" width="8" height="10" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+                        <rect x="46" y="20" width="8" height="10" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
                         <!-- Pipe going into Z (shown as ellipse/perspective) -->
-                        <ellipse cx="50" cy="20" rx="4" ry="3" fill="#93C5FD" stroke="#60A5FA" stroke-width="1"/>
+                        <ellipse cx="50" cy="20" rx="4" ry="3" fill="#CCFBF1" stroke="#0D9488" stroke-width="1"/>
                         <!-- Z direction indicator (diagonal to show depth) -->
-                        <line x1="50" y1="20" x2="30" y2="6" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#c7fb)"/>
-                        <text x="18" y="10" font-size="7" fill="#3B82F6" font-weight="600">Z</text>
+                        <line x1="50" y1="20" x2="30" y2="6" stroke="#0D9488" stroke-width="2.5" marker-end="url(#c7fb)"/>
+                        <text x="18" y="10" font-size="7" fill="#0D9488" font-weight="600">Z</text>
                         <!-- Reaction force arrow (opposite Z) -->
-                        <line x1="50" y1="60" x2="74" y2="78" stroke="#EF4444" stroke-width="2.5" marker-end="url(#c7fr)"/>
-                        <text x="72" y="76" font-size="7" fill="#EF4444" font-weight="700">Fz</text>
+                        <line x1="50" y1="60" x2="74" y2="78" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c7fr)"/>
+                        <text x="72" y="76" font-size="7" fill="#DC2626" font-weight="700">Fz</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Laterale (Z)</div>
@@ -3139,33 +3144,33 @@
                     <div class="config-option-svg">
                       <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                          <marker id="c8fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
-                          <marker id="c8fra" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
-                          <marker id="c8frb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#EF4444"/></marker>
+                          <marker id="c8fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                          <marker id="c8fra" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
+                          <marker id="c8frb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
                         </defs>
                         <!-- Process pipe -->
-                        <rect x="8" y="88" width="58" height="8" rx="1" fill="#D4D4D8" stroke="#71717A" stroke-width="1.2"/>
+                        <rect x="8" y="88" width="58" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
                         <!-- Inlet nozzle -->
-                        <rect x="28" y="78" width="14" height="12" fill="#D4D4D8" stroke="#71717A" stroke-width="1"/>
+                        <rect x="28" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
                         <!-- PSV body -->
-                        <rect x="23" y="54" width="24" height="26" rx="3" fill="#A1A1AA" stroke="#52525B" stroke-width="1.5"/>
+                        <rect x="23" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
                         <text x="35" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
                         <!-- Inclined discharge pipe at 45° -->
-                        <line x1="39" y1="54" x2="82" y2="11" stroke="#93C5FD" stroke-width="9" stroke-linecap="round"/>
-                        <line x1="39" y1="54" x2="82" y2="11" stroke="#DBEAFE" stroke-width="7" stroke-linecap="round"/>
+                        <line x1="39" y1="54" x2="82" y2="11" stroke="#0D9488" stroke-width="9" stroke-linecap="round"/>
+                        <line x1="39" y1="54" x2="82" y2="11" stroke="#F0FDFA" stroke-width="7" stroke-linecap="round"/>
                         <!-- Open end -->
-                        <line x1="78" y1="7" x2="86" y2="15" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="78" y1="7" x2="86" y2="15" stroke="#0D9488" stroke-width="2"/>
                         <!-- 45° angle arc -->
                         <path d="M35,46 Q35,36 42,32" stroke="#9CA3AF" stroke-width="0.8" fill="none" stroke-dasharray="2 1.5"/>
                         <text x="42" y="42" font-size="7" fill="#9CA3AF">45°</text>
                         <!-- Flow arrow -->
-                        <line x1="60" y1="33" x2="72" y2="21" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#c8fb)"/>
+                        <line x1="60" y1="33" x2="72" y2="21" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c8fb)"/>
                         <!-- Reaction Fy (down) -->
-                        <line x1="35" y1="98" x2="35" y2="114" stroke="#EF4444" stroke-width="2" marker-end="url(#c8fra)"/>
-                        <text x="42" y="112" font-size="6.5" fill="#EF4444" font-weight="700">Fy</text>
+                        <line x1="35" y1="98" x2="35" y2="114" stroke="#DC2626" stroke-width="2" marker-end="url(#c8fra)"/>
+                        <text x="42" y="112" font-size="6.5" fill="#DC2626" font-weight="700">Fy</text>
                         <!-- Reaction Fx (left) -->
-                        <line x1="21" y1="67" x2="5" y2="67" stroke="#EF4444" stroke-width="2" marker-end="url(#c8frb)"/>
-                        <text x="2" y="78" font-size="6.5" fill="#EF4444" font-weight="700">Fx</text>
+                        <line x1="21" y1="67" x2="5" y2="67" stroke="#DC2626" stroke-width="2" marker-end="url(#c8frb)"/>
+                        <text x="2" y="78" font-size="6.5" fill="#DC2626" font-weight="700">Fx</text>
                       </svg>
                     </div>
                     <div class="config-option-label">Inclinee 45°</div>
@@ -3231,26 +3236,26 @@
                 <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); padding: var(--space-3); background: var(--color-gray-50); border-radius: var(--radius-md); border: 1px solid var(--color-gray-200);">
                   <svg viewBox="0 0 70 70" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                      <marker id="triadArrowX" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#EF4444"/></marker>
-                      <marker id="triadArrowY" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#22C55E"/></marker>
-                      <marker id="triadArrowZ" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3B82F6"/></marker>
+                      <marker id="triadArrowX" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#DC2626"/></marker>
+                      <marker id="triadArrowY" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
+                      <marker id="triadArrowZ" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#6B7280"/></marker>
                     </defs>
                     <!-- Origin point -->
                     <circle cx="25" cy="45" r="2.5" fill="#374151"/>
                     <!-- X axis (right) -->
-                    <line x1="25" y1="45" x2="60" y2="45" stroke="#EF4444" stroke-width="2" marker-end="url(#triadArrowX)"/>
-                    <text x="63" y="49" font-size="10" fill="#EF4444" font-weight="700">X</text>
+                    <line x1="25" y1="45" x2="60" y2="45" stroke="#DC2626" stroke-width="2" marker-end="url(#triadArrowX)"/>
+                    <text x="63" y="49" font-size="10" fill="#DC2626" font-weight="700">X</text>
                     <!-- Y axis (up) -->
-                    <line x1="25" y1="45" x2="25" y2="10" stroke="#22C55E" stroke-width="2" marker-end="url(#triadArrowY)"/>
-                    <text x="21" y="8" font-size="10" fill="#22C55E" font-weight="700">Y</text>
+                    <line x1="25" y1="45" x2="25" y2="10" stroke="#0D9488" stroke-width="2" marker-end="url(#triadArrowY)"/>
+                    <text x="21" y="8" font-size="10" fill="#0D9488" font-weight="700">Y</text>
                     <!-- Z axis (isometric out towards viewer) -->
-                    <line x1="25" y1="45" x2="6" y2="60" stroke="#3B82F6" stroke-width="2" marker-end="url(#triadArrowZ)"/>
-                    <text x="1" y="68" font-size="10" fill="#3B82F6" font-weight="700">Z</text>
+                    <line x1="25" y1="45" x2="6" y2="60" stroke="#6B7280" stroke-width="2" marker-end="url(#triadArrowZ)"/>
+                    <text x="1" y="68" font-size="10" fill="#6B7280" font-weight="700">Z</text>
                   </svg>
                   <div style="font-size: 12px; color: var(--color-gray-600); line-height: 1.6;">
-                    <div><strong style="color: #EF4444;">X</strong> : Horizontal (axe de la tuyauterie)</div>
-                    <div><strong style="color: #22C55E;">Y</strong> : Vertical (haut positif)</div>
-                    <div><strong style="color: #3B82F6;">Z</strong> : Lateral</div>
+                    <div><strong style="color: #DC2626;">X</strong> : Horizontal (axe de la tuyauterie)</div>
+                    <div><strong style="color: #0D9488;">Y</strong> : Vertical (haut positif)</div>
+                    <div><strong style="color: #6B7280;">Z</strong> : Lateral</div>
                   </div>
                 </div>
                 <div class="force-results-layout">
@@ -3558,7 +3563,7 @@
             <div id="apiResultsBody">
               <!-- 1. Hypothese d'orifice -->
               <div class="api-orifice-result">
-                <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #4338CA;">
+                <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary-dark);">
                   Orifice maximum assume selon API 526
                 </div>
                 <div class="api-orifice-letter" id="apiOrificeLetter">-</div>
@@ -5110,53 +5115,53 @@
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-1 : Decharge verticale haut</text>
           <rect x="80" y="70" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <rect x="85" y="55" width="30" height="20" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <line x1="100" y1="55" x2="100" y2="25" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB)"/>
-          <line x1="100" y1="120" x2="100" y2="148" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR)"/>
-          <text x="115" y="40" font-size="9" fill="#3B82F6">Sortie</text>
-          <text x="115" y="140" font-size="9" font-weight="600" fill="#EF4444">Fy = -${fDesign.toFixed(0)} daN</text>
+          <line x1="100" y1="55" x2="100" y2="25" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB)"/>
+          <line x1="100" y1="120" x2="100" y2="148" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR)"/>
+          <text x="115" y="40" font-size="9" fill="#0D9488">Sortie</text>
+          <text x="115" y="140" font-size="9" font-weight="600" fill="#DC2626">Fy = -${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
-          <defs><marker id="dArrowB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-2': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-2 : Decharge verticale bas</text>
           <rect x="80" y="40" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <rect x="85" y="85" width="30" height="20" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <line x1="100" y1="105" x2="100" y2="135" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB2)"/>
-          <line x1="100" y1="40" x2="100" y2="20" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR2)"/>
-          <text x="115" y="130" font-size="9" fill="#3B82F6">Sortie</text>
-          <text x="115" y="30" font-size="9" font-weight="600" fill="#EF4444">Fy = +${fDesign.toFixed(0)} daN</text>
+          <line x1="100" y1="105" x2="100" y2="135" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB2)"/>
+          <line x1="100" y1="40" x2="100" y2="20" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR2)"/>
+          <text x="115" y="130" font-size="9" fill="#0D9488">Sortie</text>
+          <text x="115" y="30" font-size="9" font-weight="600" fill="#DC2626">Fy = +${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
-          <defs><marker id="dArrowB2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-3': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-3 : Decharge horizontale</text>
           <rect x="40" y="55" width="50" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <rect x="85" y="62" width="20" height="26" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <line x1="105" y1="75" x2="155" y2="75" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB3)"/>
-          <line x1="40" y1="75" x2="10" y2="75" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR3)"/>
-          <text x="140" y="68" font-size="9" fill="#3B82F6">Sortie</text>
-          <text x="10" y="100" font-size="9" font-weight="600" fill="#EF4444">Fx = -${fDesign.toFixed(0)} daN</text>
+          <line x1="105" y1="75" x2="155" y2="75" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB3)"/>
+          <line x1="40" y1="75" x2="10" y2="75" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR3)"/>
+          <text x="140" y="68" font-size="9" fill="#0D9488">Sortie</text>
+          <text x="10" y="100" font-size="9" font-weight="600" fill="#DC2626">Fx = -${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fy=0, Fz=0</text>
-          <defs><marker id="dArrowB3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-4': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-4 : Coude 90°</text>
           <rect x="55" y="75" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <path d="M75 75 L75 50 Q75 40 85 40 L110 40" stroke="#D1D5DB" stroke-width="8" fill="none"/>
           <path d="M75 75 L75 50 Q75 40 85 40 L110 40" stroke="#6B7280" stroke-width="2" fill="none"/>
-          <line x1="110" y1="40" x2="155" y2="40" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB4)"/>
-          <line x1="75" y1="115" x2="75" y2="145" stroke="#EF4444" stroke-width="2.5" marker-end="url(#dArrowR4a)"/>
-          <line x1="55" y1="95" x2="20" y2="95" stroke="#EF4444" stroke-width="2.5" marker-end="url(#dArrowR4b)"/>
-          <text x="145" y="35" font-size="9" fill="#3B82F6">Sortie</text>
-          <text x="85" y="140" font-size="8" font-weight="600" fill="#EF4444">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
-          <text x="5" y="108" font-size="8" font-weight="600" fill="#EF4444">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
+          <line x1="110" y1="40" x2="155" y2="40" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB4)"/>
+          <line x1="75" y1="115" x2="75" y2="145" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR4a)"/>
+          <line x1="55" y1="95" x2="20" y2="95" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR4b)"/>
+          <text x="145" y="35" font-size="9" fill="#0D9488">Sortie</text>
+          <text x="85" y="140" font-size="8" font-weight="600" fill="#DC2626">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
+          <text x="5" y="108" font-size="8" font-weight="600" fill="#DC2626">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fz=0</text>
-          <defs><marker id="dArrowB4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR4a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker>
-          <marker id="dArrowR4b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR4a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker>
+          <marker id="dArrowR4b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-5': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-5 : Collecteur (torche)</text>
@@ -5164,64 +5169,64 @@
           <rect x="65" y="62" width="15" height="26" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
           <rect x="80" y="40" width="80" height="70" rx="5" fill="#F9FAFB" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4 3"/>
           <text x="120" y="78" text-anchor="middle" font-size="9" fill="#6B7280">Collecteur</text>
-          <line x1="30" y1="75" x2="8" y2="75" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR5)"/>
-          <text x="10" y="100" font-size="9" font-weight="600" fill="#EF4444">Fx = -${fDesign.toFixed(0)} daN</text>
+          <line x1="30" y1="75" x2="8" y2="75" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR5)"/>
+          <text x="10" y="100" font-size="9" font-weight="600" fill="#DC2626">Fx = -${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fy=0, Fz=0 (contre-pression reduit F)</text>
-          <defs><marker id="dArrowR5" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowR5" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-6': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-6 : Col de cygne (180°)</text>
           <rect x="50" y="85" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <text x="70" y="108" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
-          <rect x="65" y="50" width="10" height="37" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
-          <rect x="65" y="40" width="60" height="10" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
-          <rect x="115" y="48" width="10" height="40" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
-          <line x1="120" y1="70" x2="120" y2="100" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB6)"/>
-          <text x="132" y="95" font-size="9" fill="#3B82F6">Sortie</text>
-          <line x1="70" y1="125" x2="70" y2="148" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR6)"/>
-          <text x="80" y="145" font-size="9" font-weight="600" fill="#EF4444">Fy = -${fDesign.toFixed(0)} daN</text>
+          <rect x="65" y="50" width="10" height="37" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
+          <rect x="65" y="40" width="60" height="10" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
+          <rect x="115" y="48" width="10" height="40" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
+          <line x1="120" y1="70" x2="120" y2="100" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB6)"/>
+          <text x="132" y="95" font-size="9" fill="#0D9488">Sortie</text>
+          <line x1="70" y1="125" x2="70" y2="148" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR6)"/>
+          <text x="80" y="145" font-size="9" font-weight="600" fill="#DC2626">Fy = -${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
-          <defs><marker id="dArrowB6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-7': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-7 : Decharge laterale (Z)</text>
           <rect x="60" y="70" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <text x="80" y="98" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
-          <rect x="75" y="50" width="10" height="22" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
-          <ellipse cx="80" cy="50" rx="5" ry="3" fill="#93C5FD" stroke="#60A5FA" stroke-width="1"/>
-          <line x1="80" y1="50" x2="55" y2="30" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB7)"/>
-          <text x="38" y="28" font-size="9" fill="#3B82F6">Z</text>
-          <line x1="80" y1="70" x2="110" y2="95" stroke="#EF4444" stroke-width="3" marker-end="url(#dArrowR7)"/>
-          <text x="115" y="95" font-size="9" font-weight="600" fill="#EF4444">Fz = -${fDesign.toFixed(0)} daN</text>
+          <rect x="75" y="50" width="10" height="22" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
+          <ellipse cx="80" cy="50" rx="5" ry="3" fill="#CCFBF1" stroke="#0D9488" stroke-width="1"/>
+          <line x1="80" y1="50" x2="55" y2="30" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB7)"/>
+          <text x="38" y="28" font-size="9" fill="#0D9488">Z</text>
+          <line x1="80" y1="70" x2="110" y2="95" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR7)"/>
+          <text x="115" y="95" font-size="9" font-weight="600" fill="#DC2626">Fz = -${fDesign.toFixed(0)} daN</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fy=0</text>
-          <line x1="140" y1="130" x2="170" y2="130" stroke="#EF4444" stroke-width="1.5"/>
+          <line x1="140" y1="130" x2="170" y2="130" stroke="#DC2626" stroke-width="1.5"/>
           <text x="172" y="133" font-size="7" fill="#6B7280">axe X (tuyauterie)</text>
-          <line x1="140" y1="130" x2="140" y2="110" stroke="#22C55E" stroke-width="1.5"/>
+          <line x1="140" y1="130" x2="140" y2="110" stroke="#0D9488" stroke-width="1.5"/>
           <text x="143" y="112" font-size="7" fill="#6B7280">Y</text>
-          <line x1="140" y1="130" x2="122" y2="142" stroke="#3B82F6" stroke-width="1.5"/>
+          <line x1="140" y1="130" x2="122" y2="142" stroke="#0D9488" stroke-width="1.5"/>
           <text x="118" y="148" font-size="7" fill="#6B7280">Z</text>
-          <defs><marker id="dArrowB7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`,
         'CFG-8': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-8 : Inclinee 45°</text>
           <rect x="50" y="80" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
           <text x="70" y="103" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
-          <line x1="70" y1="80" x2="140" y2="25" stroke="#DBEAFE" stroke-width="10" stroke-linecap="round"/>
-          <line x1="70" y1="80" x2="140" y2="25" stroke="#93C5FD" stroke-width="1.5"/>
-          <line x1="120" y1="42" x2="140" y2="25" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#dArrowB8)"/>
-          <text x="142" y="30" font-size="9" fill="#3B82F6">Sortie</text>
+          <line x1="70" y1="80" x2="140" y2="25" stroke="#F0FDFA" stroke-width="10" stroke-linecap="round"/>
+          <line x1="70" y1="80" x2="140" y2="25" stroke="#0D9488" stroke-width="1.5"/>
+          <line x1="120" y1="42" x2="140" y2="25" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB8)"/>
+          <text x="142" y="30" font-size="9" fill="#0D9488">Sortie</text>
           <path d="M70,72 Q70,62 78,58" stroke="#9CA3AF" stroke-width="1" fill="none" stroke-dasharray="2 1.5"/>
           <text x="76" y="68" font-size="8" fill="#9CA3AF">45°</text>
-          <line x1="70" y1="120" x2="70" y2="148" stroke="#EF4444" stroke-width="2.5" marker-end="url(#dArrowR8a)"/>
-          <text x="80" y="145" font-size="8" font-weight="600" fill="#EF4444">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
-          <line x1="50" y1="100" x2="15" y2="100" stroke="#EF4444" stroke-width="2.5" marker-end="url(#dArrowR8b)"/>
-          <text x="8" y="115" font-size="8" font-weight="600" fill="#EF4444">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
+          <line x1="70" y1="120" x2="70" y2="148" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR8a)"/>
+          <text x="80" y="145" font-size="8" font-weight="600" fill="#DC2626">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
+          <line x1="50" y1="100" x2="15" y2="100" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR8b)"/>
+          <text x="8" y="115" font-size="8" font-weight="600" fill="#DC2626">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
           <text x="10" y="148" font-size="8" fill="#6B7280">Fz=0</text>
-          <defs><marker id="dArrowB8" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3B82F6"/></marker>
-          <marker id="dArrowR8a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker>
-          <marker id="dArrowR8b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#EF4444"/></marker></defs>
+          <defs><marker id="dArrowB8" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
+          <marker id="dArrowR8a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker>
+          <marker id="dArrowR8b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
         </svg>`
       };
 
