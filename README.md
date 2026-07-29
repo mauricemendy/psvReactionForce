@@ -182,6 +182,29 @@ l'exhaustivité des cas permis : les inclure va dans le sens conservatif de
 l'approche par enveloppe, mais un corps en acier au carbone peut ne pas les
 proposer.
 
+### Aires d'orifice : deux tables, volontairement
+
+Le module API n'utilise **pas** la table `areaTable` du mode Kf. Il s'appuie sur
+`api526AreaMm2`, transcription du **Tableau 1** de la norme (*Standard Effective
+Orifice Areas and Letter Designations*) en mm² :
+
+| D | E | F | G | H | J | K | L | M | N | P | Q | R | T |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 71 | 126 | 198 | 325 | 506 | 830 | 1186 | 1841 | 2323 | 2800 | 4116 | 7129 | 10323 | 16774 |
+
+`areaTable` arrondit à trois chiffres significatifs et s'écarte jusqu'à **0,31 %**
+du Tableau 1 (T : 16 800 mm² au lieu de 16 774). L'écart est physiquement
+négligeable — `W` et `F` sont proportionnels à l'aire — mais il empêcherait un
+vérificateur de retrouver le résultat depuis la norme. Les deux tables restent
+séparées : modifier `areaTable` changerait les résultats du mode Kf, qui a sa
+propre calibration empirique.
+
+**La nomenclature s'arrête définitivement à T.** Les lettres U, V et W que l'on
+rencontre dans des fiches fournisseurs (*Super Capacity*, *Extra-Large*) relèvent
+de conceptions propriétaires hors API 526, sans cotes ni limites
+pression/température prévisibles. Le filtrage se fait par liste blanche : toute
+désignation non standard est écartée, quelle qu'elle soit.
+
 ---
 
 ## Tests

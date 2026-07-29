@@ -133,8 +133,19 @@ var PSV_CONFIG = {
     }
   },
 
-  // V et W (areaTable) sont hors API 526 : jamais proposes par le module.
+  // Le Tableau 1 de l'API 526 debute a D et s'arrete DEFINITIVEMENT a T.
+  // U, V, W (« Super Capacity ») sont des conceptions proprietaires hors
+  // norme : filtrage par liste blanche, jamais proposes par le module.
   api526Orifices: ['D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'T'],
+
+  // Aires effectives normalisees — API 526 Tableau 1, en mm2.
+  // Distincte de areaTable (cm2, mode Kf herité) qui arrondit a 3
+  // chiffres significatifs et s'ecarte jusqu'a 0.31 % de la norme.
+  api526AreaMm2: {
+    'D': 71,    'E': 126,   'F': 198,   'G': 325,   'H': 506,
+    'J': 830,   'K': 1186,  'L': 1841,  'M': 2323,  'N': 2800,
+    'P': 4116,  'Q': 7129,  'R': 10323, 'T': 16774
+  },
 
   validNps: ['1', '1.5', '2', '3', '4', '6', '8', '10'],
 

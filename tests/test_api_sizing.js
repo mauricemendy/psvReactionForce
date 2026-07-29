@@ -16,8 +16,8 @@
  *   3. Module B - debit vapeur d'eau (API 520 Part I)
  *   4. Module C - force de reaction (API 520 Part II)
  *   5. Integrite et synchronisation des tables (index.html <-> config.gs)
- *   6. Audit des entrees API 526 non validees (non bloquant)
- *   7. Non-regression : le mode simple n'est pas touche
+ *   6. Chaine complete et bloc de reserves
+ *   7. Audit BLOQUANT des entrees API 526 + non-regression du mode Kf
  */
 
 const fs = require('fs');
@@ -104,7 +104,7 @@ const engineSource = jsCode.slice(0, jsCode.lastIndexOf('// ====================
 
 const EXPORTS = [
   'api526Table', 'api526Orifices', 'pipeIdTable', 'fluidPresets', 'areaTable',
-  'validNps', 'validRatings', 'validSchedules', 'API_CONST',
+  'validNps', 'validRatings', 'validSchedules', 'API_CONST', 'api526AreaMm2',
   'selectMaxOrifice', 'coefficientC', 'coefficientCUS', 'napierKN',
   'criticalFlowPressure', 'ratedFlow', 'outletArea', 'reactionForce',
   'computeApiSizing', 'buildApiDisclaimer', 'formatDlf',
@@ -147,7 +147,7 @@ test('Cas de reference SRS : 2x3 CL300 retient l\'orifice J', () => {
   assert(r.ok, 'la requete doit aboutir');
   assertEqual(r.orifice, 'J', 'orifice retenu');
   assertClose(r.areaIn2, 1.287, 0.002, 'aire en in2 (valeur SRS)');
-  assertClose(r.areaCm2, 8.3, 0.001, 'aire en cm2');
+  assertEqual(r.areaMm2, 830, 'aire en mm2 (API 526 Tableau 1)');
 });
 
 test('Cas SRS : en CL300 les candidats sont H et J, H est ecarte', () => {
@@ -172,7 +172,7 @@ test('La regle de decision retient le MAXIMUM, pas le premier', () => {
   // 4x6 propose L, M, N, P : P (41.2 cm2) doit gagner.
   const r = api.selectMaxOrifice('4', '6', 300);
   assertEqual(r.orifice, 'P', 'orifice retenu pour 4x6');
-  assertClose(r.areaCm2, 41.2, 0.001, 'aire');
+  assertClose(r.areaMm2, 4116, 1e-9, 'aire normalisee (API 526 Tableau 1)');
 });
 
 test('Chaque entree de la table retourne bien son orifice d\'aire maximale', () => {
@@ -181,8 +181,8 @@ test('Chaque entree de la table retourne bien son orifice d\'aire maximale', () 
     const parts = key.split('x');
     const r = api.selectMaxOrifice(parts[0], parts[1], entry.ratings[0]);
     assert(r.ok, `${key} doit aboutir`);
-    const maxArea = Math.max.apply(null, entry.orifices.map(o => api.areaTable[o]));
-    assertClose(r.areaCm2, maxArea, 1e-9, `${key} : aire maximale`);
+    const maxArea = Math.max.apply(null, entry.orifices.map(o => api.api526AreaMm2[o]));
+    assertClose(r.areaMm2, maxArea, 1e-9, `${key} : aire maximale`);
   });
 });
 
@@ -558,10 +558,10 @@ test('Schedule inconnu -> erreur explicite de l\'orchestrateur', () => {
 suite('5. Integrite et synchronisation des tables');
 // ============================================================
 
-test('Toutes les lettres citees dans api526Table existent dans areaTable', () => {
+test('Toutes les lettres citees dans api526Table ont une aire normalisee', () => {
   Object.keys(api.api526Table).forEach(key => {
     api.api526Table[key].orifices.forEach(o => {
-      assert(typeof api.areaTable[o] === 'number', `${key} cite l'orifice inconnu ${o}`);
+      assert(typeof api.api526AreaMm2[o] === 'number', `${key} cite l'orifice inconnu ${o}`);
     });
   });
 });
@@ -574,17 +574,67 @@ test('api526Table ne contient que des orifices de la liste API 526 (D a T)', () 
   });
 });
 
-test('api526Orifices exclut bien V et W', () => {
-  assert(api.api526Orifices.indexOf('V') === -1, 'V ne doit pas y figurer');
-  assert(api.api526Orifices.indexOf('W') === -1, 'W ne doit pas y figurer');
+test('api526Orifices couvre D a T et rien d\'autre', () => {
+  // Le Tableau 1 debute a D et s'arrete DEFINITIVEMENT a T.
+  assertEqual(api.api526Orifices.join(''), 'DEFGHJKLMNPQRT', 'nomenclature du Tableau 1');
   assertEqual(api.api526Orifices.length, 14, 'D a T = 14 lettres');
+});
+
+test('Les orifices hors norme ne sont jamais retenus, quelle que soit la lettre', () => {
+  // U, V, W (« Super Capacity ») sont des conceptions proprietaires.
+  // Le filtrage est une liste blanche : on verifie qu'une lettre non
+  // standard injectee dans la table est ecartee, meme avec une aire enorme.
+  ['U', 'V', 'W', 'ZZ'].forEach(lettre => {
+    assert(api.api526Orifices.indexOf(lettre) === -1, `${lettre} ne doit pas etre normalise`);
+    assert(typeof api.api526AreaMm2[lettre] !== 'number', `${lettre} ne doit pas avoir d'aire normalisee`);
+  });
+
+  const saved = api.api526Table['8x10'].byRating[150];
+  api.api526Table['8x10'].byRating[150] = ['T', 'W'];
+  try {
+    assertEqual(api.selectMaxOrifice('8', '10', 150).orifice, 'T',
+      'W (406 cm2) doit etre ignore au profit de T');
+  } finally {
+    api.api526Table['8x10'].byRating[150] = saved;
+  }
+});
+
+test('Les aires normalisees reproduisent le Tableau 1 de l\'API 526', () => {
+  // Ancrages fournis par la norme : D = 71 mm2, T = 16 774 mm2.
+  assertEqual(api.api526AreaMm2['D'], 71, 'borne basse du Tableau 1');
+  assertEqual(api.api526AreaMm2['T'], 16774, 'borne haute du Tableau 1');
+
+  // Le reste doit etre la conversion exacte des aires en in2, au mm2 pres.
+  const in2 = {
+    D: 0.110, E: 0.196, F: 0.307, G: 0.503, H: 0.785, J: 1.287, K: 1.838,
+    L: 2.853, M: 3.60, N: 4.34, P: 6.38, Q: 11.05, R: 16.00, T: 26.00
+  };
+  api.api526Orifices.forEach(o => {
+    assertEqual(api.api526AreaMm2[o], Math.round(in2[o] * 645.16), `orifice ${o}`);
+  });
+});
+
+test('Les aires normalisees sont strictement croissantes de D a T', () => {
+  for (let i = 1; i < api.api526Orifices.length; i++) {
+    const prec = api.api526Orifices[i - 1], cur = api.api526Orifices[i];
+    assert(api.api526AreaMm2[cur] > api.api526AreaMm2[prec], `${cur} doit depasser ${prec}`);
+  }
+});
+
+test('La table normalisee est distincte de areaTable, qui reste intacte', () => {
+  // areaTable sert le mode Kf herité et arrondit a 3 chiffres significatifs.
+  // La toucher changerait les resultats de ce mode ; elle doit rester en l'etat.
+  assertEqual(api.areaTable['T'], 168, 'areaTable (mode Kf) inchangee');
+  assertEqual(api.api526AreaMm2['T'] / 100, 167.74, 'table normalisee (module API)');
+  assert(api.areaTable['V'] === 271 && api.areaTable['W'] === 406,
+    'V et W restent dans areaTable pour le mode Kf');
 });
 
 test('Les orifices de chaque corps sont listes par aire croissante', () => {
   Object.keys(api.api526Table).forEach(key => {
     const orifices = api.api526Table[key].orifices;
     for (let i = 1; i < orifices.length; i++) {
-      assert(api.areaTable[orifices[i]] > api.areaTable[orifices[i - 1]],
+      assert(api.api526AreaMm2[orifices[i]] > api.api526AreaMm2[orifices[i - 1]],
         `${key} : ${orifices[i]} devrait avoir une aire superieure a ${orifices[i - 1]}`);
     }
   });
@@ -656,6 +706,7 @@ test('pipeIdTable est strictement identique entre index.html et config.gs', () =
 test('Les autres tables v3.0 sont identiques entre index.html et config.gs', () => {
   assertEqual(JSON.stringify(cfg.fluidPresets), JSON.stringify(api.fluidPresets), 'fluidPresets');
   assertEqual(JSON.stringify(cfg.api526Orifices), JSON.stringify(api.api526Orifices), 'api526Orifices');
+  assertEqual(JSON.stringify(cfg.api526AreaMm2), JSON.stringify(api.api526AreaMm2), 'api526AreaMm2');
   assertEqual(JSON.stringify(cfg.validNps), JSON.stringify(api.validNps), 'validNps');
   assertEqual(JSON.stringify(cfg.validRatings), JSON.stringify(api.validRatings), 'validRatings');
   assertEqual(JSON.stringify(cfg.validSchedules), JSON.stringify(api.validSchedules), 'validSchedules');

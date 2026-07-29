@@ -4146,10 +4146,39 @@
       }
     };
 
-    // Orifices couverts par l'API 526. V et W existent dans areaTable
-    // (catalogues constructeurs) mais sont HORS norme : le module de
-    // dimensionnement ne doit jamais les proposer.
+    // Orifices couverts par l'API 526. La nomenclature du Tableau 1
+    // (Standard Effective Orifice Areas and Letter Designations) debute
+    // a D et s'arrete DEFINITIVEMENT a T : c'est la borne superieure
+    // absolue du standard.
+    //
+    // Les lettres U, V et W que l'on rencontre dans des fiches
+    // fournisseurs (« Super Capacity », « Extra-Large ») relevent de
+    // conceptions proprietaires hors API 526 : ni cotes centre-a-face ni
+    // limites pression/temperature previsibles. V et W figurent dans
+    // `areaTable` pour le mode Kf hérité, mais le module de
+    // dimensionnement ne doit JAMAIS les proposer. Le filtrage se fait
+    // par liste blanche ci-dessous, donc tout autre lettre non
+    // standard (U, ou une invention constructeur) est ecartee de meme.
     const api526Orifices = ['D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'T'];
+
+    // ------------------------------------------------------------------
+    // Aires effectives normalisees — API 526 Tableau 1, valeurs SI (mm2)
+    // ------------------------------------------------------------------
+    // Table DISTINCTE de `areaTable` (exprimee en cm2, utilisee par le
+    // mode Kf herité) et volontairement non fusionnee avec elle :
+    //   - `areaTable` arrondit a 3 chiffres significatifs, ce qui ecarte
+    //     jusqu'a 0.31 % des valeurs du Tableau 1 (T : 16 800 vs 16 774).
+    //     Negligeable physiquement, mais l'outil doit rester recalculable
+    //     a l'identique depuis la norme par un verificateur.
+    //   - modifier `areaTable` changerait les resultats du mode Kf, qui
+    //     a sa propre calibration empirique. Aucune raison d'y toucher.
+    // Valeurs = conversion exacte des aires en in2 du Tableau 1,
+    // arrondie au mm2 (ancrages fournis : D = 71, T = 16 774).
+    const api526AreaMm2 = {
+      'D': 71,    'E': 126,   'F': 198,   'G': 325,   'H': 506,
+      'J': 830,   'K': 1186,  'L': 1841,  'M': 2323,  'N': 2800,
+      'P': 4116,  'Q': 7129,  'R': 10323, 'T': 16774
+    };
 
     const validNps = ['1', '1.5', '2', '3', '4', '6', '8', '10'];
     const validRatings = [150, 300, 600, 900, 1500, 2500];
@@ -4299,9 +4328,11 @@
         ? entry.byRating[ratingNum]
         : entry.orifices;
 
-      // Filet de securite : V et W sont hors API 526 et ne doivent jamais sortir.
+      // Filet de securite par liste blanche : seules les lettres du
+      // Tableau 1 (D a T) sortent d'ici. U, V, W et toute designation
+      // constructeur sont ecartees d'office.
       const inStandard = candidates.filter(function (o) {
-        return api526Orifices.indexOf(o) !== -1 && typeof areaTable[o] === 'number';
+        return api526Orifices.indexOf(o) !== -1 && typeof api526AreaMm2[o] === 'number';
       });
 
       if (inStandard.length === 0) {
@@ -4310,18 +4341,18 @@
 
       // Regle de decision SRS : retenir l'aire effective la PLUS GRANDE.
       const maxOrifice = inStandard.reduce(function (best, o) {
-        return areaTable[o] > areaTable[best] ? o : best;
+        return api526AreaMm2[o] > api526AreaMm2[best] ? o : best;
       }, inStandard[0]);
 
-      const areaCm2 = areaTable[maxOrifice];
+      const areaMm2 = api526AreaMm2[maxOrifice];
 
       return {
         ok: true,
         key: key,
         orifice: maxOrifice,
-        areaCm2: areaCm2,
-        areaMm2: cm2ToMm2(areaCm2),
-        areaIn2: cm2ToIn2(areaCm2),
+        areaCm2: areaMm2 / 100,
+        areaMm2: areaMm2,
+        areaIn2: areaMm2 / 645.16,
         candidates: inStandard.slice(),
         rejected: inStandard.filter(function (o) { return o !== maxOrifice; }),
         verified: entry.verified === true
@@ -6455,14 +6486,14 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
         e.ratings.forEach(function (rating) {
           const candidates = (e.byRating && e.byRating[rating]) ? e.byRating[rating] : e.orifices;
           const maxO = candidates.reduce(function (b, o) {
-            return areaTable[o] > areaTable[b] ? o : b;
+            return api526AreaMm2[o] > api526AreaMm2[b] ? o : b;
           }, candidates[0]);
           refRows.push('<tr>' +
             '<td>' + parts[0] + '" x ' + parts[1] + '"</td>' +
             '<td>' + rating + '#</td>' +
             '<td>' + candidates.join(', ') + '</td>' +
             '<td><strong>' + maxO + '</strong></td>' +
-            '<td>' + String(areaTable[maxO]).replace('.', ',') + '</td>' +
+            '<td>' + (api526AreaMm2[maxO] / 100).toFixed(2).replace('.', ',') + '</td>' +
             '</tr>');
         });
       });
