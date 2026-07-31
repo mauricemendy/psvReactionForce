@@ -498,8 +498,22 @@ test('La logique JS gere DLF < 1.0 comme warning', () => {
 });
 
 test('La logique JS gere DLF > 3.0 comme warning', () => {
-  assert(jsCode.includes('value > 3.0'), 'Warning DLF > 3.0 absent');
-  assert(jsCode.includes('Valeur tres elevee'), 'Message warning DLF > 3.0 absent');
+  // La regle DLF est desormais unifiee sur les trois modes dans checkDlf().
+  // Les seuils sont portes par des constantes nommees ; le comportement
+  // (avertissement au-dela de 3.0) est inchange. Les tests de comportement
+  // proprement dits sont dans tests/test_batch_api.js, qui execute le moteur.
+  assert(jsCode.includes('DLF_SEUIL_ELEVE = 3.0'), 'Seuil DLF eleve absent');
+  assert(jsCode.includes('v > DLF_SEUIL_ELEVE'), 'Comparaison au seuil eleve absente');
+  assert(jsCode.includes('inhabituellement eleve'), 'Message warning DLF > 3.0 absent');
+});
+
+test('La regle DLF est unifiee et refuse les valeurs sous 1.0', () => {
+  assert(jsCode.includes('function checkDlf('), 'checkDlf absent');
+  assert(jsCode.includes('DLF_MIN_BLOQUANT = 1.0'), 'Borne bloquante absente');
+  // Les trois modes doivent passer par la meme fonction.
+  assert(jsCode.includes('checkDlf(value)'), 'mode simple non branche sur checkDlf');
+  assert(jsCode.includes('checkDlf(getApiDLF())'), 'mode API non branche sur checkDlf');
+  assert(/errors\.dlf = 'DLF < 1\.0'/.test(jsCode), 'mode batch non branche sur checkDlf');
 });
 
 // ============================================================

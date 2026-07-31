@@ -159,8 +159,27 @@ l'ingénieur mesure son conservatisme :
 | `Kc` | 1,0 (0,9 avec disque de rupture amont) | API 520 Part I. |
 | `KSH` | 1,0 par défaut | Vapeur saturée. `KSH ≤ 1` toujours, donc `KSH = 1` **maximise** W : choix conservatif cohérent avec l'approche par enveloppe. Surchargeable. |
 | `Z` | 1,0 par défaut | Approche conservative si inconnu. |
-| `DLF` | 2,0 par défaut | Toute valeur < 2,0 déclenche un avertissement et exige une justification par analyse temporelle (time-history). |
+| `DLF` | 2,0 par défaut | Voir la règle unifiée ci-dessous. |
 | Pertes de charge | non calculées | Détente critique supposée à l'atmosphère, sans calcul itératif de perte de charge en ligne d'échappement. Simplification admise pour un pré-dimensionnement, **à condition de la documenter** — d'où la présente section. |
+
+### Facteur de charge dynamique (DLF)
+
+Règle unique appliquée aux **trois modes** :
+
+| Valeur | Traitement | Motif |
+|---|---|---|
+| `< 1,0` | **Erreur bloquante** | Une décharge de PSV est un effort *soutenu*, pas une impulsion brève : l'amplification dynamique ne peut y descendre sous 1 (ASME B31.1 App. O / B31.3). |
+| `1,0` à `2,0` | Avertissement | À justifier par une analyse dynamique temporelle (*time-history*). À défaut, conserver 2,0. |
+| `2,0` à `3,0` | Accepté | Plage de conception usuelle. |
+| `> 3,0` | Avertissement | Valeur inhabituellement élevée, à vérifier. |
+
+Avant unification, chaque mode avait sa propre règle — et le mode Batch n'en avait
+**aucune** : ses attributs HTML `min`/`max` n'étaient appliqués nulle part côté
+JavaScript, si bien qu'une ligne à DLF 0,3 partait en calcul sans broncher.
+
+Cette borne vaut pour *cette* application. Dans le cas général un DLF descend
+légitimement sous 1 lorsque la durée de l'impulsion est courte devant la période propre
+de la structure — ce n'est simplement pas le régime d'une soupape qui reste ouverte.
 
 ### Cohérence avec la constante 366 de l'API 520 Part II
 

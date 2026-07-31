@@ -2660,8 +2660,8 @@
     <!-- Mode Switcher -->
     <div class="mode-switcher">
       <button class="mode-btn active" data-mode="simple" id="modeSimpleBtn">Calcul Simple</button>
-      <button class="mode-btn" data-mode="batch" id="modeBatchBtn">Calcul Batch</button>
       <button class="mode-btn" data-mode="api" id="modeApiBtn">Dimensionnement API</button>
+      <button class="mode-btn" data-mode="batch" id="modeBatchBtn">Calcul Batch</button>
     </div>
 
     <!-- ==================== -->
@@ -4255,7 +4255,11 @@
       dlfMode: 'conservative',
       dlfValue: 2.0,
       // v3.0 state - mode dimensionnement API
-      apiResult: null
+      apiResult: null,
+      // v4.0 state - batch mixte. createBatchDefaults est une declaration
+      // de fonction, donc hissee : l'appel ici precede sa definition sans
+      // probleme.
+      batchDefaults: createBatchDefaults()
     };
 
     // ==================================================================
@@ -4675,6 +4679,214 @@
         ' a ete applique. L\'orifice reel de l\'equipement sur site devra etre verifie. ' +
         'Si l\'orifice s\'avere non-standard et superieur a la borne de l\'API 526, cette ' +
         'analyse devra etre invalidee et recalculee.';
+    }
+
+    // ============================
+    // ==================================================================
+    // V4.0 - BATCH MIXTE : methode par ligne (Kf ou dimensionnement API)
+    // ==================================================================
+    // Une line list reelle melange les deux cas : certaines PSV ont leur
+    // fiche fournisseur (orifice connu -> Kf), d'autres non (-> API 526).
+    // Le discriminant est porte par la LIGNE, pas par le lot.
+    //
+    // Les champs de surcharge (M, k, Z, unites...) restent VIDES par
+    // defaut : vide signifie « heriter des reglages du lot ». La fusion
+    // est faite par resolvePsvParams(), seul point ou la regle
+    // d'heritage s'applique — validation, calcul et export y passent tous.
+    // ------------------------------------------------------------------
+    const BATCH_METHODS = ['kf', 'api'];
+
+    /** Champs dont la seule presence prouve qu'une ligne n'est pas vide. */
+    const PSV_CONTENT_FIELDS = [
+      'itemId', 'lineName',
+      'dn', 'fluidType', 'orifice', 'pressure',              // methode Kf
+      'npsIn', 'npsOut', 'rating', 'pset', 'temp'            // methode API
+    ];
+
+    function createEmptyPSV() {
+      return {
+        itemId: '',
+        lineName: '',
+        method: 'kf',
+        // --- methode Kf ---
+        dn: '',
+        fluidType: '',
+        orifice: '',
+        pressure: '',
+        // --- methode API, saisie par ligne ---
+        npsIn: '',
+        npsOut: '',
+        rating: '',
+        pset: '',
+        temp: '',
+        // --- surcharges optionnelles des reglages de lot ---
+        // Vide = heriter. Toute valeur dimensionnelle surchargee embarque
+        // SON unite (exigence du comite : jamais de valeur sans unite).
+        psetUnit: '',
+        tempUnit: '',
+        schedule: '',
+        overpressure: '',
+        M: '',
+        k: '',
+        Z: '',
+        phase: '',
+        ksh: '',
+        hasRuptureDisc: null,
+        // --- commun ---
+        config: 'CFG-1',
+        dlf: 2.0,
+        status: 'empty',
+        errors: {}
+      };
+    }
+
+    /** Reglages appliques par defaut a toutes les lignes en methode API. */
+    function createBatchDefaults() {
+      return {
+        fluidPreset: 'air',
+        M: 28.96,
+        k: 1.40,
+        Z: 1.0,
+        phase: 'gas',
+        ksh: 1.0,
+        hasRuptureDisc: false,
+        overpressure: 10,
+        schedule: 'STD',
+        psetUnit: 'barg',
+        tempUnit: 'C'
+      };
+    }
+
+    // ------------------------------------------------------------------
+    // Facteur de charge dynamique — regle unique pour les trois modes
+    // ------------------------------------------------------------------
+    // Avant unification, chaque mode avait la sienne : simple avertissait
+    // sous 1.0 et au-dessus de 3.0, le mode API sous 2.0, et le batch ne
+    // controlait RIEN (seuls des attributs HTML min/max, non appliques).
+    //
+    // Regle retenue, sur exigence du comite :
+    //   < 1.0  ERREUR BLOQUANTE. Une decharge de PSV est un effort
+    //          SOUTENU, pas une impulsion breve : l'amplification
+    //          dynamique ne peut pas y etre inferieure a 1.
+    //          (La borne generale du DLF descend bien sous 1 pour une
+    //          impulsion courte devant la periode propre — ce n'est
+    //          simplement pas le cas d'espece ici.)
+    //   < 2.0  avertissement : valeur a justifier par une analyse
+    //          temporelle (SRS 2.1, plus strict que le seuil 1.1 demande
+    //          par le comite, qu'il absorbe donc).
+    //   > 3.0  avertissement : valeur inhabituellement elevee.
+    // ------------------------------------------------------------------
+    const DLF_MIN_BLOQUANT = 1.0;
+    const DLF_SEUIL_JUSTIFICATION = 2.0;
+    const DLF_SEUIL_ELEVE = 3.0;
+
+    /**
+     * @returns {{level: 'ok'|'warning'|'error', message: string}}
+     */
+    function checkDlf(value) {
+      const v = parseFloat(value);
+      if (isNaN(v)) {
+        return { level: 'error', message: 'DLF invalide.' };
+      }
+      if (v < DLF_MIN_BLOQUANT) {
+        return {
+          level: 'error',
+          message: 'DLF = ' + v + ' invalide : une decharge de PSV est un effort soutenu, ' +
+            'l\'amplification dynamique ne peut pas y etre inferieure a 1.0 ' +
+            '(ASME B31.1 App. O / B31.3).'
+        };
+      }
+      if (v < DLF_SEUIL_JUSTIFICATION) {
+        return {
+          level: 'warning',
+          message: 'DLF = ' + v + ' inferieur a 2.0 : a justifier par une analyse dynamique ' +
+            'temporelle (time-history). A defaut, conserver DLF = 2.0.'
+        };
+      }
+      if (v > DLF_SEUIL_ELEVE) {
+        return { level: 'warning', message: 'DLF = ' + v + ' inhabituellement eleve — a verifier.' };
+      }
+      return { level: 'ok', message: '' };
+    }
+
+    /** Une surcharge est active si elle porte une valeur exploitable. */
+    function hasOverride(v) {
+      return v !== '' && v !== null && v !== undefined;
+    }
+
+    // Version du schema de session. A incrementer des que la forme d'une
+    // ligne change de facon non retrocompatible.
+    const PSV_SCHEMA_VERSION = 4;
+
+    /**
+     * Une ligne porte-t-elle de la donnee ?
+     *
+     * ATTENTION — c'est ici que se jouait une regression silencieuse : la
+     * version precedente testait `p.dn || p.fluidType || p.orifice ||
+     * p.pressure`, tous specifiques a la methode Kf. Un lot entierement
+     * saisi en methode API n'en possede AUCUN : il etait donc considere
+     * comme vide et jete sans le moindre message, l'utilisateur perdant
+     * sa saisie. Le test doit rester agnostique de la methode.
+     */
+    function psvHasContent(psv) {
+      if (!psv) return false;
+      return PSV_CONTENT_FIELDS.some(champ => {
+        const v = psv[champ];
+        return v !== '' && v !== null && v !== undefined;
+      });
+    }
+
+    /**
+     * Ramene une session enregistree au schema courant.
+     * Une session sans version precede le batch mixte : toutes ses lignes
+     * relevent de la methode Kf par construction, donc rien n'est perdu.
+     */
+    function migratePsvList(data, version) {
+      if (!Array.isArray(data)) return null;
+      if (version >= PSV_SCHEMA_VERSION) return data;
+      const modele = createEmptyPSV();
+      return data.map(ligne => Object.assign({}, modele, ligne, {
+        method: BATCH_METHODS.indexOf(ligne.method) !== -1 ? ligne.method : 'kf'
+      }));
+    }
+
+    /**
+     * Fusionne une ligne avec les reglages du lot.
+     *
+     * Couplage valeur / unite (exigence du comite, section 2.3) : une
+     * ligne qui surcharge une grandeur dimensionnelle SANS surcharger son
+     * unite herite de l'unite du lot, et la fusion le SIGNALE. Sans ce
+     * signalement, une temperature saisie en °F sur un lot en °C passerait
+     * inapercue et donnerait un resultat physiquement absurde.
+     *
+     * Fonction pure : ne modifie ni la ligne ni les reglages.
+     */
+    function resolvePsvParams(psv, defaults) {
+      const d = defaults || createBatchDefaults();
+      const pick = (champ) => hasOverride(psv[champ]) ? psv[champ] : d[champ];
+      const unitWarnings = [];
+
+      [['pset', 'psetUnit', 'pression de tarage'],
+       ['temp', 'tempUnit', 'temperature']].forEach(([valeur, unite, label]) => {
+        if (hasOverride(psv[valeur]) && !hasOverride(psv[unite])) {
+          unitWarnings.push('Ligne surchargeant ' + label + ' sans preciser l\'unite : ' +
+            'l\'unite du lot (' + d[unite] + ') est appliquee. Verifier la coherence.');
+        }
+      });
+
+      return {
+        M: parseFloat(pick('M')),
+        k: parseFloat(pick('k')),
+        Z: parseFloat(pick('Z')),
+        phase: pick('phase'),
+        ksh: parseFloat(pick('ksh')),
+        hasRuptureDisc: hasOverride(psv.hasRuptureDisc) ? !!psv.hasRuptureDisc : !!d.hasRuptureDisc,
+        overpressure: parseFloat(pick('overpressure')),
+        schedule: pick('schedule'),
+        psetUnit: pick('psetUnit'),
+        tempUnit: pick('tempUnit'),
+        unitWarnings: unitWarnings
+      };
     }
 
     // ============================
@@ -5138,13 +5350,11 @@
     function validateDLF(value) {
       dlfWarning.classList.remove('show', 'warning-low', 'warning-high');
 
-      if (value < 1.0) {
-        dlfWarning.textContent = 'Valeur inhabituelle — a justifier';
-        dlfWarning.classList.add('show', 'warning-low');
-      } else if (value > 3.0) {
-        dlfWarning.textContent = 'Valeur tres elevee — verifier';
-        dlfWarning.classList.add('show', 'warning-high');
-      }
+      const verdict = checkDlf(value);
+      if (verdict.level === 'ok') return;
+
+      dlfWarning.textContent = verdict.message;
+      dlfWarning.classList.add('show', verdict.level === 'error' ? 'warning-high' : 'warning-low');
     }
 
     function getCurrentDLF() {
@@ -5318,22 +5528,6 @@
 
     // ============================
     // BATCH MODE - FORM HANDLING
-    // ============================
-    function createEmptyPSV() {
-      return {
-        itemId: '',
-        lineName: '',
-        dn: '',
-        fluidType: '',
-        orifice: '',
-        pressure: '',
-        config: 'CFG-1',
-        dlf: 2.0,
-        status: 'empty',
-        errors: {}
-      };
-    }
-
     function generateDNOptions(selected = '') {
       return `
         <option value="">--</option>
@@ -5692,6 +5886,15 @@
         errors.pressure = 'Doit etre > 0';
       } else if (pressure > 999.99) {
         errors.pressure = 'Max 999.99';
+      }
+
+      // DLF — le batch n'effectuait aucun controle : seuls des attributs
+      // HTML min/max, que rien n'appliquait cote JS. Une ligne a DLF 0.3
+      // partait donc en calcul sans broncher. Meme regle que les deux
+      // autres modes (exigence du comite).
+      const verdictDlf = checkDlf(psv.dlf === '' || psv.dlf === undefined ? 2.0 : psv.dlf);
+      if (verdictDlf.level === 'error') {
+        errors.dlf = 'DLF < 1.0';
       }
 
       return {
@@ -6399,7 +6602,9 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
     function saveToLocalStorage() {
       try {
         localStorage.setItem('psv_calculator_mode', appState.mode);
+        localStorage.setItem('psv_calculator_schema_version', String(PSV_SCHEMA_VERSION));
         localStorage.setItem('psv_calculator_batch_data', JSON.stringify(appState.psvList));
+        localStorage.setItem('psv_calculator_batch_defaults', JSON.stringify(appState.batchDefaults));
         localStorage.setItem('psv_calculator_batch_timestamp', Date.now().toString());
       } catch (e) {
         console.error('Erreur sauvegarde localStorage:', e);
@@ -6410,14 +6615,13 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
       try {
         const batchData = localStorage.getItem('psv_calculator_batch_data');
         const timestamp = localStorage.getItem('psv_calculator_batch_timestamp');
+        const version = parseInt(localStorage.getItem('psv_calculator_schema_version'), 10) || 0;
 
         // Restore if session is recent (< 24h)
         if (timestamp && Date.now() - parseInt(timestamp) < 24 * 60 * 60 * 1000) {
           if (batchData) {
-            const data = JSON.parse(batchData);
-            // Check if there's actual data
-            const hasData = data.some(p => p.itemId || p.lineName || p.dn || p.fluidType || p.orifice || p.pressure);
-            if (hasData) {
+            const data = migratePsvList(JSON.parse(batchData), version);
+            if (data && data.some(psvHasContent)) {
               return data;
             }
           }
@@ -6429,9 +6633,23 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
       }
     }
 
+    /** Reglages de lot enregistres, ou valeurs par defaut. */
+    function loadBatchDefaults() {
+      try {
+        const brut = localStorage.getItem('psv_calculator_batch_defaults');
+        if (!brut) return createBatchDefaults();
+        return Object.assign(createBatchDefaults(), JSON.parse(brut));
+      } catch (e) {
+        console.error('Erreur chargement des reglages de lot:', e);
+        return createBatchDefaults();
+      }
+    }
+
     function clearLocalStorage() {
       localStorage.removeItem('psv_calculator_batch_data');
+      localStorage.removeItem('psv_calculator_batch_defaults');
       localStorage.removeItem('psv_calculator_batch_timestamp');
+      localStorage.removeItem('psv_calculator_schema_version');
     }
 
     function checkSavedSession() {
@@ -6445,6 +6663,7 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
       const savedData = loadFromLocalStorage();
       if (savedData) {
         appState.psvList = savedData;
+        appState.batchDefaults = loadBatchDefaults();
         renderBatchTable();
         showToast('Session restauree');
       }
@@ -6586,15 +6805,15 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
      * justifiee par une analyse temporelle (time-history).
      */
     function refreshApiDlfWarning() {
-      const v = getApiDLF();
-      if (v < 2.0) {
-        apiEls.dlfWarning.style.display = 'block';
-        apiEls.dlfWarning.innerHTML = '<strong>DLF = ' + v + ' — justification requise</strong>' +
-          'Toute valeur inferieure a 2.0 doit etre justifiee par une analyse dynamique ' +
-          'temporelle (time-history). A defaut, conserver DLF = 2.0.';
-      } else {
+      const verdict = checkDlf(getApiDLF());
+      if (verdict.level === 'ok') {
         apiEls.dlfWarning.style.display = 'none';
+        return;
       }
+      apiEls.dlfWarning.style.display = 'block';
+      apiEls.dlfWarning.innerHTML =
+        '<strong>' + (verdict.level === 'error' ? 'DLF refuse' : 'Justification requise') + '</strong>' +
+        verdict.message;
     }
 
     /** Met a jour l'aide sur A_e a chaque changement de sortie/schedule. */
