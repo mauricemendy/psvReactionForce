@@ -194,35 +194,60 @@ test('EXIGENCE COMITE : la surpression heritee est bien 10 % et non 21 %', () =>
 suite('2. Couplage valeur / unite (exigence comite 2.3)');
 // ============================================================
 
-test('Surcharger une valeur dimensionnelle sans son unite est signale', () => {
-  // Le risque : un lot en °C, une ligne qui saisit 200 en pensant °F.
-  // Sans signalement, le calcul donnerait un resultat absurde en silence.
-  const psv = Object.assign(api.createEmptyPSV(), { temp: 200 });
-  const r = api.resolvePsvParams(psv, api.createBatchDefaults());
-  assertEqual(r.unitWarnings.length, 1, 'un avertissement attendu');
-  assert(/temperature/.test(r.unitWarnings[0]), 'le message doit nommer la grandeur');
-  assert(/unite du lot/.test(r.unitWarnings[0]), 'le message doit dire quelle unite est appliquee');
-  assertEqual(r.tempUnit, 'C', 'l\'unite du lot est appliquee');
-});
-
-test('Surcharger valeur ET unite ne declenche aucun signalement', () => {
-  const psv = Object.assign(api.createEmptyPSV(), { temp: 200, tempUnit: 'F' });
+test('Une ligne API ordinaire ne declenche AUCUN avertissement d\'unite', () => {
+  // pset et temp sont les champs PRIMAIRES d'une ligne API, pas des
+  // surcharges : ils sont toujours lus dans l'unite du lot. Un
+  // avertissement ici se declencherait sur 100 % des lignes normales.
+  const psv = Object.assign(api.createEmptyPSV(), {
+    method: 'api', npsIn: '2', npsOut: '3', rating: 300, pset: 20, temp: 150
+  });
   const r = api.resolvePsvParams(psv, api.createBatchDefaults());
   assertEqual(r.unitWarnings.length, 0, 'aucun avertissement attendu');
-  assertEqual(r.tempUnit, 'F', 'l\'unite de ligne est retenue');
+  assertEqual(r.psetUnit, 'barg', 'unite du lot appliquee');
+  assertEqual(r.tempUnit, 'C', 'unite du lot appliquee');
+});
+
+test('Une ligne qui surcharge son unite est signalee', () => {
+  // Le risque reel : 200 lu en °F alors que le lot est en °C donne
+  // 366 K au lieu de 473 K, sans que rien ne l'indique.
+  const psv = Object.assign(api.createEmptyPSV(), {
+    method: 'api', temp: 200, tempUnit: 'F'
+  });
+  const r = api.resolvePsvParams(psv, api.createBatchDefaults());
+  assertEqual(r.unitWarnings.length, 1, 'un avertissement attendu');
+  assert(/temperature/.test(r.unitWarnings[0]), 'doit nommer la grandeur');
+  assert(/en F/.test(r.unitWarnings[0]), 'doit citer l\'unite de la ligne');
+  assert(/lot est en C/.test(r.unitWarnings[0]), 'doit citer l\'unite du lot');
+  assert(/200/.test(r.unitWarnings[0]), 'doit rappeler la valeur saisie');
+  assertEqual(r.tempUnit, 'F', 'l\'unite de ligne est bien retenue');
+});
+
+test('Surcharger l\'unite avec la MEME valeur que le lot ne signale rien', () => {
+  const psv = Object.assign(api.createEmptyPSV(), { temp: 150, tempUnit: 'C' });
+  const r = api.resolvePsvParams(psv, api.createBatchDefaults());
+  assertEqual(r.unitWarnings.length, 0, 'aucun ecart, aucun avertissement');
 });
 
 test('La regle vaut pour la pression comme pour la temperature', () => {
-  const psv = Object.assign(api.createEmptyPSV(), { pset: 12, temp: 80 });
+  const psv = Object.assign(api.createEmptyPSV(), {
+    pset: 300, psetUnit: 'psig', temp: 200, tempUnit: 'F'
+  });
   const r = api.resolvePsvParams(psv, api.createBatchDefaults());
   assertEqual(r.unitWarnings.length, 2, 'les deux grandeurs doivent etre signalees');
   assert(r.unitWarnings.some(w => /pression de tarage/.test(w)), 'pression signalee');
   assert(r.unitWarnings.some(w => /temperature/.test(w)), 'temperature signalee');
 });
 
-test('Une ligne sans surcharge dimensionnelle ne signale rien', () => {
-  const r = api.resolvePsvParams(api.createEmptyPSV(), api.createBatchDefaults());
+test('Un lot entier dans une autre unite ne signale rien', () => {
+  // Si le lot est en psig/°F, les lignes qui n'en surchargent pas
+  // l'unite sont coherentes : rien a signaler.
+  const d = api.createBatchDefaults();
+  d.psetUnit = 'psig'; d.tempUnit = 'F';
+  const psv = Object.assign(api.createEmptyPSV(), { pset: 300, temp: 200 });
+  const r = api.resolvePsvParams(psv, d);
   assertEqual(r.unitWarnings.length, 0, 'aucun avertissement');
+  assertEqual(r.psetUnit, 'psig', 'unite du lot');
+  assertEqual(r.tempUnit, 'F', 'unite du lot');
 });
 
 

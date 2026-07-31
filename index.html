@@ -4853,11 +4853,18 @@
     /**
      * Fusionne une ligne avec les reglages du lot.
      *
-     * Couplage valeur / unite (exigence du comite, section 2.3) : une
-     * ligne qui surcharge une grandeur dimensionnelle SANS surcharger son
-     * unite herite de l'unite du lot, et la fusion le SIGNALE. Sans ce
-     * signalement, une temperature saisie en °F sur un lot en °C passerait
-     * inapercue et donnerait un resultat physiquement absurde.
+     * Couplage valeur / unite (exigence du comite, section 2.3).
+     *
+     * Les unites sont portees par le LOT : `pset` et `temp` sont les champs
+     * primaires d'une ligne API, jamais des surcharges, et sont donc
+     * toujours lus dans l'unite du lot. Le cas « valeur saisie sans unite »
+     * signale par le comite ne peut donc pas survenir par construction.
+     *
+     * Le risque qui subsiste est le miroir : une ligne qui surcharge son
+     * UNITE sans reprendre sa valeur. Une temperature de 200 lue en °F
+     * alors que le lot est en °C donne 366 K au lieu de 473 K, sans que
+     * rien ne le signale. C'est ce cas — rare, donc digne d'un
+     * avertissement — que la fusion remonte ici.
      *
      * Fonction pure : ne modifie ni la ligne ni les reglages.
      */
@@ -4868,9 +4875,11 @@
 
       [['pset', 'psetUnit', 'pression de tarage'],
        ['temp', 'tempUnit', 'temperature']].forEach(([valeur, unite, label]) => {
-        if (hasOverride(psv[valeur]) && !hasOverride(psv[unite])) {
-          unitWarnings.push('Ligne surchargeant ' + label + ' sans preciser l\'unite : ' +
-            'l\'unite du lot (' + d[unite] + ') est appliquee. Verifier la coherence.');
+        if (hasOverride(psv[unite]) && psv[unite] !== d[unite]) {
+          unitWarnings.push('Cette ligne lit sa ' + label + ' en ' + psv[unite] +
+            ' alors que le lot est en ' + d[unite] + '. Verifier que la valeur saisie (' +
+            (hasOverride(psv[valeur]) ? psv[valeur] : '?') + ') est bien exprimee en ' +
+            psv[unite] + '.');
         }
       });
 
@@ -5825,14 +5834,119 @@
     // ============================
     // BATCH MODE - VALIDATION
     // ============================
+    // ------------------------------------------------------------------
+    // Validation d'une ligne de lot
+    // ------------------------------------------------------------------
+    // Aiguillage sur psv.method. Le tronc commun (vacuite, ITEM_ID, nom de
+    // ligne, DLF) reste partage ; seuls les champs propres a la methode
+    // divergent. Une ligne API ne doit JAMAIS se voir reprocher l'absence
+    // de DN ou d'orifice, et reciproquement.
+    // ------------------------------------------------------------------
+
+    /** Champs Kf : DN, fluide, orifice, pression absolue. */
+    function validatePsvKf(psv, errors) {
+      if (!psv.dn) {
+        errors.dn = 'Requis';
+      } else if (!validDNs.includes(psv.dn)) {
+        errors.dn = 'Invalide';
+      }
+
+      if (!psv.fluidType) {
+        errors.fluidType = 'Requis';
+      } else if (!validFluids.includes(psv.fluidType)) {
+        errors.fluidType = 'Invalide';
+      }
+
+      if (!psv.orifice) {
+        errors.orifice = 'Requis';
+      } else if (!validOrifices.includes(psv.orifice)) {
+        errors.orifice = 'Invalide';
+      }
+
+      const pressure = parseFloat(psv.pressure);
+      if (!psv.pressure && psv.pressure !== 0) {
+        errors.pressure = 'Requis';
+      } else if (isNaN(pressure) || pressure <= 0) {
+        errors.pressure = 'Doit etre > 0';
+      } else if (pressure > 999.99) {
+        errors.pressure = 'Max 999.99';
+      }
+    }
+
+    /**
+     * Champs API : brides, pression de tarage, temperature, plus les
+     * parametres resolus depuis les reglages de lot.
+     *
+     * @returns {string[]} avertissements non bloquants (unites, orifice)
+     */
+    function validatePsvApi(psv, errors, defaults) {
+      const params = resolvePsvParams(psv, defaults);
+      const warnings = params.unitWarnings.slice();
+
+      // --- geometrie des brides ---
+      if (!psv.npsIn) errors.npsIn = 'Requis';
+      else if (validNps.indexOf(String(psv.npsIn)) === -1) errors.npsIn = 'Invalide';
+
+      if (!psv.npsOut) errors.npsOut = 'Requis';
+      else if (validNps.indexOf(String(psv.npsOut)) === -1) errors.npsOut = 'Invalide';
+
+      if (!psv.rating) errors.rating = 'Requis';
+      else if (validRatings.indexOf(parseInt(psv.rating, 10)) === -1) errors.rating = 'Invalide';
+
+      // Verification API 526 des la saisie : un concepteur ne doit pas
+      // pouvoir lancer un calcul de flexibilite sur une configuration
+      // geometrique qui n'existe pas dans le standard.
+      if (!errors.npsIn && !errors.npsOut && !errors.rating) {
+        const res = selectMaxOrifice(psv.npsIn, psv.npsOut, psv.rating);
+        if (!res.ok) {
+          errors.npsIn = 'Hors API 526';
+          errors.rating = 'Hors API 526';
+          warnings.push(res.error);
+        }
+      }
+
+      // --- pression de tarage ---
+      // Garde-fou exige par le comite : sans lui, une valeur nulle ou
+      // negative partirait en calcul et donnerait un resultat absurde
+      // plutot qu'une erreur lisible.
+      const pset = parseFloat(psv.pset);
+      if (!psv.pset && psv.pset !== 0) {
+        errors.pset = 'Requis';
+      } else if (isNaN(pset) || pset <= 0) {
+        errors.pset = 'Doit etre > 0 (relatif)';
+      }
+
+      // --- temperature ---
+      const temp = parseFloat(psv.temp);
+      if (!psv.temp && psv.temp !== 0) {
+        errors.temp = 'Requis';
+      } else if (isNaN(temp)) {
+        errors.temp = 'Invalide';
+      } else {
+        const tempK = params.tempUnit === 'F' ? fahrenheitToK(temp) : celsiusToK(temp);
+        if (tempK <= 0) errors.temp = 'Sous le zero absolu';
+      }
+
+      // --- parametres resolus (lot ou surcharge) ---
+      if (!(params.M > 0)) errors.M = 'Masse molaire invalide';
+      if (!(params.k >= 1)) errors.k = 'k doit etre >= 1';
+      if (!(params.Z > 0)) errors.Z = 'Z doit etre > 0';
+      if (!(params.overpressure >= 0)) errors.overpressure = 'Surpression invalide';
+      if (!pipeIdTable[String(psv.npsOut)] ||
+          typeof pipeIdTable[String(psv.npsOut)][params.schedule] !== 'number') {
+        errors.schedule = 'Schedule inconnu';
+      }
+
+      return warnings;
+    }
+
     function validatePSV(psv, index) {
       const errors = {};
+      const method = BATCH_METHODS.indexOf(psv.method) !== -1 ? psv.method : 'kf';
 
-      // Check if row is empty
-      const isEmpty = !psv.itemId && !psv.lineName && !psv.dn &&
-                      !psv.fluidType && !psv.orifice && !psv.pressure;
-      if (isEmpty) {
-        return { isValid: false, isEmpty: true, errors };
+      // Vacuite : test agnostique de la methode (cf. psvHasContent).
+      if (!psvHasContent(psv)) {
+        return { isValid: false, isEmpty: true, errors, warnings: [] };
       }
 
       // ITEM ID
@@ -5841,7 +5955,6 @@
       } else if (psv.itemId.length > 50) {
         errors.itemId = 'Max 50 caracteres';
       } else {
-        // Check for duplicates
         const duplicate = appState.psvList.findIndex((p, i) =>
           i !== index && p.itemId && p.itemId.toLowerCase() === psv.itemId.toLowerCase()
         );
@@ -5857,50 +5970,27 @@
         errors.lineName = 'Max 100 caracteres';
       }
 
-      // DN
-      if (!psv.dn) {
-        errors.dn = 'Requis';
-      } else if (!validDNs.includes(psv.dn)) {
-        errors.dn = 'Invalide';
+      // Champs propres a la methode
+      let warnings = [];
+      if (method === 'api') {
+        warnings = validatePsvApi(psv, errors, appState.batchDefaults);
+      } else {
+        validatePsvKf(psv, errors);
       }
 
-      // Fluid Type
-      if (!psv.fluidType) {
-        errors.fluidType = 'Requis';
-      } else if (!validFluids.includes(psv.fluidType)) {
-        errors.fluidType = 'Invalide';
-      }
-
-      // Orifice
-      if (!psv.orifice) {
-        errors.orifice = 'Requis';
-      } else if (!validOrifices.includes(psv.orifice)) {
-        errors.orifice = 'Invalide';
-      }
-
-      // Pressure
-      const pressure = parseFloat(psv.pressure);
-      if (!psv.pressure && psv.pressure !== 0) {
-        errors.pressure = 'Requis';
-      } else if (isNaN(pressure) || pressure <= 0) {
-        errors.pressure = 'Doit etre > 0';
-      } else if (pressure > 999.99) {
-        errors.pressure = 'Max 999.99';
-      }
-
-      // DLF — le batch n'effectuait aucun controle : seuls des attributs
-      // HTML min/max, que rien n'appliquait cote JS. Une ligne a DLF 0.3
-      // partait donc en calcul sans broncher. Meme regle que les deux
-      // autres modes (exigence du comite).
+      // DLF — regle unifiee, commune aux trois modes.
       const verdictDlf = checkDlf(psv.dlf === '' || psv.dlf === undefined ? 2.0 : psv.dlf);
       if (verdictDlf.level === 'error') {
         errors.dlf = 'DLF < 1.0';
+      } else if (verdictDlf.level === 'warning') {
+        warnings.push(verdictDlf.message);
       }
 
       return {
         isValid: Object.keys(errors).length === 0,
         isEmpty: false,
-        errors
+        errors,
+        warnings
       };
     }
 
@@ -5993,20 +6083,76 @@
         };
       }
 
+      const dlf = parseFloat(psv.dlf) || 2.0;
+      const configId = psv.config || 'CFG-1';
+      const method = BATCH_METHODS.indexOf(psv.method) !== -1 ? psv.method : 'kf';
+
+      // --- Chemin API 526 / API 520 --------------------------------------
+      // Delegue integralement au moteur du mode unitaire : aucune equation
+      // n'est reecrite ici, seuls les parametres sont resolus depuis les
+      // reglages de lot.
+      if (method === 'api') {
+        const params = resolvePsvParams(psv, appState.batchDefaults);
+        const psetAccum = parseFloat(psv.pset) * (1 + params.overpressure / 100);
+        const p1KPa = params.psetUnit === 'psig'
+          ? psigToKPaAbs(psetAccum)
+          : bargToKPaAbs(psetAccum);
+        const tempK = params.tempUnit === 'F'
+          ? fahrenheitToK(parseFloat(psv.temp))
+          : celsiusToK(parseFloat(psv.temp));
+
+        const res = computeApiSizing({
+          npsIn: psv.npsIn, npsOut: psv.npsOut, rating: parseInt(psv.rating, 10),
+          schedule: params.schedule,
+          p1KPa: p1KPa, tempK: tempK,
+          M: params.M, k: params.k, Z: params.Z, phase: params.phase,
+          ksh: params.ksh, hasRuptureDisc: params.hasRuptureDisc,
+          dlf: dlf, config: configId,
+          psetRaw: parseFloat(psv.pset), psetUnit: params.psetUnit,
+          overpressure: params.overpressure
+        });
+
+        if (!res.ok) {
+          return { ...psv, status: 'error', errors: { npsIn: 'Hors API 526' }, errorMessage: res.error };
+        }
+
+        const components = (configurationsTable[configId] || configurationsTable['CFG-1'])
+          .components(parseFloat(res.force.fDesignDaN.toFixed(2)));
+
+        return {
+          ...psv,
+          method: 'api',
+          orifice: res.orifice.orifice,             // orifice DEDUIT, non saisi
+          area: parseFloat((res.orifice.areaMm2 / 100).toFixed(2)),
+          p1Bar: parseFloat((res.input.p1KPa / 100).toFixed(3)),
+          wKgH: parseFloat(res.flow.w.toFixed(1)),
+          force: parseFloat(res.force.fStaticDaN.toFixed(2)),
+          dlf,
+          config: configId,
+          fDesign: parseFloat(res.force.fDesignDaN.toFixed(2)),
+          fx: components.fx,
+          fy: components.fy,
+          fz: components.fz,
+          choked: res.force.choked,
+          apiWarnings: (validation.warnings || []).concat(res.warnings || []),
+          status: 'calculated',
+          errors: {}
+        };
+      }
+
+      // --- Chemin Kf, strictement inchange -------------------------------
       const kf = kfTable[psv.dn][psv.fluidType];
       const area = areaTable[psv.orifice];
       const pressure = parseFloat(psv.pressure);
       const force = kf * area * pressure;
 
-      // V2.0 - DLF and directional components
-      const dlf = parseFloat(psv.dlf) || 2.0;
-      const configId = psv.config || 'CFG-1';
       const fDesign = parseFloat((force * dlf).toFixed(2));
       const config = configurationsTable[configId];
       const components = config ? config.components(fDesign) : { fx: 0, fy: -fDesign, fz: 0 };
 
       return {
         ...psv,
+        method: 'kf',
         kf,
         area,
         force: parseFloat(force.toFixed(2)),
@@ -6016,6 +6162,7 @@
         fx: components.fx,
         fy: components.fy,
         fz: components.fz,
+        apiWarnings: validation.warnings || [],
         status: 'calculated',
         errors: {}
       };
