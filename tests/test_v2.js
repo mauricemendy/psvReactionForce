@@ -544,8 +544,10 @@ test('Import CSV sans colonnes CONFIG/DLF utilise les valeurs par defaut', () =>
   // The normalizeConfig function returns 'CFG-1' for empty/null
   assert(jsCode.includes("function normalizeConfig"), 'normalizeConfig absent');
   assert(jsCode.includes("if (!value) return 'CFG-1'"), 'Default CFG-1 absent dans normalizeConfig');
-  // Default DLF
-  assert(jsCode.includes("dlf: normalized.dlf ? parseFloat(normalized.dlf) : 2.0"),
+  // Default DLF. L'import gere desormais les deux methodes, et le test de
+  // presence utilise `rempli()` plutot qu'un test de verite — ce qui evite
+  // qu'une valeur « 0 » passe pour absente. Le defaut reste 2.0.
+  assert(/dlf: rempli\(normalized\.dlf\) \? parseFloat\(normalized\.dlf\) : 2\.0/.test(jsCode),
     'Default DLF 2.0 absent dans processCSVData');
 });
 

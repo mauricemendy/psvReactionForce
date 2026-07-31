@@ -386,7 +386,78 @@ test('Les reglages de lot sont persistes avec la session', () => {
 
 
 // ============================================================
-suite('5. Reordonnancement des onglets');
+suite('5. Import / export CSV');
+// ============================================================
+
+test('La detection de methode suit l\'ordre METHOD, puis NPS_IN/RATING, puis kf', () => {
+  // L'ordre compte : un fichier au format historique n'a ni METHOD ni
+  // NPS_IN, il doit donc retomber sur kf et s'importer sans modification.
+  assert(/BATCH_METHODS\.indexOf\(method\) === -1/.test(jsCode), 'METHOD prioritaire');
+  assert(/rempli\(normalized\.npsIn\) \|\| rempli\(normalized\.rating\)\) \? 'api' : 'kf'/.test(jsCode),
+    'repli sur NPS_IN / RATING puis kf');
+});
+
+test('Les en-tetes des deux methodes sont reconnus', () => {
+  ['item_id', 'line_name', 'dn', 'fluid_type', 'orifice', 'pressure', 'config', 'dlf']
+    .forEach(h => assert(jsCode.indexOf(`'${h}':`) !== -1, `en-tete historique ${h} manquant`));
+  ['method', 'nps_in', 'nps_out', 'rating', 'p_set', 'temp', 'mw', 'ksh', 'rupture_disc']
+    .forEach(h => assert(jsCode.indexOf(`'${h}':`) !== -1, `en-tete API ${h} manquant`));
+});
+
+test('La vacuite a l\'import est agnostique de la methode', () => {
+  // Meme piege que pour localStorage : une ligne API n'a aucun champ Kf.
+  assert(/'npsIn','npsOut','rating','pset','temp'\]\s*\n?\s*\.some\(c => rempli/.test(jsCode) ||
+         /'npsIn','npsOut','rating','pset','temp'\]/.test(jsCode),
+    'les champs API doivent compter dans le test de vacuite');
+});
+
+test('L\'import verifie la combinaison de brides contre l\'API 526', () => {
+  assert(/selectMaxOrifice\(psv\.npsIn, psv\.npsOut, psv\.rating\)/.test(jsCode),
+    'verification API 526 absente de l\'import');
+});
+
+test('L\'import refuse un DLF sous 1.0', () => {
+  assert(/checkDlf\(psv\.dlf\)\.level === 'error'/.test(jsCode), 'controle DLF absent de l\'import');
+});
+
+test('Le modele CSV historique est conserve a l\'identique', () => {
+  // Des fichiers sont deja en circulation chez les utilisateurs : leur
+  // en-tete ne doit pas bouger. Un second modele, etendu, est propose a cote.
+  assert(jsCode.includes('ITEM_ID,LINE_NAME,DN,FLUID_TYPE,ORIFICE,PRESSURE,CONFIG,DLF'),
+    'modele historique modifie');
+  assert(jsCode.includes('ITEM_ID,LINE_NAME,METHOD,DN,FLUID_TYPE,ORIFICE,PRESSURE,NPS_IN,NPS_OUT,RATING,P_SET,TEMP,CONFIG,DLF'),
+    'modele etendu absent');
+});
+
+test('L\'export porte METHOD, les colonnes API et API_WARNINGS', () => {
+  ['\'METHOD\'', '\'NPS_IN\'', '\'NPS_OUT\'', '\'RATING\'', '\'W_KGH\'', '\'CHOKED\'', '\'API_WARNINGS\'']
+    .forEach(col => assert(jsCode.indexOf(col) !== -1, `colonne ${col} absente de l'export`));
+});
+
+test('L\'export echappe les cellules contenant des virgules', () => {
+  // Les avertissements moteur en contiennent : sans echappement, le CSV
+  // serait decale d'une colonne a partir de la premiere.
+  assert(/const csvCell = /.test(jsCode), 'fonction d\'echappement absente');
+  assert(/replace\(\/"\/g, '""'\)/.test(jsCode), 'guillemets non doubles');
+});
+
+test('Le PDF produit une table par methode et le bloc de reserves', () => {
+  assert(/lignesKf = appState\.results\.filter/.test(jsCode), 'table Kf absente');
+  assert(/lignesApi = appState\.results\.filter/.test(jsCode), 'table API absente');
+  assert(/Bounding Approach/.test(jsCode), 'bloc de reserves absent du PDF');
+  assert(/Avertissements de calcul/.test(jsCode), 'section avertissements absente du PDF');
+});
+
+test('Un regime heterogene dans le lot est signale', () => {
+  // Exige par le comite : le basculement bloque / non bloque change les
+  // hypotheses de contre-pression de la tuyauterie aval.
+  assert(/function renderBatchRegimeWarning\(\)/.test(jsCode), 'fonction absente');
+  assert(/heterogene dans ce lot/.test(jsCode), 'message absent');
+});
+
+
+// ============================================================
+suite('6. Reordonnancement des onglets');
 // ============================================================
 
 test('L\'ordre des onglets est Simple, Dimensionnement API, Batch', () => {

@@ -9,7 +9,18 @@ Trois modes :
 | Mode | Méthode | Quand l'utiliser |
 |------|---------|------------------|
 | **Calcul Simple** | `F = Kf × A × P1` | L'orifice de la soupape est connu. Estimation rapide. |
-| **Calcul Batch** | idem, en série | Plusieurs soupapes, import/export CSV, rapport PDF. |
+| **Calcul Batch** | **les deux, au choix par ligne** | Plusieurs soupapes, import/export CSV, rapport PDF. |
+
+Le mode Batch accepte un **lot mixte** : chaque ligne porte sa propre méthode. C'est le
+cas réel d'une *line list*, où certaines PSV ont leur fiche fournisseur (orifice connu
+→ Kf) et d'autres non (→ API). Les paramètres procédé (`M`, `k`, `Z`, surpression,
+schedule, unités, `KSH`, disque de rupture) se règlent **en tête de lot** et chaque ligne
+peut les surcharger individuellement.
+
+L'import CSV **détecte la méthode automatiquement** : colonne `METHOD` si elle est
+présente, sinon `NPS_IN`/`RATING` → API, sinon Kf. Les fichiers au format historique
+s'importent donc sans aucune modification. Deux modèles sont téléchargeables, l'ancien
+inchangé et un modèle étendu couvrant les deux méthodes.
 | **Dimensionnement API** | API 526 + API 520 | **L'orifice est inconnu.** Borne supérieure défendable à partir des seules dimensions de brides. |
 
 ---
