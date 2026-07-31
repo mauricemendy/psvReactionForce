@@ -684,6 +684,100 @@
       display: none;
     }
 
+    /* v4.0 - En-tete de groupe et cellules inactives du tableau batch */
+    .batch-table-groups th {
+      text-align: center;
+      padding-top: var(--space-3);
+      padding-bottom: var(--space-2);
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      border-bottom: none;
+    }
+
+    .batch-table-groups .group-kf,
+    .batch-table-groups .group-api {
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    }
+
+    .batch-table-groups .group-kf {
+      background: var(--color-gray-100);
+      color: var(--color-gray-700);
+    }
+
+    .batch-table-groups .group-api {
+      background: var(--color-primary-light);
+      color: var(--color-primary-dark);
+    }
+
+    /* Colonnes du groupe non retenu : desactivees, pas masquees.
+       Le nombre de colonnes doit rester constant pour que la table reste
+       valide et que l'ordre de la line list soit preserve. */
+    .batch-table td.cell-inactive {
+      background: var(--color-gray-50);
+    }
+
+    .batch-table td.cell-inactive .batch-input {
+      opacity: 0.4;
+      cursor: not-allowed;
+      background: transparent;
+      border-color: var(--color-gray-200);
+    }
+
+    .batch-table td.cell-inactive .field-error {
+      display: none;
+    }
+
+    /* v4.0 - Reglages de lot du mode batch */
+    .batch-defaults-panel {
+      display: none;
+      background: var(--bg-surface);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--space-5);
+      overflow: hidden;
+    }
+
+    .batch-defaults-panel.show {
+      display: block;
+    }
+
+    .batch-defaults-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-4) var(--space-5);
+      cursor: pointer;
+      user-select: none;
+      border-bottom: 1px solid var(--color-gray-200);
+    }
+
+    .batch-defaults-header h4 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+    }
+
+    .batch-defaults-body {
+      padding: var(--space-5);
+      display: none;
+    }
+
+    .batch-defaults-body.show {
+      display: block;
+    }
+
+    .batch-defaults-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-4);
+    }
+
+    .batch-defaults-grid .param-group {
+      margin-bottom: 0;
+    }
+
     /* v3.0 - Mode dimensionnement par enveloppe API 526 / API 520 */
     .api-section {
       display: none;
@@ -2660,8 +2754,8 @@
     <!-- Mode Switcher -->
     <div class="mode-switcher">
       <button class="mode-btn active" data-mode="simple" id="modeSimpleBtn">Calcul Simple</button>
-      <button class="mode-btn" data-mode="batch" id="modeBatchBtn">Calcul Batch</button>
       <button class="mode-btn" data-mode="api" id="modeApiBtn">Dimensionnement API</button>
+      <button class="mode-btn" data-mode="batch" id="modeBatchBtn">Calcul Batch</button>
     </div>
 
     <!-- ==================== -->
@@ -3723,6 +3817,83 @@
         </label>
       </div>
 
+      <!-- ============================================================ -->
+      <!-- Reglages de lot (v4.0)                                       -->
+      <!-- Ne s'affiche que si au moins une ligne est en methode API.    -->
+      <!-- Toute ligne peut surcharger individuellement ces valeurs.     -->
+      <!-- ============================================================ -->
+      <div class="batch-defaults-panel" id="batchDefaultsPanel">
+        <div class="batch-defaults-header" id="batchDefaultsHeader">
+          <h4>
+            Reglages du lot
+            <span class="api-card-tag proc">Procede</span>
+          </h4>
+          <button class="config-panel-toggle" id="batchDefaultsToggle" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+        </div>
+        <div class="batch-defaults-body" id="batchDefaultsBody">
+          <p class="helper-text" style="margin-bottom: var(--space-4);">
+            Ces valeurs s'appliquent a toutes les lignes en methode <strong>Dimensionnement API</strong>.
+            Une ligne qui renseigne son propre parametre l'emporte sur le reglage du lot.
+          </p>
+          <div class="batch-defaults-grid">
+            <div class="param-group">
+              <label for="bdFluidPreset">Fluide (pre-remplissage)</label>
+              <select id="bdFluidPreset"></select>
+            </div>
+            <div class="param-group">
+              <label for="bdM">Masse molaire M</label>
+              <input type="number" id="bdM" min="1" step="0.01">
+            </div>
+            <div class="param-group">
+              <label for="bdK">Exposant isentropique k</label>
+              <input type="number" id="bdK" min="1" max="2" step="0.001">
+            </div>
+            <div class="param-group">
+              <label for="bdZ">Compressibilite Z</label>
+              <input type="number" id="bdZ" min="0.1" max="2" step="0.01">
+            </div>
+            <div class="param-group">
+              <label for="bdOverpressure">Surpression (%)</label>
+              <select id="bdOverpressure">
+                <option value="10">10 % — contingence standard</option>
+                <option value="21">21 % — cas incendie</option>
+              </select>
+            </div>
+            <div class="param-group">
+              <label for="bdSchedule">Schedule sortie</label>
+              <select id="bdSchedule"></select>
+            </div>
+            <div class="param-group">
+              <label for="bdPsetUnit">Unite de pression</label>
+              <select id="bdPsetUnit">
+                <option value="barg">barg</option>
+                <option value="psig">psig</option>
+              </select>
+            </div>
+            <div class="param-group">
+              <label for="bdTempUnit">Unite de temperature</label>
+              <select id="bdTempUnit">
+                <option value="C">°C</option>
+                <option value="F">°F</option>
+              </select>
+            </div>
+            <div class="param-group" id="bdKshGroup" style="display: none;">
+              <label for="bdKsh">Facteur de surchauffe KSH</label>
+              <input type="number" id="bdKsh" min="0.5" max="1" step="0.001">
+            </div>
+            <div class="param-group">
+              <label>
+                <input type="checkbox" id="bdRuptureDisc"> Disque de rupture amont (Kc = 0.9)
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Batch Form -->
       <div class="batch-form-container" id="batchFormContainer">
         <div class="batch-form-header">
@@ -3737,14 +3908,31 @@
         <div class="batch-table-wrapper">
           <table class="batch-table" id="batchTable">
             <thead>
+              <!-- En-tete a deux niveaux : les colonnes restent constantes
+                   (table valide, ordre de la line list preserve) et seul le
+                   groupe correspondant a la methode de la ligne est actif. -->
+              <tr class="batch-table-groups">
+                <th class="row-number"></th>
+                <th colspan="3"></th>
+                <th colspan="4" class="group-kf">Methode Kf</th>
+                <th colspan="5" class="group-api">Dimensionnement API 526 / 520</th>
+                <th colspan="2"></th>
+                <th class="action-cell"></th>
+              </tr>
               <tr>
                 <th class="row-number">#</th>
                 <th>ITEM ID *</th>
                 <th>Nom de ligne *</th>
-                <th>DN *</th>
-                <th>Fluide *</th>
-                <th>Orifice *</th>
-                <th>Pression (bar abs) *</th>
+                <th>Methode *</th>
+                <th class="group-kf">DN *</th>
+                <th class="group-kf">Fluide *</th>
+                <th class="group-kf">Orifice *</th>
+                <th class="group-kf">P1 (bar abs) *</th>
+                <th class="group-api">NPS in *</th>
+                <th class="group-api">NPS out *</th>
+                <th class="group-api">Classe *</th>
+                <th class="group-api">P_tarage *</th>
+                <th class="group-api">T *</th>
                 <th>Config.</th>
                 <th>DLF</th>
                 <th class="action-cell"></th>
@@ -3794,7 +3982,15 @@
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" y1="15" x2="12" y2="3"/>
               </svg>
-              Telecharger le template CSV
+              Template Kf
+            </button>
+            <button class="btn btn-small btn-secondary" id="downloadTemplateApiBtn">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Template etendu (Kf + API)
             </button>
           </div>
 
@@ -3844,19 +4040,33 @@
             </div>
           </div>
 
+          <!-- Signalement d'un regime d'echappement heterogene dans le lot.
+               Exige par le comite : le basculement bloque / non bloque
+               change les hypotheses de contre-pression de la tuyauterie aval. -->
+          <div class="method-warning" id="batchRegimeWarning" style="display: none;"></div>
+          <ul class="api-warning-list" id="batchApiWarnings"></ul>
+
           <!-- Desktop Table -->
           <div class="results-table-wrapper">
             <table class="results-table" id="resultsTable">
               <thead>
+                <tr class="batch-table-groups">
+                  <th colspan="3"></th>
+                  <th colspan="4" class="group-kf">Entrees</th>
+                  <th colspan="3" class="group-api">Dimensionnement API</th>
+                  <th colspan="6"></th>
+                </tr>
                 <tr>
                   <th>ITEM ID</th>
                   <th>Nom de ligne</th>
-                  <th>DN</th>
-                  <th>Fluide</th>
-                  <th>Orifice</th>
-                  <th>P1 (bar)</th>
-                  <th>Kf</th>
-                  <th>A (cm2)</th>
+                  <th>Methode</th>
+                  <th class="group-kf">DN / NPS</th>
+                  <th class="group-kf">Fluide</th>
+                  <th class="group-kf">Orifice</th>
+                  <th class="group-kf">P1 (bar)</th>
+                  <th class="group-api">A (cm2)</th>
+                  <th class="group-api">W (kg/h)</th>
+                  <th class="group-api">Regime</th>
                   <th>F brute (daN)</th>
                   <th>DLF</th>
                   <th>F design (daN)</th>
@@ -3911,12 +4121,14 @@
       <!-- Formula Reference for Batch -->
       <div class="formula-box" style="margin-top: var(--space-6);">
         <h5>Formules de calcul</h5>
-        <div class="formula">F_brute = Kf x A x P1 &nbsp;&nbsp;|&nbsp;&nbsp; F_design = F_brute x DLF</div>
+        <div class="formula">Methode Kf &nbsp;: &nbsp;F_brute = Kf x A x P1</div>
+        <div class="formula">Methode API : &nbsp;brides &rarr; orifice max (API 526) &rarr; W (API 520 I) &rarr; F (API 520 II)</div>
+        <div class="formula">Les deux &nbsp;&nbsp;&nbsp;: &nbsp;F_design = F_brute x DLF</div>
         <div class="formula-legend">
           <strong>Kf :</strong> Facteur dependant du fluide et du DN |
           <strong>A :</strong> Section d'orifice (cm2) |
           <strong>P1 :</strong> Pression de decharge absolue (bar) |
-          <strong>F_brute :</strong> Force brute de reaction (daN) |
+          <strong>W :</strong> Debit nominal, <em>Rated Capacity</em> |
           <strong>DLF :</strong> Dynamic Load Factor |
           <strong>F_design :</strong> Force de design (daN)
         </div>
@@ -3924,8 +4136,13 @@
 
       <!-- Method Limitation Warning (Batch) -->
       <div class="method-warning" style="margin-top: var(--space-4);">
-        <strong>Methode simplifiee</strong>
-        Cette methode utilise des facteurs Kf empiriques. Pour les cas critiques (H2, haute pression &gt; 100 bar, services diphasiques, contre-pression significative), un calcul conforme a l'API 520 Part II est requis.
+        <strong>Choisir la methode ligne par ligne</strong>
+        <strong style="display:inline; font-weight:600;">Kf</strong> : facteurs empiriques, exige de connaitre la lettre d'orifice.
+        Pour les cas critiques (H2, haute pression &gt; 100 bar, diphasique, contre-pression significative),
+        lui preferer la methode API.
+        <strong style="display:inline; font-weight:600;">API</strong> : approche par enveloppe quand l'orifice est
+        inconnu — l'orifice maximum admissible par les brides est retenu, le debit obtenu est donc majorant
+        (<em>Rated Flow</em>, pas le debit requis par le procede). Diphasique et liquides hors perimetre.
       </div>
     </div>
   </div>
@@ -4255,7 +4472,11 @@
       dlfMode: 'conservative',
       dlfValue: 2.0,
       // v3.0 state - mode dimensionnement API
-      apiResult: null
+      apiResult: null,
+      // v4.0 state - batch mixte. createBatchDefaults est une declaration
+      // de fonction, donc hissee : l'appel ici precede sa definition sans
+      // probleme.
+      batchDefaults: createBatchDefaults()
     };
 
     // ==================================================================
@@ -4675,6 +4896,223 @@
         ' a ete applique. L\'orifice reel de l\'equipement sur site devra etre verifie. ' +
         'Si l\'orifice s\'avere non-standard et superieur a la borne de l\'API 526, cette ' +
         'analyse devra etre invalidee et recalculee.';
+    }
+
+    // ============================
+    // ==================================================================
+    // V4.0 - BATCH MIXTE : methode par ligne (Kf ou dimensionnement API)
+    // ==================================================================
+    // Une line list reelle melange les deux cas : certaines PSV ont leur
+    // fiche fournisseur (orifice connu -> Kf), d'autres non (-> API 526).
+    // Le discriminant est porte par la LIGNE, pas par le lot.
+    //
+    // Les champs de surcharge (M, k, Z, unites...) restent VIDES par
+    // defaut : vide signifie « heriter des reglages du lot ». La fusion
+    // est faite par resolvePsvParams(), seul point ou la regle
+    // d'heritage s'applique — validation, calcul et export y passent tous.
+    // ------------------------------------------------------------------
+    const BATCH_METHODS = ['kf', 'api'];
+
+    /** Champs dont la seule presence prouve qu'une ligne n'est pas vide. */
+    const PSV_CONTENT_FIELDS = [
+      'itemId', 'lineName',
+      'dn', 'fluidType', 'orifice', 'pressure',              // methode Kf
+      'npsIn', 'npsOut', 'rating', 'pset', 'temp'            // methode API
+    ];
+
+    function createEmptyPSV() {
+      return {
+        itemId: '',
+        lineName: '',
+        method: 'kf',
+        // --- methode Kf ---
+        dn: '',
+        fluidType: '',
+        orifice: '',
+        pressure: '',
+        // --- methode API, saisie par ligne ---
+        npsIn: '',
+        npsOut: '',
+        rating: '',
+        pset: '',
+        temp: '',
+        // --- surcharges optionnelles des reglages de lot ---
+        // Vide = heriter. Toute valeur dimensionnelle surchargee embarque
+        // SON unite (exigence du comite : jamais de valeur sans unite).
+        psetUnit: '',
+        tempUnit: '',
+        schedule: '',
+        overpressure: '',
+        M: '',
+        k: '',
+        Z: '',
+        phase: '',
+        ksh: '',
+        hasRuptureDisc: null,
+        // --- commun ---
+        config: 'CFG-1',
+        dlf: 2.0,
+        status: 'empty',
+        errors: {}
+      };
+    }
+
+    /** Reglages appliques par defaut a toutes les lignes en methode API. */
+    function createBatchDefaults() {
+      return {
+        fluidPreset: 'air',
+        M: 28.96,
+        k: 1.40,
+        Z: 1.0,
+        phase: 'gas',
+        ksh: 1.0,
+        hasRuptureDisc: false,
+        overpressure: 10,
+        schedule: 'STD',
+        psetUnit: 'barg',
+        tempUnit: 'C'
+      };
+    }
+
+    // ------------------------------------------------------------------
+    // Facteur de charge dynamique — regle unique pour les trois modes
+    // ------------------------------------------------------------------
+    // Avant unification, chaque mode avait la sienne : simple avertissait
+    // sous 1.0 et au-dessus de 3.0, le mode API sous 2.0, et le batch ne
+    // controlait RIEN (seuls des attributs HTML min/max, non appliques).
+    //
+    // Regle retenue, sur exigence du comite :
+    //   < 1.0  ERREUR BLOQUANTE. Une decharge de PSV est un effort
+    //          SOUTENU, pas une impulsion breve : l'amplification
+    //          dynamique ne peut pas y etre inferieure a 1.
+    //          (La borne generale du DLF descend bien sous 1 pour une
+    //          impulsion courte devant la periode propre — ce n'est
+    //          simplement pas le cas d'espece ici.)
+    //   < 2.0  avertissement : valeur a justifier par une analyse
+    //          temporelle (SRS 2.1, plus strict que le seuil 1.1 demande
+    //          par le comite, qu'il absorbe donc).
+    //   > 3.0  avertissement : valeur inhabituellement elevee.
+    // ------------------------------------------------------------------
+    const DLF_MIN_BLOQUANT = 1.0;
+    const DLF_SEUIL_JUSTIFICATION = 2.0;
+    const DLF_SEUIL_ELEVE = 3.0;
+
+    /**
+     * @returns {{level: 'ok'|'warning'|'error', message: string}}
+     */
+    function checkDlf(value) {
+      const v = parseFloat(value);
+      if (isNaN(v)) {
+        return { level: 'error', message: 'DLF invalide.' };
+      }
+      if (v < DLF_MIN_BLOQUANT) {
+        return {
+          level: 'error',
+          message: 'DLF = ' + v + ' invalide : une decharge de PSV est un effort soutenu, ' +
+            'l\'amplification dynamique ne peut pas y etre inferieure a 1.0 ' +
+            '(ASME B31.1 App. O / B31.3).'
+        };
+      }
+      if (v < DLF_SEUIL_JUSTIFICATION) {
+        return {
+          level: 'warning',
+          message: 'DLF = ' + v + ' inferieur a 2.0 : a justifier par une analyse dynamique ' +
+            'temporelle (time-history). A defaut, conserver DLF = 2.0.'
+        };
+      }
+      if (v > DLF_SEUIL_ELEVE) {
+        return { level: 'warning', message: 'DLF = ' + v + ' inhabituellement eleve — a verifier.' };
+      }
+      return { level: 'ok', message: '' };
+    }
+
+    /** Une surcharge est active si elle porte une valeur exploitable. */
+    function hasOverride(v) {
+      return v !== '' && v !== null && v !== undefined;
+    }
+
+    // Version du schema de session. A incrementer des que la forme d'une
+    // ligne change de facon non retrocompatible.
+    const PSV_SCHEMA_VERSION = 4;
+
+    /**
+     * Une ligne porte-t-elle de la donnee ?
+     *
+     * ATTENTION — c'est ici que se jouait une regression silencieuse : la
+     * version precedente testait `p.dn || p.fluidType || p.orifice ||
+     * p.pressure`, tous specifiques a la methode Kf. Un lot entierement
+     * saisi en methode API n'en possede AUCUN : il etait donc considere
+     * comme vide et jete sans le moindre message, l'utilisateur perdant
+     * sa saisie. Le test doit rester agnostique de la methode.
+     */
+    function psvHasContent(psv) {
+      if (!psv) return false;
+      return PSV_CONTENT_FIELDS.some(champ => {
+        const v = psv[champ];
+        return v !== '' && v !== null && v !== undefined;
+      });
+    }
+
+    /**
+     * Ramene une session enregistree au schema courant.
+     * Une session sans version precede le batch mixte : toutes ses lignes
+     * relevent de la methode Kf par construction, donc rien n'est perdu.
+     */
+    function migratePsvList(data, version) {
+      if (!Array.isArray(data)) return null;
+      if (version >= PSV_SCHEMA_VERSION) return data;
+      const modele = createEmptyPSV();
+      return data.map(ligne => Object.assign({}, modele, ligne, {
+        method: BATCH_METHODS.indexOf(ligne.method) !== -1 ? ligne.method : 'kf'
+      }));
+    }
+
+    /**
+     * Fusionne une ligne avec les reglages du lot.
+     *
+     * Couplage valeur / unite (exigence du comite, section 2.3).
+     *
+     * Les unites sont portees par le LOT : `pset` et `temp` sont les champs
+     * primaires d'une ligne API, jamais des surcharges, et sont donc
+     * toujours lus dans l'unite du lot. Le cas « valeur saisie sans unite »
+     * signale par le comite ne peut donc pas survenir par construction.
+     *
+     * Le risque qui subsiste est le miroir : une ligne qui surcharge son
+     * UNITE sans reprendre sa valeur. Une temperature de 200 lue en °F
+     * alors que le lot est en °C donne 366 K au lieu de 473 K, sans que
+     * rien ne le signale. C'est ce cas — rare, donc digne d'un
+     * avertissement — que la fusion remonte ici.
+     *
+     * Fonction pure : ne modifie ni la ligne ni les reglages.
+     */
+    function resolvePsvParams(psv, defaults) {
+      const d = defaults || createBatchDefaults();
+      const pick = (champ) => hasOverride(psv[champ]) ? psv[champ] : d[champ];
+      const unitWarnings = [];
+
+      [['pset', 'psetUnit', 'pression de tarage'],
+       ['temp', 'tempUnit', 'temperature']].forEach(([valeur, unite, label]) => {
+        if (hasOverride(psv[unite]) && psv[unite] !== d[unite]) {
+          unitWarnings.push('Cette ligne lit sa ' + label + ' en ' + psv[unite] +
+            ' alors que le lot est en ' + d[unite] + '. Verifier que la valeur saisie (' +
+            (hasOverride(psv[valeur]) ? psv[valeur] : '?') + ') est bien exprimee en ' +
+            psv[unite] + '.');
+        }
+      });
+
+      return {
+        M: parseFloat(pick('M')),
+        k: parseFloat(pick('k')),
+        Z: parseFloat(pick('Z')),
+        phase: pick('phase'),
+        ksh: parseFloat(pick('ksh')),
+        hasRuptureDisc: hasOverride(psv.hasRuptureDisc) ? !!psv.hasRuptureDisc : !!d.hasRuptureDisc,
+        overpressure: parseFloat(pick('overpressure')),
+        schedule: pick('schedule'),
+        psetUnit: pick('psetUnit'),
+        tempUnit: pick('tempUnit'),
+        unitWarnings: unitWarnings
+      };
     }
 
     // ============================
@@ -5138,13 +5576,11 @@
     function validateDLF(value) {
       dlfWarning.classList.remove('show', 'warning-low', 'warning-high');
 
-      if (value < 1.0) {
-        dlfWarning.textContent = 'Valeur inhabituelle — a justifier';
-        dlfWarning.classList.add('show', 'warning-low');
-      } else if (value > 3.0) {
-        dlfWarning.textContent = 'Valeur tres elevee — verifier';
-        dlfWarning.classList.add('show', 'warning-high');
-      }
+      const verdict = checkDlf(value);
+      if (verdict.level === 'ok') return;
+
+      dlfWarning.textContent = verdict.message;
+      dlfWarning.classList.add('show', verdict.level === 'error' ? 'warning-high' : 'warning-low');
     }
 
     function getCurrentDLF() {
@@ -5318,22 +5754,6 @@
 
     // ============================
     // BATCH MODE - FORM HANDLING
-    // ============================
-    function createEmptyPSV() {
-      return {
-        itemId: '',
-        lineName: '',
-        dn: '',
-        fluidType: '',
-        orifice: '',
-        pressure: '',
-        config: 'CFG-1',
-        dlf: 2.0,
-        status: 'empty',
-        errors: {}
-      };
-    }
-
     function generateDNOptions(selected = '') {
       return `
         <option value="">--</option>
@@ -5362,9 +5782,35 @@
       ).join('');
     }
 
+    /** Options d'un select generique. */
+    function optionsFrom(valeurs, selected, formatteur) {
+      return '<option value="">--</option>' + valeurs.map(v => {
+        const label = formatteur ? formatteur(v) : v;
+        return `<option value="${v}" ${String(selected) === String(v) ? 'selected' : ''}>${label}</option>`;
+      }).join('');
+    }
+
+    function generateMethodOptions(selected) {
+      return `
+        <option value="kf" ${selected !== 'api' ? 'selected' : ''}>Kf</option>
+        <option value="api" ${selected === 'api' ? 'selected' : ''}>API</option>
+      `;
+    }
+
     function renderBatchRow(psv, index) {
       const row = document.createElement('tr');
       row.dataset.index = index;
+      const method = psv.method === 'api' ? 'api' : 'kf';
+      row.dataset.method = method;
+
+      // Les cellules du groupe non retenu sont desactivees plutot que
+      // masquees : le nombre de colonnes doit rester constant pour que la
+      // table reste valide et que l'ordre de la line list soit preserve.
+      const kfOff = method === 'api' ? 'disabled' : '';
+      const apiOff = method === 'kf' ? 'disabled' : '';
+      const kfCls = method === 'api' ? 'cell-inactive' : '';
+      const apiCls = method === 'kf' ? 'cell-inactive' : '';
+
       row.innerHTML = `
         <td class="row-number">${index + 1}</td>
         <td class="input-cell">
@@ -5386,34 +5832,76 @@
           <div class="field-error" data-error="lineName"></div>
         </td>
         <td class="select-cell">
-          <select class="batch-input" data-field="dn">
+          <select class="batch-input" data-field="method">
+            ${generateMethodOptions(method)}
+          </select>
+        </td>
+
+        <td class="select-cell ${kfCls}">
+          <select class="batch-input" data-field="dn" ${kfOff}>
             ${generateDNOptions(psv.dn)}
           </select>
           <div class="field-error" data-error="dn"></div>
         </td>
-        <td class="select-cell">
-          <select class="batch-input" data-field="fluidType">
+        <td class="select-cell ${kfCls}">
+          <select class="batch-input" data-field="fluidType" ${kfOff}>
             ${generateFluidOptions(psv.fluidType)}
           </select>
           <div class="field-error" data-error="fluidType"></div>
         </td>
-        <td class="select-cell">
-          <select class="batch-input" data-field="orifice">
+        <td class="select-cell ${kfCls}">
+          <select class="batch-input" data-field="orifice" ${kfOff}>
             ${generateOrificeOptions(psv.orifice)}
           </select>
           <div class="field-error" data-error="orifice"></div>
         </td>
-        <td class="input-cell">
+        <td class="input-cell ${kfCls}">
           <input type="number"
                  class="batch-input"
                  data-field="pressure"
                  value="${psv.pressure || ''}"
                  placeholder="ex: 15.5"
-                 min="0"
-                 max="999.99"
-                 step="0.01">
+                 min="0" max="999.99" step="0.01" ${kfOff}>
           <div class="field-error" data-error="pressure"></div>
         </td>
+
+        <td class="select-cell ${apiCls}">
+          <select class="batch-input" data-field="npsIn" ${apiOff}>
+            ${optionsFrom(validNps, psv.npsIn, v => v + '"')}
+          </select>
+          <div class="field-error" data-error="npsIn"></div>
+        </td>
+        <td class="select-cell ${apiCls}">
+          <select class="batch-input" data-field="npsOut" ${apiOff}>
+            ${optionsFrom(validNps, psv.npsOut, v => v + '"')}
+          </select>
+          <div class="field-error" data-error="npsOut"></div>
+        </td>
+        <td class="select-cell ${apiCls}">
+          <select class="batch-input" data-field="rating" ${apiOff}>
+            ${optionsFrom(validRatings, psv.rating, v => v + '#')}
+          </select>
+          <div class="field-error" data-error="rating"></div>
+        </td>
+        <td class="input-cell ${apiCls}">
+          <input type="number"
+                 class="batch-input"
+                 data-field="pset"
+                 value="${psv.pset || ''}"
+                 placeholder="ex: 20"
+                 min="0" step="0.1" ${apiOff}>
+          <div class="field-error" data-error="pset"></div>
+        </td>
+        <td class="input-cell ${apiCls}">
+          <input type="number"
+                 class="batch-input"
+                 data-field="temp"
+                 value="${psv.temp === '' || psv.temp === undefined ? '' : psv.temp}"
+                 placeholder="ex: 150"
+                 step="1" ${apiOff}>
+          <div class="field-error" data-error="temp"></div>
+        </td>
+
         <td class="select-cell">
           <select class="batch-input" data-field="config">
             ${generateConfigOptions(psv.config || 'CFG-1')}
@@ -5425,10 +5913,11 @@
                  data-field="dlf"
                  value="${psv.dlf || 2.0}"
                  placeholder="2.0"
-                 min="0.5"
+                 min="1.0"
                  max="5.0"
                  step="0.1"
                  style="width:70px">
+          <div class="field-error" data-error="dlf"></div>
         </td>
         <td class="action-cell">
           <button class="delete-row-btn" title="Supprimer cette ligne">&#10005;</button>
@@ -5441,6 +5930,59 @@
       const card = document.createElement('div');
       card.className = 'batch-input-card';
       card.dataset.index = index;
+      const method = psv.method === 'api' ? 'api' : 'kf';
+      card.dataset.method = method;
+
+      // En vue etroite on n'affiche QUE les champs de la methode retenue :
+      // pas de contrainte de colonnes ici, donc autant ne pas encombrer.
+      const champsMethode = method === 'api' ? `
+          <div class="batch-input-card-row">
+            <div class="batch-input-card-field">
+              <label>NPS entree</label>
+              <select class="batch-input-mobile" data-field="npsIn">${optionsFrom(validNps, psv.npsIn, v => v + '"')}</select>
+            </div>
+            <div class="batch-input-card-field">
+              <label>NPS sortie</label>
+              <select class="batch-input-mobile" data-field="npsOut">${optionsFrom(validNps, psv.npsOut, v => v + '"')}</select>
+            </div>
+          </div>
+          <div class="batch-input-card-row">
+            <div class="batch-input-card-field">
+              <label>Classe de bride</label>
+              <select class="batch-input-mobile" data-field="rating">${optionsFrom(validRatings, psv.rating, v => v + '#')}</select>
+            </div>
+            <div class="batch-input-card-field">
+              <label>P_tarage (${appState.batchDefaults.psetUnit})</label>
+              <input type="number" class="batch-input-mobile" data-field="pset" value="${psv.pset || ''}" placeholder="ex: 20" min="0" step="0.1">
+            </div>
+          </div>
+          <div class="batch-input-card-field full-width">
+            <label>Temperature (${appState.batchDefaults.tempUnit === 'F' ? '°F' : '°C'})</label>
+            <input type="number" class="batch-input-mobile" data-field="temp" value="${psv.temp === '' || psv.temp === undefined ? '' : psv.temp}" placeholder="ex: 150" step="1">
+          </div>
+      ` : `
+          <div class="batch-input-card-row">
+            <div class="batch-input-card-field">
+              <label>DN</label>
+              <select class="batch-input-mobile" data-field="dn">${generateDNOptions(psv.dn)}</select>
+            </div>
+            <div class="batch-input-card-field">
+              <label>Fluide</label>
+              <select class="batch-input-mobile" data-field="fluidType">${generateFluidOptions(psv.fluidType)}</select>
+            </div>
+          </div>
+          <div class="batch-input-card-row">
+            <div class="batch-input-card-field">
+              <label>Orifice</label>
+              <select class="batch-input-mobile" data-field="orifice">${generateOrificeOptions(psv.orifice)}</select>
+            </div>
+            <div class="batch-input-card-field">
+              <label>P1 (bar abs)</label>
+              <input type="number" class="batch-input-mobile" data-field="pressure" value="${psv.pressure || ''}" placeholder="ex: 15.5" min="0" max="999.99" step="0.01">
+            </div>
+          </div>
+      `;
+
       card.innerHTML = `
         <div class="batch-input-card-header">
           <span class="batch-input-card-number">PSV #${index + 1}</span>
@@ -5453,28 +5995,15 @@
               <input type="text" class="batch-input-mobile" data-field="itemId" value="${psv.itemId || ''}" placeholder="PSV-001" maxlength="50">
             </div>
             <div class="batch-input-card-field">
-              <label>DN</label>
-              <select class="batch-input-mobile" data-field="dn">${generateDNOptions(psv.dn)}</select>
+              <label>Methode</label>
+              <select class="batch-input-mobile" data-field="method">${generateMethodOptions(method)}</select>
             </div>
           </div>
           <div class="batch-input-card-field full-width">
             <label>Nom de ligne</label>
             <input type="text" class="batch-input-mobile" data-field="lineName" value="${psv.lineName || ''}" placeholder="Ligne vapeur HP" maxlength="100">
           </div>
-          <div class="batch-input-card-row">
-            <div class="batch-input-card-field">
-              <label>Fluide</label>
-              <select class="batch-input-mobile" data-field="fluidType">${generateFluidOptions(psv.fluidType)}</select>
-            </div>
-            <div class="batch-input-card-field">
-              <label>Orifice</label>
-              <select class="batch-input-mobile" data-field="orifice">${generateOrificeOptions(psv.orifice)}</select>
-            </div>
-          </div>
-          <div class="batch-input-card-field full-width">
-            <label>Pression (bar abs)</label>
-            <input type="number" class="batch-input-mobile" data-field="pressure" value="${psv.pressure || ''}" placeholder="ex: 15.5" min="0" max="999.99" step="0.01">
-          </div>
+          ${champsMethode}
           <div class="batch-input-card-row">
             <div class="batch-input-card-field">
               <label>Config.</label>
@@ -5482,7 +6011,7 @@
             </div>
             <div class="batch-input-card-field">
               <label>DLF</label>
-              <input type="number" class="batch-input-mobile" data-field="dlf" value="${psv.dlf || 2.0}" placeholder="2.0" min="0.5" max="5.0" step="0.1">
+              <input type="number" class="batch-input-mobile" data-field="dlf" value="${psv.dlf || 2.0}" placeholder="2.0" min="1.0" max="5.0" step="0.1">
             </div>
           </div>
         </div>
@@ -5504,6 +6033,7 @@
       });
 
       attachBatchEventListeners();
+      refreshBatchDefaultsVisibility();
       validateBatchForm();
     }
 
@@ -5516,11 +6046,22 @@
           const field = e.target.dataset.field;
           let value = e.target.value;
 
-          if ((field === 'pressure' || field === 'dlf') && value) {
+          if (['pressure', 'dlf', 'pset', 'temp'].indexOf(field) !== -1 && value !== '') {
             value = parseFloat(value);
           }
 
           appState.psvList[index][field] = value;
+
+          // Changer de methode redessine la ligne : ce sont les cellules
+          // actives qui changent, pas seulement une valeur. On repasse par
+          // renderBatchTable pour que la vue mobile et le panneau de
+          // reglages de lot suivent aussi.
+          if (field === 'method') {
+            saveToLocalStorage();
+            renderBatchTable();
+            return;
+          }
+
           validateRow(index);
           validateBatchForm();
           saveToLocalStorage();
@@ -5551,11 +6092,22 @@
           const field = e.target.dataset.field;
           let value = e.target.value;
 
-          if ((field === 'pressure' || field === 'dlf') && value) {
+          if (['pressure', 'dlf', 'pset', 'temp'].indexOf(field) !== -1 && value !== '') {
             value = parseFloat(value);
           }
 
           appState.psvList[index][field] = value;
+
+          // Changer de methode redessine la ligne : ce sont les cellules
+          // actives qui changent, pas seulement une valeur. On repasse par
+          // renderBatchTable pour que la vue mobile et le panneau de
+          // reglages de lot suivent aussi.
+          if (field === 'method') {
+            saveToLocalStorage();
+            renderBatchTable();
+            return;
+          }
+
           validateRow(index);
           validateBatchForm();
           saveToLocalStorage();
@@ -5616,12 +6168,116 @@
       saveToLocalStorage();
     }
 
+    // ==================================================================
+    // V4.0 - REGLAGES DE LOT
+    // ==================================================================
+    const bdEls = {
+      panel: document.getElementById('batchDefaultsPanel'),
+      header: document.getElementById('batchDefaultsHeader'),
+      body: document.getElementById('batchDefaultsBody'),
+      toggle: document.getElementById('batchDefaultsToggle'),
+      fluidPreset: document.getElementById('bdFluidPreset'),
+      M: document.getElementById('bdM'),
+      k: document.getElementById('bdK'),
+      Z: document.getElementById('bdZ'),
+      overpressure: document.getElementById('bdOverpressure'),
+      schedule: document.getElementById('bdSchedule'),
+      psetUnit: document.getElementById('bdPsetUnit'),
+      tempUnit: document.getElementById('bdTempUnit'),
+      kshGroup: document.getElementById('bdKshGroup'),
+      ksh: document.getElementById('bdKsh'),
+      ruptureDisc: document.getElementById('bdRuptureDisc')
+    };
+
+    /** Le panneau n'a de sens que si une ligne au moins est en methode API. */
+    function refreshBatchDefaultsVisibility() {
+      const utile = appState.psvList.some(p => p && p.method === 'api');
+      bdEls.panel.classList.toggle('show', utile);
+    }
+
+    /** Ecrit les reglages courants dans les champs du panneau. */
+    function renderBatchDefaults() {
+      const d = appState.batchDefaults;
+      bdEls.fluidPreset.value = d.fluidPreset || '';
+      bdEls.M.value = d.M;
+      bdEls.k.value = d.k;
+      bdEls.Z.value = d.Z;
+      bdEls.overpressure.value = String(d.overpressure);
+      bdEls.schedule.value = d.schedule;
+      bdEls.psetUnit.value = d.psetUnit;
+      bdEls.tempUnit.value = d.tempUnit;
+      bdEls.ksh.value = d.ksh;
+      bdEls.ruptureDisc.checked = !!d.hasRuptureDisc;
+      bdEls.kshGroup.style.display = d.phase === 'steam' ? 'block' : 'none';
+    }
+
+    /** Relit les champs du panneau vers l'etat. */
+    function readBatchDefaults() {
+      const d = appState.batchDefaults;
+      d.fluidPreset = bdEls.fluidPreset.value;
+      d.M = parseFloat(bdEls.M.value);
+      d.k = parseFloat(bdEls.k.value);
+      d.Z = parseFloat(bdEls.Z.value);
+      d.overpressure = parseFloat(bdEls.overpressure.value);
+      d.schedule = bdEls.schedule.value;
+      d.psetUnit = bdEls.psetUnit.value;
+      d.tempUnit = bdEls.tempUnit.value;
+      d.ksh = parseFloat(bdEls.ksh.value);
+      d.hasRuptureDisc = bdEls.ruptureDisc.checked;
+    }
+
+    function initBatchDefaultsPanel() {
+      bdEls.fluidPreset.innerHTML = '<option value="">Saisie manuelle</option>' +
+        Object.keys(fluidPresets).map(key =>
+          `<option value="${key}">${fluidPresets[key].label}</option>`).join('');
+      bdEls.schedule.innerHTML = validSchedules.map(s =>
+        `<option value="${s}">Sch ${s}</option>`).join('');
+
+      renderBatchDefaults();
+
+      bdEls.header.addEventListener('click', (e) => {
+        if (e.target.closest('input, select')) return;
+        bdEls.body.classList.toggle('show');
+      });
+
+      bdEls.fluidPreset.addEventListener('change', () => {
+        const preset = fluidPresets[bdEls.fluidPreset.value];
+        if (preset) {
+          appState.batchDefaults.M = preset.M;
+          appState.batchDefaults.k = preset.k;
+          appState.batchDefaults.phase = preset.phase;
+        }
+        readBatchDefaults();
+        renderBatchDefaults();
+        revalidateBatchIfNeeded();
+      });
+
+      ['M', 'k', 'Z', 'overpressure', 'schedule', 'psetUnit', 'tempUnit', 'ksh', 'ruptureDisc']
+        .forEach(champ => {
+          bdEls[champ].addEventListener('change', () => {
+            readBatchDefaults();
+            revalidateBatchIfNeeded();
+          });
+        });
+    }
+
+    /**
+     * Un changement de reglage de lot deplace potentiellement toutes les
+     * lignes API : on revalide, et on recalcule si un resultat est affiche.
+     */
+    function revalidateBatchIfNeeded() {
+      saveToLocalStorage();
+      validateBatchForm();
+      if (appState.calculated) calculateBatch();
+    }
+
     function initBatchForm() {
       // Initialize with 5 empty rows
       appState.psvList = [];
       for (let i = 0; i < 5; i++) {
         appState.psvList.push(createEmptyPSV());
       }
+      initBatchDefaultsPanel();
       renderBatchTable();
     }
 
@@ -5631,14 +6287,119 @@
     // ============================
     // BATCH MODE - VALIDATION
     // ============================
+    // ------------------------------------------------------------------
+    // Validation d'une ligne de lot
+    // ------------------------------------------------------------------
+    // Aiguillage sur psv.method. Le tronc commun (vacuite, ITEM_ID, nom de
+    // ligne, DLF) reste partage ; seuls les champs propres a la methode
+    // divergent. Une ligne API ne doit JAMAIS se voir reprocher l'absence
+    // de DN ou d'orifice, et reciproquement.
+    // ------------------------------------------------------------------
+
+    /** Champs Kf : DN, fluide, orifice, pression absolue. */
+    function validatePsvKf(psv, errors) {
+      if (!psv.dn) {
+        errors.dn = 'Requis';
+      } else if (!validDNs.includes(psv.dn)) {
+        errors.dn = 'Invalide';
+      }
+
+      if (!psv.fluidType) {
+        errors.fluidType = 'Requis';
+      } else if (!validFluids.includes(psv.fluidType)) {
+        errors.fluidType = 'Invalide';
+      }
+
+      if (!psv.orifice) {
+        errors.orifice = 'Requis';
+      } else if (!validOrifices.includes(psv.orifice)) {
+        errors.orifice = 'Invalide';
+      }
+
+      const pressure = parseFloat(psv.pressure);
+      if (!psv.pressure && psv.pressure !== 0) {
+        errors.pressure = 'Requis';
+      } else if (isNaN(pressure) || pressure <= 0) {
+        errors.pressure = 'Doit etre > 0';
+      } else if (pressure > 999.99) {
+        errors.pressure = 'Max 999.99';
+      }
+    }
+
+    /**
+     * Champs API : brides, pression de tarage, temperature, plus les
+     * parametres resolus depuis les reglages de lot.
+     *
+     * @returns {string[]} avertissements non bloquants (unites, orifice)
+     */
+    function validatePsvApi(psv, errors, defaults) {
+      const params = resolvePsvParams(psv, defaults);
+      const warnings = params.unitWarnings.slice();
+
+      // --- geometrie des brides ---
+      if (!psv.npsIn) errors.npsIn = 'Requis';
+      else if (validNps.indexOf(String(psv.npsIn)) === -1) errors.npsIn = 'Invalide';
+
+      if (!psv.npsOut) errors.npsOut = 'Requis';
+      else if (validNps.indexOf(String(psv.npsOut)) === -1) errors.npsOut = 'Invalide';
+
+      if (!psv.rating) errors.rating = 'Requis';
+      else if (validRatings.indexOf(parseInt(psv.rating, 10)) === -1) errors.rating = 'Invalide';
+
+      // Verification API 526 des la saisie : un concepteur ne doit pas
+      // pouvoir lancer un calcul de flexibilite sur une configuration
+      // geometrique qui n'existe pas dans le standard.
+      if (!errors.npsIn && !errors.npsOut && !errors.rating) {
+        const res = selectMaxOrifice(psv.npsIn, psv.npsOut, psv.rating);
+        if (!res.ok) {
+          errors.npsIn = 'Hors API 526';
+          errors.rating = 'Hors API 526';
+          warnings.push(res.error);
+        }
+      }
+
+      // --- pression de tarage ---
+      // Garde-fou exige par le comite : sans lui, une valeur nulle ou
+      // negative partirait en calcul et donnerait un resultat absurde
+      // plutot qu'une erreur lisible.
+      const pset = parseFloat(psv.pset);
+      if (!psv.pset && psv.pset !== 0) {
+        errors.pset = 'Requis';
+      } else if (isNaN(pset) || pset <= 0) {
+        errors.pset = 'Doit etre > 0 (relatif)';
+      }
+
+      // --- temperature ---
+      const temp = parseFloat(psv.temp);
+      if (!psv.temp && psv.temp !== 0) {
+        errors.temp = 'Requis';
+      } else if (isNaN(temp)) {
+        errors.temp = 'Invalide';
+      } else {
+        const tempK = params.tempUnit === 'F' ? fahrenheitToK(temp) : celsiusToK(temp);
+        if (tempK <= 0) errors.temp = 'Sous le zero absolu';
+      }
+
+      // --- parametres resolus (lot ou surcharge) ---
+      if (!(params.M > 0)) errors.M = 'Masse molaire invalide';
+      if (!(params.k >= 1)) errors.k = 'k doit etre >= 1';
+      if (!(params.Z > 0)) errors.Z = 'Z doit etre > 0';
+      if (!(params.overpressure >= 0)) errors.overpressure = 'Surpression invalide';
+      if (!pipeIdTable[String(psv.npsOut)] ||
+          typeof pipeIdTable[String(psv.npsOut)][params.schedule] !== 'number') {
+        errors.schedule = 'Schedule inconnu';
+      }
+
+      return warnings;
+    }
+
     function validatePSV(psv, index) {
       const errors = {};
+      const method = BATCH_METHODS.indexOf(psv.method) !== -1 ? psv.method : 'kf';
 
-      // Check if row is empty
-      const isEmpty = !psv.itemId && !psv.lineName && !psv.dn &&
-                      !psv.fluidType && !psv.orifice && !psv.pressure;
-      if (isEmpty) {
-        return { isValid: false, isEmpty: true, errors };
+      // Vacuite : test agnostique de la methode (cf. psvHasContent).
+      if (!psvHasContent(psv)) {
+        return { isValid: false, isEmpty: true, errors, warnings: [] };
       }
 
       // ITEM ID
@@ -5647,7 +6408,6 @@
       } else if (psv.itemId.length > 50) {
         errors.itemId = 'Max 50 caracteres';
       } else {
-        // Check for duplicates
         const duplicate = appState.psvList.findIndex((p, i) =>
           i !== index && p.itemId && p.itemId.toLowerCase() === psv.itemId.toLowerCase()
         );
@@ -5663,41 +6423,27 @@
         errors.lineName = 'Max 100 caracteres';
       }
 
-      // DN
-      if (!psv.dn) {
-        errors.dn = 'Requis';
-      } else if (!validDNs.includes(psv.dn)) {
-        errors.dn = 'Invalide';
+      // Champs propres a la methode
+      let warnings = [];
+      if (method === 'api') {
+        warnings = validatePsvApi(psv, errors, appState.batchDefaults);
+      } else {
+        validatePsvKf(psv, errors);
       }
 
-      // Fluid Type
-      if (!psv.fluidType) {
-        errors.fluidType = 'Requis';
-      } else if (!validFluids.includes(psv.fluidType)) {
-        errors.fluidType = 'Invalide';
-      }
-
-      // Orifice
-      if (!psv.orifice) {
-        errors.orifice = 'Requis';
-      } else if (!validOrifices.includes(psv.orifice)) {
-        errors.orifice = 'Invalide';
-      }
-
-      // Pressure
-      const pressure = parseFloat(psv.pressure);
-      if (!psv.pressure && psv.pressure !== 0) {
-        errors.pressure = 'Requis';
-      } else if (isNaN(pressure) || pressure <= 0) {
-        errors.pressure = 'Doit etre > 0';
-      } else if (pressure > 999.99) {
-        errors.pressure = 'Max 999.99';
+      // DLF — regle unifiee, commune aux trois modes.
+      const verdictDlf = checkDlf(psv.dlf === '' || psv.dlf === undefined ? 2.0 : psv.dlf);
+      if (verdictDlf.level === 'error') {
+        errors.dlf = 'DLF < 1.0';
+      } else if (verdictDlf.level === 'warning') {
+        warnings.push(verdictDlf.message);
       }
 
       return {
         isValid: Object.keys(errors).length === 0,
         isEmpty: false,
-        errors
+        errors,
+        warnings
       };
     }
 
@@ -5790,20 +6536,76 @@
         };
       }
 
+      const dlf = parseFloat(psv.dlf) || 2.0;
+      const configId = psv.config || 'CFG-1';
+      const method = BATCH_METHODS.indexOf(psv.method) !== -1 ? psv.method : 'kf';
+
+      // --- Chemin API 526 / API 520 --------------------------------------
+      // Delegue integralement au moteur du mode unitaire : aucune equation
+      // n'est reecrite ici, seuls les parametres sont resolus depuis les
+      // reglages de lot.
+      if (method === 'api') {
+        const params = resolvePsvParams(psv, appState.batchDefaults);
+        const psetAccum = parseFloat(psv.pset) * (1 + params.overpressure / 100);
+        const p1KPa = params.psetUnit === 'psig'
+          ? psigToKPaAbs(psetAccum)
+          : bargToKPaAbs(psetAccum);
+        const tempK = params.tempUnit === 'F'
+          ? fahrenheitToK(parseFloat(psv.temp))
+          : celsiusToK(parseFloat(psv.temp));
+
+        const res = computeApiSizing({
+          npsIn: psv.npsIn, npsOut: psv.npsOut, rating: parseInt(psv.rating, 10),
+          schedule: params.schedule,
+          p1KPa: p1KPa, tempK: tempK,
+          M: params.M, k: params.k, Z: params.Z, phase: params.phase,
+          ksh: params.ksh, hasRuptureDisc: params.hasRuptureDisc,
+          dlf: dlf, config: configId,
+          psetRaw: parseFloat(psv.pset), psetUnit: params.psetUnit,
+          overpressure: params.overpressure
+        });
+
+        if (!res.ok) {
+          return { ...psv, status: 'error', errors: { npsIn: 'Hors API 526' }, errorMessage: res.error };
+        }
+
+        const components = (configurationsTable[configId] || configurationsTable['CFG-1'])
+          .components(parseFloat(res.force.fDesignDaN.toFixed(2)));
+
+        return {
+          ...psv,
+          method: 'api',
+          orifice: res.orifice.orifice,             // orifice DEDUIT, non saisi
+          area: parseFloat((res.orifice.areaMm2 / 100).toFixed(2)),
+          p1Bar: parseFloat((res.input.p1KPa / 100).toFixed(3)),
+          wKgH: parseFloat(res.flow.w.toFixed(1)),
+          force: parseFloat(res.force.fStaticDaN.toFixed(2)),
+          dlf,
+          config: configId,
+          fDesign: parseFloat(res.force.fDesignDaN.toFixed(2)),
+          fx: components.fx,
+          fy: components.fy,
+          fz: components.fz,
+          choked: res.force.choked,
+          apiWarnings: (validation.warnings || []).concat(res.warnings || []),
+          status: 'calculated',
+          errors: {}
+        };
+      }
+
+      // --- Chemin Kf, strictement inchange -------------------------------
       const kf = kfTable[psv.dn][psv.fluidType];
       const area = areaTable[psv.orifice];
       const pressure = parseFloat(psv.pressure);
       const force = kf * area * pressure;
 
-      // V2.0 - DLF and directional components
-      const dlf = parseFloat(psv.dlf) || 2.0;
-      const configId = psv.config || 'CFG-1';
       const fDesign = parseFloat((force * dlf).toFixed(2));
       const config = configurationsTable[configId];
       const components = config ? config.components(fDesign) : { fx: 0, fy: -fDesign, fz: 0 };
 
       return {
         ...psv,
+        method: 'kf',
         kf,
         area,
         force: parseFloat(force.toFixed(2)),
@@ -5813,6 +6615,7 @@
         fx: components.fx,
         fy: components.fy,
         fz: components.fz,
+        apiWarnings: validation.warnings || [],
         status: 'calculated',
         errors: {}
       };
@@ -5862,15 +6665,50 @@
     // ============================
     // BATCH MODE - RESULTS DISPLAY
     // ============================
+    /**
+     * Le regime d'echappement conditionne les hypotheses de contre-pression
+     * de la tuyauterie aval. S'il n'est pas le meme sur toutes les lignes
+     * API du lot, le concepteur doit le savoir avant de modeliser.
+     */
+    function renderBatchRegimeWarning() {
+      const el = document.getElementById('batchRegimeWarning');
+      const api = appState.results.filter(r => r.method === 'api' && r.status === 'calculated');
+      if (api.length < 2) { el.style.display = 'none'; return; }
+
+      const bloques = api.filter(r => r.choked);
+      const libres = api.filter(r => !r.choked);
+      if (bloques.length === 0 || libres.length === 0) { el.style.display = 'none'; return; }
+
+      el.style.display = 'block';
+      el.innerHTML = '<strong>Regime d\'echappement heterogene dans ce lot</strong>' +
+        bloques.length + ' ligne(s) en ecoulement bloque, ' + libres.length + ' en ecoulement non bloque. ' +
+        'Les hypotheses de contre-pression aval different entre ces deux groupes et ne peuvent pas ' +
+        'etre reprises en bloc. Non bloquees : ' +
+        libres.map(r => r.itemId || '?').join(', ') + '.';
+    }
+
+    /** Traçabilite QA/QC : tous les avertissements moteur, par ITEM_ID. */
+    function renderBatchApiWarnings() {
+      const el = document.getElementById('batchApiWarnings');
+      const items = [];
+      appState.results.forEach(r => {
+        (r.apiWarnings || []).forEach(w => items.push({ id: r.itemId || '?', w }));
+      });
+      el.innerHTML = items.map(i => `<li><strong>${i.id}</strong> — ${i.w}</li>`).join('');
+    }
+
     function renderResults() {
       // Update stats
       document.getElementById('resultsValidCount').textContent = `${appState.stats.valid} valides`;
       document.getElementById('resultsErrorCount').textContent = `${appState.stats.errors} erreurs`;
+      renderBatchRegimeWarning();
+      renderBatchApiWarnings();
 
       // Render table (desktop)
       resultsTableBody.innerHTML = '';
       appState.results.forEach(result => {
         const row = document.createElement('tr');
+        const estApi = result.method === 'api';
         if (result.status === 'error') {
           row.classList.add('row-error');
         }
@@ -5878,12 +6716,16 @@
         row.innerHTML = `
           <td class="text-left">${result.itemId || '-'}</td>
           <td class="text-left">${result.lineName || '-'}</td>
-          <td>${result.dn || '-'}</td>
-          <td>${result.fluidType === 'vapeur eau' ? 'Vapeur' : (result.fluidType || '-')}</td>
-          <td>${result.orifice || '-'}</td>
-          <td class="text-right">${result.pressure ? parseFloat(result.pressure).toFixed(2) : '-'}</td>
-          <td class="text-right">${result.kf || '-'}</td>
-          <td class="text-right">${result.area || '-'}</td>
+          <td>${estApi ? '<span class="badge badge-success">API</span>' : '<span class="badge badge-neutral">Kf</span>'}</td>
+          <td>${estApi ? (result.npsIn || '-') + '&times;' + (result.npsOut || '-') + ' CL' + (result.rating || '-') : (result.dn || '-')}</td>
+          <td>${estApi ? '-' : (result.fluidType === 'vapeur eau' ? 'Vapeur' : (result.fluidType || '-'))}</td>
+          <td>${result.orifice || '-'}${estApi && result.orifice ? ' <span class="orifice-deduit" title="Orifice deduit des brides, non saisi">&#9662;</span>' : ''}</td>
+          <td class="text-right">${estApi ? (result.p1Bar !== undefined ? result.p1Bar.toFixed(3) : '-') : (result.pressure ? parseFloat(result.pressure).toFixed(2) : '-')}</td>
+          <td class="text-right">${estApi && result.area !== undefined ? result.area.toFixed(2) : '-'}</td>
+          <td class="text-right">${estApi && result.wKgH !== undefined ? result.wKgH.toFixed(0) : '-'}</td>
+          <td>${estApi ? (result.choked
+                ? '<span class="badge badge-neutral">bloque</span>'
+                : '<span class="badge badge-warning">non bloque</span>') : '-'}</td>
           <td class="text-right">${result.force ? result.force.toFixed(2) : '-'}</td>
           <td class="text-right">${result.dlf || '-'}</td>
           <td class="force-cell text-right">${result.fDesign ? result.fDesign.toFixed(2) : '-'}</td>
@@ -5919,10 +6761,16 @@
             ${result.fDesign ? 'F_design: ' + result.fDesign.toFixed(2) + ' daN' : (result.force ? result.force.toFixed(2) + ' daN' : '-')}
           </div>
           <div class="result-card-mobile-params">
-            <div><strong>DN:</strong> ${result.dn || '-'}</div>
-            <div><strong>Fluide:</strong> ${result.fluidType === 'vapeur eau' ? 'Vapeur' : (result.fluidType || '-')}</div>
-            <div><strong>Orifice:</strong> ${result.orifice || '-'}</div>
-            <div><strong>P1:</strong> ${result.pressure ? parseFloat(result.pressure).toFixed(2) + ' bar' : '-'}</div>
+            <div><strong>Methode:</strong> ${result.method === 'api' ? 'API 526/520' : 'Kf'}</div>
+            ${result.method === 'api'
+              ? `<div><strong>Brides:</strong> ${result.npsIn || '-'}&times;${result.npsOut || '-'} CL${result.rating || '-'}</div>
+                 <div><strong>Orifice:</strong> ${result.orifice || '-'} (deduit)</div>
+                 <div><strong>W:</strong> ${result.wKgH !== undefined ? result.wKgH.toFixed(0) + ' kg/h' : '-'}</div>
+                 <div><strong>Regime:</strong> ${result.choked ? 'bloque' : 'non bloque'}</div>`
+              : `<div><strong>DN:</strong> ${result.dn || '-'}</div>
+                 <div><strong>Fluide:</strong> ${result.fluidType === 'vapeur eau' ? 'Vapeur' : (result.fluidType || '-')}</div>
+                 <div><strong>Orifice:</strong> ${result.orifice || '-'}</div>
+                 <div><strong>P1:</strong> ${result.pressure ? parseFloat(result.pressure).toFixed(2) + ' bar' : '-'}</div>`}
             <div><strong>F brute:</strong> ${result.force ? result.force.toFixed(2) + ' daN' : '-'}</div>
             <div><strong>DLF:</strong> ${result.dlf || '-'}</div>
             <div><strong>Fx:</strong> ${result.fx !== undefined ? result.fx.toFixed(2) : '-'}</div>
@@ -6037,6 +6885,37 @@
         'configuration': 'config',
         'discharge_config': 'config',
         'dlf': 'dlf',
+        // --- v4.0, methode de dimensionnement API ---
+        'method': 'method',
+        'methode': 'method',
+        'nps_in': 'npsIn',
+        'npsin': 'npsIn',
+        'nps entree': 'npsIn',
+        'nps_out': 'npsOut',
+        'npsout': 'npsOut',
+        'nps sortie': 'npsOut',
+        'rating': 'rating',
+        'classe': 'rating',
+        'class': 'rating',
+        'schedule': 'schedule',
+        'sch': 'schedule',
+        'p_set': 'pset',
+        'pset': 'pset',
+        'p_tarage': 'pset',
+        'p_set_unit': 'psetUnit',
+        'overpressure': 'overpressure',
+        'surpression': 'overpressure',
+        'temp': 'temp',
+        'temperature': 'temp',
+        'temp_unit': 'tempUnit',
+        'mw': 'M',
+        'masse_molaire': 'M',
+        'k': 'k',
+        'z': 'Z',
+        'phase': 'phase',
+        'ksh': 'ksh',
+        'rupture_disc': 'hasRuptureDisc',
+        'disque_rupture': 'hasRuptureDisc',
         'dynamic_load_factor': 'dlf'
       };
 
@@ -6087,25 +6966,55 @@
         const lineNum = index + 2; // Account for header row
         const normalized = normalizeCSVHeaders(row);
 
-        // Skip completely empty rows
-        const isEmpty = !normalized.itemId && !normalized.lineName &&
-                       !normalized.dn && !normalized.fluidType &&
-                       !normalized.orifice && !normalized.pressure;
+        // Vacuite : test agnostique de la methode.
+        const rempli = (v) => v !== undefined && v !== null && String(v).trim() !== '';
+        const isEmpty = !['itemId','lineName','dn','fluidType','orifice','pressure',
+                          'npsIn','npsOut','rating','pset','temp']
+                          .some(c => rempli(normalized[c]));
         if (isEmpty) return;
 
-        const psv = {
+        // Detection de la methode, par ordre de priorite :
+        //   1. colonne METHOD explicite (permet un fichier mixte)
+        //   2. presence de NPS_IN / RATING -> dimensionnement API
+        //   3. defaut -> Kf, ce qui laisse passer les fichiers existants
+        //      sans la moindre modification.
+        let method = String(normalized.method || '').toLowerCase().trim();
+        if (BATCH_METHODS.indexOf(method) === -1) {
+          method = (rempli(normalized.npsIn) || rempli(normalized.rating)) ? 'api' : 'kf';
+        }
+
+        const nombre = (v) => rempli(v) ? parseFloat(v) : '';
+        const psv = Object.assign(createEmptyPSV(), {
           itemId: (normalized.itemId || '').trim(),
           lineName: (normalized.lineName || '').trim(),
+          method: method,
           dn: normalizeDN(normalized.dn),
           fluidType: normalizeFluidType(normalized.fluidType),
           orifice: (normalized.orifice || '').toUpperCase().trim(),
-          pressure: normalized.pressure ? parseFloat(normalized.pressure) : '',
+          pressure: nombre(normalized.pressure),
+          npsIn: rempli(normalized.npsIn) ? String(normalized.npsIn).trim().replace(/"/g, '') : '',
+          npsOut: rempli(normalized.npsOut) ? String(normalized.npsOut).trim().replace(/"/g, '') : '',
+          rating: rempli(normalized.rating) ? parseInt(String(normalized.rating).replace('#', ''), 10) : '',
+          pset: nombre(normalized.pset),
+          temp: nombre(normalized.temp),
+          psetUnit: (normalized.psetUnit || '').trim(),
+          tempUnit: (normalized.tempUnit || '').trim(),
+          schedule: (normalized.schedule || '').trim(),
+          overpressure: nombre(normalized.overpressure),
+          M: nombre(normalized.M),
+          k: nombre(normalized.k),
+          Z: nombre(normalized.Z),
+          phase: (normalized.phase || '').trim(),
+          ksh: nombre(normalized.ksh),
+          hasRuptureDisc: rempli(normalized.hasRuptureDisc)
+            ? /^(yes|oui|true|1)$/i.test(String(normalized.hasRuptureDisc).trim())
+            : null,
           config: normalizeConfig(normalized.config),
-          dlf: normalized.dlf ? parseFloat(normalized.dlf) : 2.0,
+          dlf: rempli(normalized.dlf) ? parseFloat(normalized.dlf) : 2.0,
           status: 'pending',
           errors: {},
           lineNum
-        };
+        });
 
         // Validate
         const rowErrors = [];
@@ -6116,17 +7025,42 @@
         if (!psv.lineName) {
           rowErrors.push('LINE_NAME manquant');
         }
-        if (psv.dn && !validDNs.includes(psv.dn)) {
-          rowErrors.push(`DN invalide "${normalized.dn}"`);
+        if (psv.method === 'api') {
+          if (psv.npsIn && validNps.indexOf(String(psv.npsIn)) === -1) {
+            rowErrors.push(`NPS entree invalide "${normalized.npsIn}"`);
+          }
+          if (psv.npsOut && validNps.indexOf(String(psv.npsOut)) === -1) {
+            rowErrors.push(`NPS sortie invalide "${normalized.npsOut}"`);
+          }
+          if (psv.rating && validRatings.indexOf(psv.rating) === -1) {
+            rowErrors.push(`Classe de bride invalide "${normalized.rating}"`);
+          }
+          if (psv.pset !== '' && (isNaN(psv.pset) || psv.pset <= 0)) {
+            rowErrors.push(`Pression de tarage invalide "${normalized.pset}"`);
+          }
+          if (psv.temp !== '' && isNaN(psv.temp)) {
+            rowErrors.push(`Temperature invalide "${normalized.temp}"`);
+          }
+          if (psv.npsIn && psv.npsOut && psv.rating && !rowErrors.length) {
+            const res = selectMaxOrifice(psv.npsIn, psv.npsOut, psv.rating);
+            if (!res.ok) rowErrors.push(res.error);
+          }
+        } else {
+          if (psv.dn && !validDNs.includes(psv.dn)) {
+            rowErrors.push(`DN invalide "${normalized.dn}"`);
+          }
+          if (psv.fluidType && !validFluids.includes(psv.fluidType)) {
+            rowErrors.push(`Fluide invalide "${normalized.fluidType}"`);
+          }
+          if (psv.orifice && !validOrifices.includes(psv.orifice)) {
+            rowErrors.push(`Orifice invalide "${normalized.orifice}"`);
+          }
+          if (psv.pressure && (isNaN(psv.pressure) || psv.pressure <= 0)) {
+            rowErrors.push(`Pression invalide "${normalized.pressure}"`);
+          }
         }
-        if (psv.fluidType && !validFluids.includes(psv.fluidType)) {
-          rowErrors.push(`Fluide invalide "${normalized.fluidType}"`);
-        }
-        if (psv.orifice && !validOrifices.includes(psv.orifice)) {
-          rowErrors.push(`Orifice invalide "${normalized.orifice}"`);
-        }
-        if (psv.pressure && (isNaN(psv.pressure) || psv.pressure <= 0)) {
-          rowErrors.push(`Pression invalide "${normalized.pressure}"`);
+        if (checkDlf(psv.dlf).level === 'error') {
+          rowErrors.push(`DLF invalide "${normalized.dlf}" — doit etre >= 1.0`);
         }
 
         if (rowErrors.length > 0) {
@@ -6134,7 +7068,9 @@
           errors.push(`Ligne ${lineNum}: ${rowErrors.join(', ')}`);
           psv.status = 'error';
           psv.errorMessage = rowErrors[0];
-        } else if (!psv.dn || !psv.fluidType || !psv.orifice || !psv.pressure) {
+        } else if (psv.method === 'api'
+                     ? (!psv.npsIn || !psv.npsOut || !psv.rating || psv.pset === '' || psv.temp === '')
+                     : (!psv.dn || !psv.fluidType || !psv.orifice || !psv.pressure)) {
           warningCount++;
           psv.status = 'warning';
         } else {
@@ -6205,6 +7141,30 @@
     });
 
     // Download template
+    // Le modele etendu couvre les deux methodes. Le modele Kf historique
+    // est conserve tel quel : les utilisateurs qui l'ont deja en circulation
+    // ne doivent rien changer, et un test verrouille sa chaine exacte.
+    document.getElementById('downloadTemplateApiBtn').addEventListener('click', () => {
+      const template = `ITEM_ID,LINE_NAME,METHOD,DN,FLUID_TYPE,ORIFICE,PRESSURE,NPS_IN,NPS_OUT,RATING,P_SET,TEMP,CONFIG,DLF
+PSV-001,Ligne vapeur HP,kf,100,gaz,K,15.5,,,,,,CFG-1,2.0
+PSV-002,Feed gaz,api,,,,,2,3,300,20,150,CFG-1,2.0
+PSV-003,Depart C101,api,,,,,3,4,600,35,200,CFG-3,2.0
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,`;
+
+      const blob = new Blob(['\ufeff' + template], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'template_psv_batch_etendu.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Template etendu telecharge');
+    });
+
     downloadTemplateBtn.addEventListener('click', () => {
       const template = `ITEM_ID,LINE_NAME,DN,FLUID_TYPE,ORIFICE,PRESSURE,CONFIG,DLF
 PSV-001,Ligne vapeur HP,100,gaz,K,15.5,CFG-1,2.0
@@ -6239,27 +7199,71 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
         return;
       }
 
-      const headers = ['ITEM_ID', 'LINE_NAME', 'DN', 'FLUID_TYPE', 'ORIFICE', 'PRESSURE_BAR', 'KF', 'AREA_CM2', 'FORCE_DAN', 'CONFIG', 'DLF', 'FORCE_DESIGN_DAN', 'FX_DAN', 'FY_DAN', 'FZ_DAN', 'STATUS', 'ERROR_MESSAGE'];
+      // Format etendu : couvre les deux methodes. METHOD porte le
+      // discriminant, ce qui permet un fichier mixte et un aller-retour
+      // export -> import fidele.
+      const headers = [
+        'ITEM_ID', 'LINE_NAME', 'METHOD',
+        'DN', 'FLUID_TYPE', 'ORIFICE', 'PRESSURE_BAR',
+        'NPS_IN', 'NPS_OUT', 'RATING', 'SCHEDULE',
+        'P_SET', 'P_SET_UNIT', 'OVERPRESSURE', 'TEMP', 'TEMP_UNIT',
+        'MW', 'K', 'Z', 'PHASE', 'KSH', 'RUPTURE_DISC',
+        'KF', 'AREA_CM2', 'W_KGH', 'FORCE_DAN',
+        'CONFIG', 'DLF', 'FORCE_DESIGN_DAN', 'FX_DAN', 'FY_DAN', 'FZ_DAN',
+        'CHOKED', 'STATUS', 'ERROR_MESSAGE', 'API_WARNINGS'
+      ];
 
-      const rows = appState.results.map(r => [
-        r.itemId || '',
-        r.lineName || '',
-        r.dn || '',
-        r.fluidType || '',
-        r.orifice || '',
-        r.pressure ? parseFloat(r.pressure).toFixed(2) : '',
-        r.kf || '',
-        r.area || '',
-        r.force ? r.force.toFixed(2) : '',
-        r.config || 'CFG-1',
-        r.dlf || '',
-        r.fDesign ? r.fDesign.toFixed(2) : '',
-        r.fx !== undefined ? r.fx.toFixed(2) : '',
-        r.fy !== undefined ? r.fy.toFixed(2) : '',
-        r.fz !== undefined ? r.fz.toFixed(2) : '',
-        r.status === 'calculated' ? 'valid' : 'error',
-        r.errorMessage || ''
-      ]);
+      // Les guillemets doivent etre echappes : les avertissements moteur
+      // contiennent des virgules et casseraient le CSV sinon.
+      const csvCell = (v) => {
+        if (v === undefined || v === null) return '';
+        const t = String(v);
+        return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+      };
+
+      const rows = appState.results.map(r => {
+        const estApi = r.method === 'api';
+        const par = resolvePsvParams(r, appState.batchDefaults);
+        return [
+          r.itemId || '',
+          r.lineName || '',
+          r.method || 'kf',
+          estApi ? '' : (r.dn || ''),
+          estApi ? '' : (r.fluidType || ''),
+          r.orifice || '',
+          estApi ? (r.p1Bar !== undefined ? r.p1Bar.toFixed(3) : '')
+                 : (r.pressure ? parseFloat(r.pressure).toFixed(2) : ''),
+          estApi ? (r.npsIn || '') : '',
+          estApi ? (r.npsOut || '') : '',
+          estApi ? (r.rating || '') : '',
+          estApi ? par.schedule : '',
+          estApi ? (r.pset !== '' && r.pset !== undefined ? r.pset : '') : '',
+          estApi ? par.psetUnit : '',
+          estApi ? par.overpressure : '',
+          estApi ? (r.temp !== '' && r.temp !== undefined ? r.temp : '') : '',
+          estApi ? par.tempUnit : '',
+          estApi ? par.M : '',
+          estApi ? par.k : '',
+          estApi ? par.Z : '',
+          estApi ? par.phase : '',
+          estApi && par.phase === 'steam' ? par.ksh : '',
+          estApi ? (par.hasRuptureDisc ? 'yes' : 'no') : '',
+          estApi ? '' : (r.kf || ''),
+          r.area !== undefined ? r.area : '',
+          estApi && r.wKgH !== undefined ? r.wKgH.toFixed(1) : '',
+          r.force !== undefined ? r.force.toFixed(2) : '',
+          r.config || 'CFG-1',
+          r.dlf || '',
+          r.fDesign !== undefined ? r.fDesign.toFixed(2) : '',
+          r.fx !== undefined ? r.fx.toFixed(2) : '',
+          r.fy !== undefined ? r.fy.toFixed(2) : '',
+          r.fz !== undefined ? r.fz.toFixed(2) : '',
+          estApi ? (r.choked ? 'yes' : 'no') : '',
+          r.status === 'calculated' ? 'valid' : 'error',
+          r.errorMessage || '',
+          (r.apiWarnings || []).join(' | ')
+        ].map(csvCell);
+      });
 
       const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
 
@@ -6301,54 +7305,128 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
       doc.text(`Resume : ${appState.results.length} PSV | ${appState.stats.valid} valides | ${appState.stats.errors} erreurs`, 14, 38);
       doc.text('Formules : F_brute = Kf x A x P1  |  F_design = F_brute x DLF', 14, 45);
 
-      // Table
-      const tableData = appState.results.map(r => [
-        r.itemId || '-',
-        r.lineName || '-',
-        r.dn || '-',
-        r.fluidType === 'vapeur eau' ? 'Vapeur' : (r.fluidType || '-'),
-        r.orifice || '-',
-        r.pressure ? parseFloat(r.pressure).toFixed(2) : '-',
-        r.kf || '-',
-        r.area || '-',
-        r.force ? r.force.toFixed(2) : '-',
-        r.dlf || '-',
-        r.fDesign ? r.fDesign.toFixed(2) : '-',
-        r.fx !== undefined ? r.fx.toFixed(2) : '-',
-        r.fy !== undefined ? r.fy.toFixed(2) : '-',
-        r.fz !== undefined ? r.fz.toFixed(2) : '-',
-        r.status === 'calculated' ? 'Valide' : (r.errorMessage || 'Erreur')
-      ]);
-
-      doc.autoTable({
-        startY: 52,
-        head: [['ITEM ID', 'Ligne', 'DN', 'Fluide', 'Orifice', 'P1', 'Kf', 'A', 'F brute', 'DLF', 'F design', 'Fx', 'Fy', 'Fz', 'Statut']],
-        body: tableData,
-        theme: 'striped',
-        headStyles: { fillColor: [79, 124, 255], fontSize: 7 },
-        bodyStyles: { fontSize: 7 },
-        columnStyles: {
-          0: { cellWidth: 20 },
-          1: { cellWidth: 25 },
-          10: { fontStyle: 'bold' }
-        },
-        didParseCell: function(data) {
-          if (data.section === 'body' && data.column.index === 14) {
-            if (data.cell.raw === 'Valide') {
-              data.cell.styles.textColor = [5, 150, 105];
-            } else {
-              data.cell.styles.textColor = [220, 38, 38];
-            }
-          }
+      // Une table PAR METHODE : les colonnes different trop pour etre
+      // fusionnees lisiblement (Kf a un facteur et une pression absolue,
+      // l'API un orifice deduit, un debit et un regime).
+      const lignesKf = appState.results.filter(r => r.method !== 'api');
+      const lignesApi = appState.results.filter(r => r.method === 'api');
+      const statutDe = (r) => r.status === 'calculated' ? 'Valide' : (r.errorMessage || 'Erreur');
+      const colorerStatut = (idxStatut) => function(data) {
+        if (data.section === 'body' && data.column.index === idxStatut) {
+          data.cell.styles.textColor = data.cell.raw === 'Valide' ? [13, 148, 136] : [220, 38, 38];
         }
-      });
+      };
+      let y = 52;
 
-      // Legend
-      const finalY = doc.lastAutoTable.finalY + 10;
+      if (lignesKf.length) {
+        doc.setFontSize(11);
+        doc.text('Methode simplifiee (F = Kf x A x P1)', 14, y);
+        doc.autoTable({
+          startY: y + 4,
+          head: [['ITEM ID', 'Ligne', 'DN', 'Fluide', 'Orifice', 'P1', 'Kf', 'A', 'F brute', 'DLF', 'F design', 'Fx', 'Fy', 'Fz', 'Statut']],
+          body: lignesKf.map(r => [
+            r.itemId || '-', r.lineName || '-', r.dn || '-',
+            r.fluidType === 'vapeur eau' ? 'Vapeur' : (r.fluidType || '-'),
+            r.orifice || '-',
+            r.pressure ? parseFloat(r.pressure).toFixed(2) : '-',
+            r.kf || '-', r.area || '-',
+            r.force ? r.force.toFixed(2) : '-', r.dlf || '-',
+            r.fDesign ? r.fDesign.toFixed(2) : '-',
+            r.fx !== undefined ? r.fx.toFixed(2) : '-',
+            r.fy !== undefined ? r.fy.toFixed(2) : '-',
+            r.fz !== undefined ? r.fz.toFixed(2) : '-',
+            statutDe(r)
+          ]),
+          theme: 'striped',
+          headStyles: { fillColor: [17, 24, 39], fontSize: 7 },
+          bodyStyles: { fontSize: 7 },
+          columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 25 }, 10: { fontStyle: 'bold' } },
+          didParseCell: colorerStatut(14)
+        });
+        y = doc.lastAutoTable.finalY + 10;
+      }
+
+      if (lignesApi.length) {
+        doc.setFontSize(11);
+        doc.text('Dimensionnement par enveloppe (API 526 / API 520)', 14, y);
+        doc.autoTable({
+          startY: y + 4,
+          head: [['ITEM ID', 'Ligne', 'Brides', 'Orifice', 'A (cm2)', 'P1', 'W (kg/h)', 'Regime', 'F stat.', 'DLF', 'F design', 'Fx', 'Fy', 'Fz', 'Statut']],
+          body: lignesApi.map(r => [
+            r.itemId || '-', r.lineName || '-',
+            (r.npsIn || '-') + 'x' + (r.npsOut || '-') + ' CL' + (r.rating || '-'),
+            r.orifice || '-',
+            r.area !== undefined ? r.area.toFixed(2) : '-',
+            r.p1Bar !== undefined ? r.p1Bar.toFixed(3) : '-',
+            r.wKgH !== undefined ? r.wKgH.toFixed(0) : '-',
+            r.choked ? 'bloque' : 'non bloque',
+            r.force !== undefined ? r.force.toFixed(2) : '-', r.dlf || '-',
+            r.fDesign !== undefined ? r.fDesign.toFixed(2) : '-',
+            r.fx !== undefined ? r.fx.toFixed(2) : '-',
+            r.fy !== undefined ? r.fy.toFixed(2) : '-',
+            r.fz !== undefined ? r.fz.toFixed(2) : '-',
+            statutDe(r)
+          ]),
+          theme: 'striped',
+          headStyles: { fillColor: [13, 148, 136], fontSize: 7 },
+          bodyStyles: { fontSize: 7 },
+          columnStyles: { 0: { cellWidth: 20 }, 1: { cellWidth: 22 }, 10: { fontStyle: 'bold' } },
+          didParseCell: colorerStatut(14)
+        });
+        y = doc.lastAutoTable.finalY + 10;
+      }
+
+      // Legende
       doc.setFontSize(9);
-      doc.text('Legende :', 14, finalY);
-      doc.text('F_brute = Kf x A x P1 | F_design = F_brute x DLF | Fx, Fy, Fz : composantes directionnelles (daN)', 14, finalY + 5);
-      doc.text('DLF : Dynamic Load Factor | Toutes les forces en daN | Pressions en bar absolus', 14, finalY + 10);
+      doc.text('Legende :', 14, y);
+      doc.text('F_brute = Kf x A x P1 (methode Kf) | F_design = F_brute x DLF | Fx, Fy, Fz : composantes directionnelles (daN)', 14, y + 5);
+      doc.text('W : Rated Capacity, a ne pas confondre avec le Required Capacity du procede | Orifice API deduit des brides', 14, y + 10);
+      doc.text('DLF : Dynamic Load Factor | Toutes les forces en daN | Pressions en bar absolus', 14, y + 15);
+      y += 22;
+
+      // Tracabilite QA/QC : tous les avertissements moteur, par ITEM_ID.
+      const avertissements = [];
+      appState.results.forEach(r => (r.apiWarnings || []).forEach(w =>
+        avertissements.push((r.itemId || '?') + ' : ' + w)));
+      if (avertissements.length) {
+        if (y > 170) { doc.addPage(); y = 20; }
+        doc.setFontSize(10);
+        doc.text('Avertissements de calcul', 14, y);
+        doc.setFontSize(7);
+        y += 5;
+        avertissements.forEach(a => {
+          doc.splitTextToSize(a, 265).forEach(ligne => {
+            if (y > 195) { doc.addPage(); y = 20; }
+            doc.text(ligne, 14, y);
+            y += 3.5;
+          });
+        });
+        y += 4;
+      }
+
+      // Bloc de reserves : des qu'une ligne releve du dimensionnement API.
+      if (lignesApi.length) {
+        const premiere = lignesApi.find(r => r.status === 'calculated');
+        if (premiere) {
+          if (y > 160) { doc.addPage(); y = 20; }
+          doc.setFontSize(10);
+          doc.text('Note de conception (a reporter dans CAESAR II / AutoPIPE)', 14, y);
+          doc.setFontSize(7);
+          y += 5;
+          const note = 'Les efforts de decharge des lignes en methode API ont ete evalues via une methode par ' +
+            'enveloppe (Bounding Approach). En l\'absence de donnees fournisseur, les soupapes sont assumees ' +
+            'conformes a la norme API 526, et l\'orifice maximum physique permis par les dimensions des brides ' +
+            'a ete utilise pour calculer le debit nominal (Rated Flow). Lignes concernees : ' +
+            lignesApi.map(r => r.itemId || '?').join(', ') + '. Les orifices reels des equipements sur site ' +
+            'devront etre verifies. Si un orifice s\'avere non-standard et superieur a la borne de l\'API 526, ' +
+            'cette analyse devra etre invalidee et recalculee.';
+          doc.splitTextToSize(note, 265).forEach(ligne => {
+            if (y > 195) { doc.addPage(); y = 20; }
+            doc.text(ligne, 14, y);
+            y += 3.5;
+          });
+        }
+      }
 
       // Save
       const timestamp = now.toISOString().slice(0,10).replace(/-/g,'');
@@ -6399,7 +7477,9 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
     function saveToLocalStorage() {
       try {
         localStorage.setItem('psv_calculator_mode', appState.mode);
+        localStorage.setItem('psv_calculator_schema_version', String(PSV_SCHEMA_VERSION));
         localStorage.setItem('psv_calculator_batch_data', JSON.stringify(appState.psvList));
+        localStorage.setItem('psv_calculator_batch_defaults', JSON.stringify(appState.batchDefaults));
         localStorage.setItem('psv_calculator_batch_timestamp', Date.now().toString());
       } catch (e) {
         console.error('Erreur sauvegarde localStorage:', e);
@@ -6410,14 +7490,13 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
       try {
         const batchData = localStorage.getItem('psv_calculator_batch_data');
         const timestamp = localStorage.getItem('psv_calculator_batch_timestamp');
+        const version = parseInt(localStorage.getItem('psv_calculator_schema_version'), 10) || 0;
 
         // Restore if session is recent (< 24h)
         if (timestamp && Date.now() - parseInt(timestamp) < 24 * 60 * 60 * 1000) {
           if (batchData) {
-            const data = JSON.parse(batchData);
-            // Check if there's actual data
-            const hasData = data.some(p => p.itemId || p.lineName || p.dn || p.fluidType || p.orifice || p.pressure);
-            if (hasData) {
+            const data = migratePsvList(JSON.parse(batchData), version);
+            if (data && data.some(psvHasContent)) {
               return data;
             }
           }
@@ -6429,9 +7508,23 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
       }
     }
 
+    /** Reglages de lot enregistres, ou valeurs par defaut. */
+    function loadBatchDefaults() {
+      try {
+        const brut = localStorage.getItem('psv_calculator_batch_defaults');
+        if (!brut) return createBatchDefaults();
+        return Object.assign(createBatchDefaults(), JSON.parse(brut));
+      } catch (e) {
+        console.error('Erreur chargement des reglages de lot:', e);
+        return createBatchDefaults();
+      }
+    }
+
     function clearLocalStorage() {
       localStorage.removeItem('psv_calculator_batch_data');
+      localStorage.removeItem('psv_calculator_batch_defaults');
       localStorage.removeItem('psv_calculator_batch_timestamp');
+      localStorage.removeItem('psv_calculator_schema_version');
     }
 
     function checkSavedSession() {
@@ -6445,6 +7538,7 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
       const savedData = loadFromLocalStorage();
       if (savedData) {
         appState.psvList = savedData;
+        appState.batchDefaults = loadBatchDefaults();
         renderBatchTable();
         showToast('Session restauree');
       }
@@ -6586,15 +7680,15 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
      * justifiee par une analyse temporelle (time-history).
      */
     function refreshApiDlfWarning() {
-      const v = getApiDLF();
-      if (v < 2.0) {
-        apiEls.dlfWarning.style.display = 'block';
-        apiEls.dlfWarning.innerHTML = '<strong>DLF = ' + v + ' — justification requise</strong>' +
-          'Toute valeur inferieure a 2.0 doit etre justifiee par une analyse dynamique ' +
-          'temporelle (time-history). A defaut, conserver DLF = 2.0.';
-      } else {
+      const verdict = checkDlf(getApiDLF());
+      if (verdict.level === 'ok') {
         apiEls.dlfWarning.style.display = 'none';
+        return;
       }
+      apiEls.dlfWarning.style.display = 'block';
+      apiEls.dlfWarning.innerHTML =
+        '<strong>' + (verdict.level === 'error' ? 'DLF refuse' : 'Justification requise') + '</strong>' +
+        verdict.message;
     }
 
     /** Met a jour l'aide sur A_e a chaque changement de sortie/schedule. */
