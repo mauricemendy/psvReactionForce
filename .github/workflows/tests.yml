@@ -24,13 +24,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '22'
           # Aucun cache : le projet n'a aucune dependance. Les suites
           # n'utilisent que fs, path et vm, tous natifs.
+          # Actions en v5 : les v4 ciblent Node 20, deprecie sur les
+          # runners GitHub depuis septembre 2025 et deja force en Node 24.
 
       # Les trois etapes portent `if: always()` pour que l'echec de l'une
       # n'empeche pas les autres de s'executer : on veut voir toutes les
