@@ -1,5 +1,7 @@
 # PSV Reaction Force Calculator
 
+[![Tests](https://github.com/mauricemendy/psvReactionForce/actions/workflows/tests.yml/badge.svg)](https://github.com/mauricemendy/psvReactionForce/actions/workflows/tests.yml)
+
 Outil web de calcul des efforts de décharge des soupapes de sûreté (PSV).
 Application autonome (`index.html`, aucun serveur) + add-on Google Sheets
 (`code.gs` / `sidebar.html` / `config.gs`).
@@ -268,9 +270,15 @@ désignation non standard est écartée, quelle qu'elle soit.
 ## Tests
 
 ```bash
-node tests/test_v2.js          # 91 tests — modes Simple et Batch (méthode Kf)
-node tests/test_api_sizing.js  # 76 tests — mode Dimensionnement API
+node tests/test_v2.js          # modes Simple et Batch (méthode Kf)
+node tests/test_api_sizing.js  # mode Dimensionnement API
+node tests/test_batch_api.js   # batch mixte, méthode par ligne
 ```
+
+Aucune dépendance : les trois suites n'utilisent que `fs`, `path` et `vm`. Elles
+s'exécutent automatiquement sur chaque *pull request* et sur chaque push vers `main`
+(`.github/workflows/tests.yml`), les trois étant lancées même si l'une échoue, pour voir
+toutes les régressions d'un coup.
 
 `test_api_sizing.js` extrait et exécute le moteur réellement embarqué dans
 `index.html` : les valeurs testées sont celles que l'utilisateur obtient. La

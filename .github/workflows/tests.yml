@@ -1,0 +1,48 @@
+name: Tests
+
+# Les trois suites s'executent sur chaque PR et sur chaque push vers main.
+# Jusqu'ici seul le deploiement Pages tournait, et uniquement sur main :
+# rien ne verifiait les tests cote GitHub, donc rien n'empechait un commit
+# de les casser sans que la PR vire au rouge.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Une PR poussee plusieurs fois de suite n'a pas besoin de garder ses
+# executions precedentes.
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Suites de tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          # Aucun cache : le projet n'a aucune dependance. Les suites
+          # n'utilisent que fs, path et vm, tous natifs.
+
+      # Les trois etapes portent `if: always()` pour que l'echec de l'une
+      # n'empeche pas les autres de s'executer : on veut voir toutes les
+      # regressions d'un coup, pas les decouvrir une par une.
+      - name: Modes Simple et Batch (methode Kf)
+        if: always()
+        run: node tests/test_v2.js
+
+      - name: Dimensionnement API 526 / API 520
+        if: always()
+        run: node tests/test_api_sizing.js
+
+      - name: Batch mixte (methode par ligne)
+        if: always()
+        run: node tests/test_batch_api.js
