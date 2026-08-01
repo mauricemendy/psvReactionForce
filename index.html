@@ -684,7 +684,7 @@
       display: none;
     }
 
-    /* v4.0 - En-tete de groupe et cellules inactives du tableau batch */
+    /* v4.0 - En-tetes de groupe (tableau de RESULTATS uniquement) */
     .batch-table-groups th {
       text-align: center;
       padding-top: var(--space-3);
@@ -709,22 +709,92 @@
       color: var(--color-primary-dark);
     }
 
-    /* Colonnes du groupe non retenu : desactivees, pas masquees.
-       Le nombre de colonnes doit rester constant pour que la table reste
-       valide et que l'ordre de la line list soit preserve. */
-    .batch-table td.cell-inactive {
-      background: var(--color-gray-50);
+    /* v4.0 - Cellule « Parametres » du tableau de SAISIE.
+       Les champs propres a la methode y sont regroupes, au lieu d'occuper
+       des colonnes distinctes : le tableau devrait sinon porter l'union
+       des deux methodes, imposant un defilement horizontal et laissant a
+       l'ecran une moitie de cellules desactivees. */
+    .batch-table td.params-cell {
+      padding: var(--space-2) var(--space-3);
     }
 
-    .batch-table td.cell-inactive .batch-input {
-      opacity: 0.4;
-      cursor: not-allowed;
-      background: transparent;
-      border-color: var(--color-gray-200);
+    /* Les colonnes d'identite sont bornees pour laisser la largeur
+       restante a la cellule Parametres, seule a contenu variable. */
+    .batch-table th:nth-child(2),
+    .batch-table td:nth-child(2) { width: 150px; }
+
+    .batch-table th:nth-child(3),
+    .batch-table td:nth-child(3) { width: 170px; }
+
+    .batch-table th:nth-child(4),
+    .batch-table td:nth-child(4) { width: 96px; }
+
+    .batch-table th:nth-child(5),
+    .batch-table td:nth-child(5) { width: auto; }
+
+    .batch-table th:nth-child(6),
+    .batch-table td:nth-child(6) { width: 126px; }
+
+    /* Sous 1400 px, les colonnes d'identite cedent de la place aux
+       parametres pour qu'ils tiennent sur une seule ligne plus longtemps. */
+    @media (max-width: 1400px) {
+      .batch-table th:nth-child(2),
+      .batch-table td:nth-child(2) { width: 130px; }
+
+      .batch-table th:nth-child(3),
+      .batch-table td:nth-child(3) { width: 140px; }
+
+      .batch-table th:nth-child(6),
+      .batch-table td:nth-child(6) { width: 110px; }
     }
 
-    .batch-table td.cell-inactive .field-error {
-      display: none;
+    .params-fields {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      align-items: flex-start;
+    }
+
+    .param-field {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .param-field label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--color-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      margin: 0;
+    }
+
+    .param-field .batch-input {
+      width: 100%;
+    }
+
+    /* Le bloc de parametres se teinte selon la methode : reperage
+       immediat des lignes API dans un lot mixte, sans colonne dediee. */
+    .params-fields[data-method="api"] {
+      border-left: 3px solid var(--color-primary);
+      padding-left: var(--space-3);
+    }
+
+    .params-fields[data-method="kf"] {
+      border-left: 3px solid var(--color-gray-300);
+      padding-left: var(--space-3);
+    }
+
+    .batch-table td.params-cell .field-error {
+      font-size: 10px;
+    }
+
+    /* La colonne Methode porte la meme teinte que le bloc qu'elle pilote. */
+    .method-select {
+      font-weight: 600;
     }
 
     /* v4.0 - Reglages de lot du mode batch */
@@ -1035,7 +1105,10 @@
 
     .batch-table {
       width: 100%;
-      min-width: 1100px;
+      /* Plancher abaisse de 1100 a 940 px : il avait ete dimensionne pour
+         un tableau qui portait l'union des colonnes des deux methodes.
+         Avec la cellule « Parametres », huit colonnes suffisent. */
+      min-width: 940px;
       border-collapse: collapse;
     }
 
@@ -1406,6 +1479,22 @@
     }
 
     /* Responsive */
+    /* Sous 1100 px, le tableau ne tient plus sans defiler : on bascule sur
+       la vue en cartes, qui n'affiche de toute facon que les champs de la
+       methode retenue. Isole du bloc 640 px, dont les autres adaptations
+       n'ont pas lieu d'etre a cette largeur.
+       A placer APRES `.batch-input-cards { display: none }` : a specificite
+       egale, c'est la derniere regle qui l'emporte. */
+    @media (max-width: 1099px) {
+      .batch-table-wrapper {
+        display: none;
+      }
+
+      .batch-input-cards {
+        display: block;
+      }
+    }
+
     @media (max-width: 640px) {
       .container {
         padding: var(--space-4) var(--space-3);
@@ -3908,31 +3997,17 @@
         <div class="batch-table-wrapper">
           <table class="batch-table" id="batchTable">
             <thead>
-              <!-- En-tete a deux niveaux : les colonnes restent constantes
-                   (table valide, ordre de la line list preserve) et seul le
-                   groupe correspondant a la methode de la ligne est actif. -->
-              <tr class="batch-table-groups">
-                <th class="row-number"></th>
-                <th colspan="3"></th>
-                <th colspan="4" class="group-kf">Methode Kf</th>
-                <th colspan="5" class="group-api">Dimensionnement API 526 / 520</th>
-                <th colspan="2"></th>
-                <th class="action-cell"></th>
-              </tr>
+              <!-- Colonnes fixes. Les champs propres a la methode vivent
+                   DANS la cellule « Parametres » : seuls ceux de la methode
+                   retenue sont rendus, ce qui supprime le defilement
+                   horizontal et les cellules desactivees, tout en gardant
+                   les colonnes d'identite alignees pour le balayage vertical. -->
               <tr>
                 <th class="row-number">#</th>
                 <th>ITEM ID *</th>
                 <th>Nom de ligne *</th>
                 <th>Methode *</th>
-                <th class="group-kf">DN *</th>
-                <th class="group-kf">Fluide *</th>
-                <th class="group-kf">Orifice *</th>
-                <th class="group-kf">P1 (bar abs) *</th>
-                <th class="group-api">NPS in *</th>
-                <th class="group-api">NPS out *</th>
-                <th class="group-api">Classe *</th>
-                <th class="group-api">P_tarage *</th>
-                <th class="group-api">T *</th>
+                <th>Parametres *</th>
                 <th>Config.</th>
                 <th>DLF</th>
                 <th class="action-cell"></th>
@@ -5776,9 +5851,23 @@
       `;
     }
 
+    // Libelles abreges pour la colonne Config du lot : le libelle complet
+    // tronquerait, et elargir la colonne coutait la ligne unique des
+    // parametres a 1280 px. Le libelle complet reste celui du mode simple.
+    const CONFIG_LABELS_COURTS = {
+      'CFG-1': 'Vert. haut',
+      'CFG-2': 'Vert. bas',
+      'CFG-3': 'Horizontale',
+      'CFG-4': 'Coude 90°',
+      'CFG-5': 'Collecteur',
+      'CFG-6': 'Col de cygne',
+      'CFG-7': 'Laterale (Z)',
+      'CFG-8': 'Inclinee 45°'
+    };
+
     function generateConfigOptions(selected = 'CFG-1') {
       return validConfigs.map(c =>
-        `<option value="${c}" ${selected === c ? 'selected' : ''}>${configurationsTable[c].label}</option>`
+        `<option value="${c}" ${selected === c ? 'selected' : ''}>${CONFIG_LABELS_COURTS[c] || configurationsTable[c].label}</option>`
       ).join('');
     }
 
@@ -5797,19 +5886,70 @@
       `;
     }
 
+    /** Options d'un select generique. */
+    function optionsFrom(valeurs, selected, formatteur) {
+      return '<option value="">--</option>' + valeurs.map(v => {
+        const label = formatteur ? formatteur(v) : v;
+        return `<option value="${v}" ${String(selected) === String(v) ? 'selected' : ''}>${label}</option>`;
+      }).join('');
+    }
+
+    function generateMethodOptions(selected) {
+      return `
+        <option value="kf" ${selected !== 'api' ? 'selected' : ''}>Kf</option>
+        <option value="api" ${selected === 'api' ? 'selected' : ''}>API</option>
+      `;
+    }
+
+    /** Un champ de la cellule « Parametres » : libelle court + controle. */
+    function paramField(label, largeur, controle, champErreur) {
+      return `
+        <div class="param-field" style="width:${largeur}">
+          <label>${label}</label>
+          ${controle}
+          <div class="field-error" data-error="${champErreur}"></div>
+        </div>`;
+    }
+
+    /**
+     * Champs de saisie propres a la methode de la ligne.
+     *
+     * Ils vivent dans UNE cellule plutot qu'en colonnes distinctes : avec
+     * des colonnes, le tableau devait porter l'union des deux methodes,
+     * ce qui imposait un defilement horizontal et laissait a l'ecran une
+     * moitie de cellules desactivees sans utilite.
+     */
+    function renderParamFields(psv, method) {
+      const d = appState.batchDefaults;
+
+      if (method === 'api') {
+        return paramField('NPS in', '72px',
+            `<select class="batch-input" data-field="npsIn">${optionsFrom(validNps, psv.npsIn, v => v + '"')}</select>`, 'npsIn')
+          + paramField('NPS out', '72px',
+            `<select class="batch-input" data-field="npsOut">${optionsFrom(validNps, psv.npsOut, v => v + '"')}</select>`, 'npsOut')
+          + paramField('Classe', '84px',
+            `<select class="batch-input" data-field="rating">${optionsFrom(validRatings, psv.rating, v => v + '#')}</select>`, 'rating')
+          + paramField(`P_tarage (${d.psetUnit})`, '96px',
+            `<input type="number" class="batch-input" data-field="pset" value="${psv.pset || ''}" placeholder="ex: 20" min="0" step="0.1">`, 'pset')
+          + paramField(`T (${d.tempUnit === 'F' ? '°F' : '°C'})`, '80px',
+            `<input type="number" class="batch-input" data-field="temp" value="${psv.temp === '' || psv.temp === undefined ? '' : psv.temp}" placeholder="ex: 150" step="1">`, 'temp');
+      }
+
+      return paramField('DN', '84px',
+          `<select class="batch-input" data-field="dn">${generateDNOptions(psv.dn)}</select>`, 'dn')
+        + paramField('Fluide', '104px',
+          `<select class="batch-input" data-field="fluidType">${generateFluidOptions(psv.fluidType)}</select>`, 'fluidType')
+        + paramField('Orifice', '84px',
+          `<select class="batch-input" data-field="orifice">${generateOrificeOptions(psv.orifice)}</select>`, 'orifice')
+        + paramField('P1 (bar abs)', '104px',
+          `<input type="number" class="batch-input" data-field="pressure" value="${psv.pressure || ''}" placeholder="ex: 15.5" min="0" max="999.99" step="0.01">`, 'pressure');
+    }
+
     function renderBatchRow(psv, index) {
       const row = document.createElement('tr');
       row.dataset.index = index;
       const method = psv.method === 'api' ? 'api' : 'kf';
       row.dataset.method = method;
-
-      // Les cellules du groupe non retenu sont desactivees plutot que
-      // masquees : le nombre de colonnes doit rester constant pour que la
-      // table reste valide et que l'ordre de la line list soit preserve.
-      const kfOff = method === 'api' ? 'disabled' : '';
-      const apiOff = method === 'kf' ? 'disabled' : '';
-      const kfCls = method === 'api' ? 'cell-inactive' : '';
-      const apiCls = method === 'kf' ? 'cell-inactive' : '';
 
       row.innerHTML = `
         <td class="row-number">${index + 1}</td>
@@ -5832,76 +5972,15 @@
           <div class="field-error" data-error="lineName"></div>
         </td>
         <td class="select-cell">
-          <select class="batch-input" data-field="method">
+          <select class="batch-input method-select" data-field="method">
             ${generateMethodOptions(method)}
           </select>
         </td>
-
-        <td class="select-cell ${kfCls}">
-          <select class="batch-input" data-field="dn" ${kfOff}>
-            ${generateDNOptions(psv.dn)}
-          </select>
-          <div class="field-error" data-error="dn"></div>
+        <td class="params-cell">
+          <div class="params-fields" data-method="${method}">
+            ${renderParamFields(psv, method)}
+          </div>
         </td>
-        <td class="select-cell ${kfCls}">
-          <select class="batch-input" data-field="fluidType" ${kfOff}>
-            ${generateFluidOptions(psv.fluidType)}
-          </select>
-          <div class="field-error" data-error="fluidType"></div>
-        </td>
-        <td class="select-cell ${kfCls}">
-          <select class="batch-input" data-field="orifice" ${kfOff}>
-            ${generateOrificeOptions(psv.orifice)}
-          </select>
-          <div class="field-error" data-error="orifice"></div>
-        </td>
-        <td class="input-cell ${kfCls}">
-          <input type="number"
-                 class="batch-input"
-                 data-field="pressure"
-                 value="${psv.pressure || ''}"
-                 placeholder="ex: 15.5"
-                 min="0" max="999.99" step="0.01" ${kfOff}>
-          <div class="field-error" data-error="pressure"></div>
-        </td>
-
-        <td class="select-cell ${apiCls}">
-          <select class="batch-input" data-field="npsIn" ${apiOff}>
-            ${optionsFrom(validNps, psv.npsIn, v => v + '"')}
-          </select>
-          <div class="field-error" data-error="npsIn"></div>
-        </td>
-        <td class="select-cell ${apiCls}">
-          <select class="batch-input" data-field="npsOut" ${apiOff}>
-            ${optionsFrom(validNps, psv.npsOut, v => v + '"')}
-          </select>
-          <div class="field-error" data-error="npsOut"></div>
-        </td>
-        <td class="select-cell ${apiCls}">
-          <select class="batch-input" data-field="rating" ${apiOff}>
-            ${optionsFrom(validRatings, psv.rating, v => v + '#')}
-          </select>
-          <div class="field-error" data-error="rating"></div>
-        </td>
-        <td class="input-cell ${apiCls}">
-          <input type="number"
-                 class="batch-input"
-                 data-field="pset"
-                 value="${psv.pset || ''}"
-                 placeholder="ex: 20"
-                 min="0" step="0.1" ${apiOff}>
-          <div class="field-error" data-error="pset"></div>
-        </td>
-        <td class="input-cell ${apiCls}">
-          <input type="number"
-                 class="batch-input"
-                 data-field="temp"
-                 value="${psv.temp === '' || psv.temp === undefined ? '' : psv.temp}"
-                 placeholder="ex: 150"
-                 step="1" ${apiOff}>
-          <div class="field-error" data-error="temp"></div>
-        </td>
-
         <td class="select-cell">
           <select class="batch-input" data-field="config">
             ${generateConfigOptions(psv.config || 'CFG-1')}
