@@ -4542,18 +4542,24 @@
         const anchor = PSV_ANCHOR[configId] || [400, 300];
 
         // Fleche de reaction : partant de l'ancre PSV, de longueur ~140 px, dans la direction de F.
+        // Rendu : liseré foncé fin autour du trait rouge pour le contraste, sans halo blanc
+        // (le halo blanc masquait une partie de l'image PSV).
         const [fdx, fdy] = projectForce(forces.fx || 0, forces.fy || 0, forces.fz || 0, 140);
         let arrowSvg = '';
         const hasForce = (forces.fx || forces.fy || forces.fz);
         if (hasForce) {
           const x1 = anchor[0], y1 = anchor[1] + 40; // +40 pour tenir compte du bandeau titre
           const x2 = x1 + fdx, y2 = y1 + fdy;
-          // Halo blanc semi-transparent sous la fleche pour la detacher de l'image
+          // Liseré foncé (2 px plus large que le trait rouge) : donne du contraste sans rien masquer
           arrowSvg =
-            '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round" opacity="0.75"/>' +
-            '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '" stroke="' + COL.force + '" stroke-width="8" stroke-linecap="round" marker-end="url(#' + uid + '-force)"/>' +
-            '<circle cx="' + x1 + '" cy="' + y1 + '" r="6" fill="' + COL.force + '" stroke="#FFFFFF" stroke-width="2"/>' +
-            '<text x="' + (x2 + Math.sign(fdx || 1) * 12).toFixed(1) + '" y="' + (y2 + (fdy < 0 ? -8 : 20)).toFixed(1) + '" font-size="26" font-weight="800" fill="' + COL.force + '" text-anchor="' + (fdx < 0 ? 'end' : 'start') + '">F</text>';
+            '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '" stroke="#7F1D1D" stroke-width="10" stroke-linecap="round"/>' +
+            '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '" stroke="' + COL.force + '" stroke-width="7" stroke-linecap="round" marker-end="url(#' + uid + '-force)"/>' +
+            '<circle cx="' + x1 + '" cy="' + y1 + '" r="4.5" fill="' + COL.force + '" stroke="#7F1D1D" stroke-width="1.2"/>' +
+            // Label F : petit fond arrondi pour rester lisible sur les zones claires ou foncées de l'image
+            '<g transform="translate(' + (x2 + (fdx < 0 ? -18 : 12)).toFixed(1) + ' ' + (y2 + (fdy < 0 ? -8 : 20)).toFixed(1) + ')">' +
+              '<rect x="-9" y="-15" width="18" height="20" rx="3" fill="#FFFFFF" opacity="0.85"/>' +
+              '<text x="0" y="0" font-size="18" font-weight="800" fill="' + COL.force + '" text-anchor="middle">F</text>' +
+            '</g>';
         }
 
         // Titre en haut
