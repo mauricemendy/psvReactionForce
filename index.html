@@ -3076,286 +3076,59 @@
             <h4>Type de configuration de decharge</h4>
                 <div class="config-options" id="configOptions">
 
-                  <!-- CFG-1: Vertical Up - Open discharge -->
+                  <!-- Cartes de configuration : SVG iso injectes au chargement par Iso.render() -->
                   <label class="config-option active" data-config="CFG-1">
                     <input type="radio" name="dischargeConfig" value="CFG-1" checked>
-                    <div class="config-option-svg">
-                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                          <marker id="c1fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
-                          <marker id="c1fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
-                        </defs>
-                        <!-- Process pipe (horizontal) -->
-                        <rect x="8" y="88" width="84" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
-                        <!-- Inlet nozzle -->
-                        <rect x="43" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
-                        <!-- PSV body -->
-                        <rect x="38" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
-                        <text x="50" y="70" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
-                        <!-- Spring bonnet -->
-                        <rect x="42" y="38" width="16" height="18" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
-                        <line x1="46" y1="42" x2="46" y2="52" stroke="#9CA3AF" stroke-width="0.8" stroke-dasharray="1.5 1"/>
-                        <line x1="54" y1="42" x2="54" y2="52" stroke="#9CA3AF" stroke-width="0.8" stroke-dasharray="1.5 1"/>
-                        <!-- Discharge pipe (vertical up) -->
-                        <rect x="46" y="8" width="8" height="32" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <!-- Open end -->
-                        <line x1="44" y1="8" x2="56" y2="8" stroke="#0D9488" stroke-width="2"/>
-                        <!-- Flow arrow -->
-                        <line x1="50" y1="30" x2="50" y2="14" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c1fb)"/>
-                        <!-- Reaction force arrow -->
-                        <line x1="50" y1="98" x2="50" y2="114" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c1fr)"/>
-                        <text x="60" y="112" font-size="7" fill="#DC2626" font-weight="700">F</text>
-                      </svg>
-                    </div>
+                    <div class="config-option-svg" data-iso-picker="CFG-1"></div>
                     <div class="config-option-label">Verticale haut</div>
                     <div class="config-option-desc">Decharge ouverte</div>
                   </label>
 
-                  <!-- CFG-2: Vertical Down -->
                   <label class="config-option" data-config="CFG-2">
                     <input type="radio" name="dischargeConfig" value="CFG-2">
-                    <div class="config-option-svg">
-                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                          <marker id="c2fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
-                          <marker id="c2fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
-                        </defs>
-                        <!-- Reaction force arrow (up) -->
-                        <line x1="50" y1="18" x2="50" y2="4" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c2fr)"/>
-                        <text x="60" y="10" font-size="7" fill="#DC2626" font-weight="700">F</text>
-                        <!-- Process pipe -->
-                        <rect x="8" y="22" width="84" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
-                        <!-- Inlet nozzle -->
-                        <rect x="43" y="28" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
-                        <!-- PSV body -->
-                        <rect x="38" y="38" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
-                        <text x="50" y="54" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
-                        <!-- Spring bonnet -->
-                        <rect x="42" y="62" width="16" height="18" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
-                        <!-- Discharge pipe (down) -->
-                        <rect x="46" y="78" width="8" height="28" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <!-- Open end -->
-                        <line x1="44" y1="106" x2="56" y2="106" stroke="#0D9488" stroke-width="2"/>
-                        <!-- Flow arrow -->
-                        <line x1="50" y1="88" x2="50" y2="102" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c2fb)"/>
-                      </svg>
-                    </div>
+                    <div class="config-option-svg" data-iso-picker="CFG-2"></div>
                     <div class="config-option-label">Verticale bas</div>
                     <div class="config-option-desc">Decharge inversee</div>
                   </label>
 
-                  <!-- CFG-3: Horizontal -->
                   <label class="config-option" data-config="CFG-3">
                     <input type="radio" name="dischargeConfig" value="CFG-3">
-                    <div class="config-option-svg">
-                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                          <marker id="c3fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
-                          <marker id="c3fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
-                        </defs>
-                        <!-- Process pipe (vertical) -->
-                        <rect x="14" y="10" width="8" height="100" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
-                        <!-- Inlet nozzle -->
-                        <rect x="20" y="52" width="12" height="14" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
-                        <!-- PSV body -->
-                        <rect x="30" y="46" width="26" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
-                        <text x="43" y="62" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
-                        <!-- Discharge pipe (horizontal right) -->
-                        <rect x="54" y="55" width="36" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <!-- Open end -->
-                        <line x1="90" y1="53" x2="90" y2="65" stroke="#0D9488" stroke-width="2"/>
-                        <!-- Flow arrow -->
-                        <line x1="72" y1="59" x2="86" y2="59" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c3fb)"/>
-                        <!-- Reaction force arrow (left) -->
-                        <line x1="12" y1="59" x2="2" y2="59" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c3fr)"/>
-                        <text x="2" y="72" font-size="7" fill="#DC2626" font-weight="700">F</text>
-                      </svg>
-                    </div>
+                    <div class="config-option-svg" data-iso-picker="CFG-3"></div>
                     <div class="config-option-label">Horizontale</div>
                     <div class="config-option-desc">Decharge laterale</div>
                   </label>
 
-                  <!-- CFG-4: 90° Elbow -->
                   <label class="config-option" data-config="CFG-4">
                     <input type="radio" name="dischargeConfig" value="CFG-4">
-                    <div class="config-option-svg">
-                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                          <marker id="c4fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
-                          <marker id="c4fra" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
-                          <marker id="c4frb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
-                        </defs>
-                        <!-- Process pipe -->
-                        <rect x="8" y="88" width="58" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
-                        <!-- Inlet nozzle -->
-                        <rect x="30" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
-                        <!-- PSV body -->
-                        <rect x="25" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
-                        <text x="37" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
-                        <!-- Vertical rise pipe -->
-                        <rect x="33" y="28" width="8" height="28" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <!-- 90° elbow -->
-                        <path d="M33,30 L33,22 Q33,14 41,14 L56,14" stroke="#0D9488" stroke-width="1" fill="none"/>
-                        <path d="M41,30 L41,22 Q41,14 49,14 L56,14" stroke="#0D9488" stroke-width="1" fill="none"/>
-                        <rect x="33" y="14" width="8" height="16" fill="#F0FDFA" stroke="none"/>
-                        <path d="M37,28 Q37,18 47,18" stroke="#0D9488" stroke-width="0" fill="#F0FDFA"/>
-                        <!-- Horizontal pipe after elbow -->
-                        <rect x="42" y="10" width="48" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <!-- Open end -->
-                        <line x1="90" y1="8" x2="90" y2="20" stroke="#0D9488" stroke-width="2"/>
-                        <!-- Flow arrow -->
-                        <line x1="70" y1="14" x2="86" y2="14" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c4fb)"/>
-                        <!-- Reaction Fy (down) -->
-                        <line x1="37" y1="98" x2="37" y2="114" stroke="#DC2626" stroke-width="2" marker-end="url(#c4fra)"/>
-                        <text x="44" y="112" font-size="6.5" fill="#DC2626" font-weight="700">Fy</text>
-                        <!-- Reaction Fx (left) -->
-                        <line x1="23" y1="67" x2="8" y2="67" stroke="#DC2626" stroke-width="2" marker-end="url(#c4frb)"/>
-                        <text x="5" y="78" font-size="6.5" fill="#DC2626" font-weight="700">Fx</text>
-                      </svg>
-                    </div>
+                    <div class="config-option-svg" data-iso-picker="CFG-4"></div>
                     <div class="config-option-label">Coude 90°</div>
                     <div class="config-option-desc">Haut puis horizontal</div>
                   </label>
 
-                  <!-- CFG-5: Collector/Flare -->
                   <label class="config-option" data-config="CFG-5">
                     <input type="radio" name="dischargeConfig" value="CFG-5">
-                    <div class="config-option-svg">
-                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                          <marker id="c5fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
-                        </defs>
-                        <!-- Process pipe -->
-                        <rect x="8" y="88" width="50" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
-                        <!-- Inlet nozzle -->
-                        <rect x="28" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
-                        <!-- PSV body -->
-                        <rect x="23" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
-                        <text x="35" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
-                        <!-- Discharge pipe to collector -->
-                        <rect x="45" y="34" width="8" height="22" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <rect x="45" y="34" width="22" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <!-- Collector (large vertical pipe, dashed) -->
-                        <rect x="64" y="8" width="26" height="104" rx="4" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="4 3"/>
-                        <text x="77" y="56" text-anchor="middle" font-size="7" fill="#9CA3AF" font-weight="600">Coll.</text>
-                        <text x="77" y="66" text-anchor="middle" font-size="6" fill="#9CA3AF">torche</text>
-                        <!-- Reaction force (left, reduced) -->
-                        <line x1="21" y1="67" x2="5" y2="67" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c5fr)"/>
-                        <text x="2" y="80" font-size="6" fill="#DC2626" font-weight="700">F (red.)</text>
-                      </svg>
-                    </div>
+                    <div class="config-option-svg" data-iso-picker="CFG-5"></div>
                     <div class="config-option-label">Collecteur</div>
                     <div class="config-option-desc">Torche / systeme ferme</div>
                   </label>
 
-                  <!-- CFG-6: Goose-neck (Col de cygne) -->
                   <label class="config-option" data-config="CFG-6">
                     <input type="radio" name="dischargeConfig" value="CFG-6">
-                    <div class="config-option-svg">
-                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                          <marker id="c6fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
-                          <marker id="c6fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
-                        </defs>
-                        <!-- Process pipe -->
-                        <rect x="8" y="88" width="54" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
-                        <!-- Inlet nozzle -->
-                        <rect x="24" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
-                        <!-- PSV body -->
-                        <rect x="19" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
-                        <text x="31" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
-                        <!-- Vertical rise -->
-                        <rect x="27" y="18" width="8" height="38" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <!-- Top horizontal segment -->
-                        <rect x="33" y="10" width="36" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <!-- Elbow corners (rounded visual) -->
-                        <rect x="27" y="10" width="8" height="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <!-- Down pipe -->
-                        <rect x="67" y="16" width="8" height="36" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <!-- Open end at bottom -->
-                        <line x1="65" y1="52" x2="77" y2="52" stroke="#0D9488" stroke-width="2"/>
-                        <!-- Flow arrow (going down at exit) -->
-                        <line x1="71" y1="36" x2="71" y2="48" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c6fb)"/>
-                        <!-- Reaction force (down) -->
-                        <line x1="31" y1="98" x2="31" y2="114" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c6fr)"/>
-                        <text x="40" y="112" font-size="7" fill="#DC2626" font-weight="700">F</text>
-                      </svg>
-                    </div>
+                    <div class="config-option-svg" data-iso-picker="CFG-6"></div>
                     <div class="config-option-label">Col de cygne</div>
                     <div class="config-option-desc">Double coude 180°</div>
                   </label>
 
-                  <!-- CFG-7: Lateral Z discharge -->
                   <label class="config-option" data-config="CFG-7">
                     <input type="radio" name="dischargeConfig" value="CFG-7">
-                    <div class="config-option-svg">
-                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                          <marker id="c7fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
-                          <marker id="c7fr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
-                        </defs>
-                        <!-- Process pipe (shown in perspective - going into page) -->
-                        <rect x="8" y="88" width="84" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
-                        <!-- Perspective hint (pipe goes left-right = X axis) -->
-                        <text x="50" y="85" text-anchor="middle" font-size="6" fill="#9CA3AF">axe X →</text>
-                        <!-- Inlet nozzle -->
-                        <rect x="43" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
-                        <!-- PSV body -->
-                        <rect x="38" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
-                        <text x="50" y="70" text-anchor="middle" font-size="7" fill="white" font-weight="700">PSV</text>
-                        <!-- Vertical rise -->
-                        <rect x="46" y="28" width="8" height="28" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <!-- 90° elbow turning towards viewer (Z direction) shown as perspective pipe -->
-                        <rect x="46" y="20" width="8" height="10" fill="#F0FDFA" stroke="#0D9488" stroke-width="1"/>
-                        <!-- Pipe going into Z (shown as ellipse/perspective) -->
-                        <ellipse cx="50" cy="20" rx="4" ry="3" fill="#CCFBF1" stroke="#0D9488" stroke-width="1"/>
-                        <!-- Z direction indicator (diagonal to show depth) -->
-                        <line x1="50" y1="20" x2="30" y2="6" stroke="#0D9488" stroke-width="2.5" marker-end="url(#c7fb)"/>
-                        <text x="18" y="10" font-size="7" fill="#0D9488" font-weight="600">Z</text>
-                        <!-- Reaction force arrow (opposite Z) -->
-                        <line x1="50" y1="60" x2="74" y2="78" stroke="#DC2626" stroke-width="2.5" marker-end="url(#c7fr)"/>
-                        <text x="72" y="76" font-size="7" fill="#DC2626" font-weight="700">Fz</text>
-                      </svg>
-                    </div>
+                    <div class="config-option-svg" data-iso-picker="CFG-7"></div>
                     <div class="config-option-label">Laterale (Z)</div>
                     <div class="config-option-desc">Perpendiculaire a la ligne</div>
                   </label>
 
-                  <!-- CFG-8: Inclined 45° discharge -->
                   <label class="config-option" data-config="CFG-8">
                     <input type="radio" name="dischargeConfig" value="CFG-8">
-                    <div class="config-option-svg">
-                      <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                          <marker id="c8fb" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
-                          <marker id="c8fra" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
-                          <marker id="c8frb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#DC2626"/></marker>
-                        </defs>
-                        <!-- Process pipe -->
-                        <rect x="8" y="88" width="58" height="8" rx="1" fill="#D1D5DB" stroke="#6B7280" stroke-width="1.2"/>
-                        <!-- Inlet nozzle -->
-                        <rect x="28" y="78" width="14" height="12" fill="#D1D5DB" stroke="#6B7280" stroke-width="1"/>
-                        <!-- PSV body -->
-                        <rect x="23" y="54" width="24" height="26" rx="3" fill="#9CA3AF" stroke="#4B5563" stroke-width="1.5"/>
-                        <text x="35" y="70" text-anchor="middle" font-size="6.5" fill="white" font-weight="700">PSV</text>
-                        <!-- Inclined discharge pipe at 45° -->
-                        <line x1="39" y1="54" x2="82" y2="11" stroke="#0D9488" stroke-width="9" stroke-linecap="round"/>
-                        <line x1="39" y1="54" x2="82" y2="11" stroke="#F0FDFA" stroke-width="7" stroke-linecap="round"/>
-                        <!-- Open end -->
-                        <line x1="78" y1="7" x2="86" y2="15" stroke="#0D9488" stroke-width="2"/>
-                        <!-- 45° angle arc -->
-                        <path d="M35,46 Q35,36 42,32" stroke="#9CA3AF" stroke-width="0.8" fill="none" stroke-dasharray="2 1.5"/>
-                        <text x="42" y="42" font-size="7" fill="#9CA3AF">45°</text>
-                        <!-- Flow arrow -->
-                        <line x1="60" y1="33" x2="72" y2="21" stroke="#0D9488" stroke-width="1.8" marker-end="url(#c8fb)"/>
-                        <!-- Reaction Fy (down) -->
-                        <line x1="35" y1="98" x2="35" y2="114" stroke="#DC2626" stroke-width="2" marker-end="url(#c8fra)"/>
-                        <text x="42" y="112" font-size="6.5" fill="#DC2626" font-weight="700">Fy</text>
-                        <!-- Reaction Fx (left) -->
-                        <line x1="21" y1="67" x2="5" y2="67" stroke="#DC2626" stroke-width="2" marker-end="url(#c8frb)"/>
-                        <text x="2" y="78" font-size="6.5" fill="#DC2626" font-weight="700">Fx</text>
-                      </svg>
-                    </div>
+                    <div class="config-option-svg" data-iso-picker="CFG-8"></div>
                     <div class="config-option-label">Inclinee 45°</div>
                     <div class="config-option-desc">Coude a 45 degres</div>
                   </label>
@@ -4259,6 +4032,409 @@
     const validDNs = ['50', '65', '80', '100', '150', '200', '>200'];
     const validFluids = ['gaz', 'vapeur eau'];
     const validOrifices = ['D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'T', 'V', 'W'];
+
+    // ============================
+    // V4.0 - BIBLIOTHEQUE DE SCHEMAS ISOMETRIQUES
+    // ============================
+    // Projection iso 30/30 (angles egaux entre les 3 axes) :
+    //   +X (axe tuyauterie) -> ecran ( cos30,  sin30) = ( 0.866, +0.5) — bas-droite
+    //   +Y (vertical)       -> ecran (     0,     -1) = (     0, -1  ) — haut
+    //   +Z (lateral)        -> ecran (-cos30,  sin30) = (-0.866, +0.5) — bas-gauche
+    // Formules :  sx = cx + (x - z) * cos30
+    //             sy = cy - y + (x + z) * sin30
+    // Systeme world commun a toutes les configurations (unites arbitraires) :
+    //   Tuyauterie process : x in [-25, +25], y=0, z=0, diametre 8
+    //   Piquage vertical   : x=0, y in [4, 12], diametre 6
+    //   Corps PSV          : x in [-7,+7], y in [12,32], z in [-6,+6]  (14x20x12)
+    //   Bonnet             : x in [-4,+4], y in [32,42], z in [-4,+4]  (8x10x8)
+    //   Sortie bonnet vers refoulement au point (0, 42, 0)
+    const Iso = (function () {
+      const COS30 = Math.cos(Math.PI / 6);
+      const SIN30 = 0.5;
+      const SQRT2 = Math.SQRT2;
+
+      const COL = {
+        pipeTop: '#E5E7EB', pipeRight: '#D1D5DB', pipeFront: '#B9BEC5', pipeStroke: '#6B7280',
+        psvTop: '#B8BEC6', psvRight: '#9CA3AF', psvFront: '#7C8592', psvStroke: '#3F4650',
+        bonnetTop: '#D1D5DB', bonnetRight: '#B4BAC2', bonnetFront: '#9CA3AF', bonnetStroke: '#4B5563',
+        dischTop: '#CCFBF1', dischRight: '#99F6E4', dischFront: '#5EEAD4', dischStroke: '#0D9488',
+        collectorFill: '#F9FAFB', collectorStroke: '#9CA3AF',
+        flow: '#0D9488', force: '#DC2626',
+        axis: '#9CA3AF', text: '#374151', label: '#111827'
+      };
+
+      function project(cx, cy, x, y, z) {
+        return [cx + (x - z) * COS30, cy - y + (x + z) * SIN30];
+      }
+      function pt(cx, cy, x, y, z) {
+        const p = project(cx, cy, x, y, z);
+        return p[0].toFixed(2) + ',' + p[1].toFixed(2);
+      }
+
+      // Iso box (3 faces visibles). Coin bas-arriere-gauche a (x0,y0,z0), dimensions (w,h,d) en +X,+Y,+Z.
+      function box(cx, cy, x0, y0, z0, w, h, d, colors) {
+        const c = Object.assign({ top: COL.psvTop, right: COL.psvRight, front: COL.psvFront, stroke: COL.psvStroke, sw: 0.6 }, colors || {});
+        const right = pt(cx, cy, x0 + w, y0, z0) + ' ' + pt(cx, cy, x0 + w, y0, z0 + d) + ' ' + pt(cx, cy, x0 + w, y0 + h, z0 + d) + ' ' + pt(cx, cy, x0 + w, y0 + h, z0);
+        const front = pt(cx, cy, x0, y0, z0 + d) + ' ' + pt(cx, cy, x0 + w, y0, z0 + d) + ' ' + pt(cx, cy, x0 + w, y0 + h, z0 + d) + ' ' + pt(cx, cy, x0, y0 + h, z0 + d);
+        const top = pt(cx, cy, x0, y0 + h, z0) + ' ' + pt(cx, cy, x0 + w, y0 + h, z0) + ' ' + pt(cx, cy, x0 + w, y0 + h, z0 + d) + ' ' + pt(cx, cy, x0, y0 + h, z0 + d);
+        return '<polygon points="' + right + '" fill="' + c.right + '" stroke="' + c.stroke + '" stroke-width="' + c.sw + '" stroke-linejoin="round"/>' +
+               '<polygon points="' + front + '" fill="' + c.front + '" stroke="' + c.stroke + '" stroke-width="' + c.sw + '" stroke-linejoin="round"/>' +
+               '<polygon points="' + top + '" fill="' + c.top + '" stroke="' + c.stroke + '" stroke-width="' + c.sw + '" stroke-linejoin="round"/>';
+      }
+
+      // Tube axe X, Y ou Z (dessine comme une boite iso allongee)
+      function pipeX(cx, cy, x0, y, z, L, d, colors) { const r = d / 2; return box(cx, cy, x0, y - r, z - r, L, d, d, colors); }
+      function pipeY(cx, cy, x, y0, z, H, d, colors) { const r = d / 2; return box(cx, cy, x - r, y0, z - r, d, H, d, colors); }
+      function pipeZ(cx, cy, x, y, z0, L, d, colors) { const r = d / 2; return box(cx, cy, x - r, y - r, z0, d, d, L, colors); }
+
+      // Ellipse iso pour une ouverture perpendiculaire a un axe (bouche de sortie ouverte)
+      // axis : 'X', 'Y' ou 'Z'
+      function openEnd(cx, cy, x, y, z, d, axis, color) {
+        const p = project(cx, cy, x, y, z);
+        const r = d / 2;
+        let rx, ry, rot;
+        if (axis === 'Y') { // cercle dans plan XZ (horizontal)
+          rx = r * SQRT2 * COS30;   // grand axe horizontal en ecran
+          ry = r * SQRT2 * SIN30;   // petit axe vertical
+          rot = 0;
+        } else if (axis === 'X') { // cercle dans plan YZ (perpendiculaire au tuyau X)
+          // Grand axe perpendiculaire a la projection de X : direction (-sin30, cos30), angle 120deg
+          rx = r * SQRT2 * COS30;
+          ry = r * SQRT2 * SIN30;
+          rot = 60;                 // rotation SVG (sens horaire ecran) pour placer petit axe le long de X-projete
+        } else { // 'Z' : cercle dans plan XY (perpendiculaire au tuyau Z)
+          rx = r * SQRT2 * COS30;
+          ry = r * SQRT2 * SIN30;
+          rot = -60;
+        }
+        return '<ellipse cx="' + p[0].toFixed(2) + '" cy="' + p[1].toFixed(2) + '" rx="' + rx.toFixed(2) + '" ry="' + ry.toFixed(2) + '" fill="#F0FDFA" stroke="' + (color || COL.dischStroke) + '" stroke-width="1.2" transform="rotate(' + rot + ' ' + p[0].toFixed(2) + ' ' + p[1].toFixed(2) + ')"/>';
+      }
+
+      // Fleche iso entre deux points world (marker-end fourni par id)
+      function arrow(cx, cy, x1, y1, z1, x2, y2, z2, opts) {
+        opts = opts || {};
+        const color = opts.color || COL.force;
+        const w = opts.width || 2.5;
+        const markerId = opts.markerId;
+        const dash = opts.dash ? ' stroke-dasharray="' + opts.dash + '"' : '';
+        const p1 = project(cx, cy, x1, y1, z1);
+        const p2 = project(cx, cy, x2, y2, z2);
+        let s = '<line x1="' + p1[0].toFixed(2) + '" y1="' + p1[1].toFixed(2) + '" x2="' + p2[0].toFixed(2) + '" y2="' + p2[1].toFixed(2) + '" stroke="' + color + '" stroke-width="' + w + '" stroke-linecap="round"' + dash + (markerId ? ' marker-end="url(#' + markerId + ')"' : '') + '/>';
+        if (opts.label) {
+          const off = opts.labelOffset || [4, 4];
+          const fs = opts.fontSize || 8;
+          s += '<text x="' + (p2[0] + off[0]).toFixed(2) + '" y="' + (p2[1] + off[1]).toFixed(2) + '" font-size="' + fs + '" fill="' + color + '" font-weight="700">' + opts.label + '</text>';
+        }
+        return s;
+      }
+
+      // Petit trihedre XYZ (aide a la lecture, coin de schema)
+      function trihedron(cx, cy, size) {
+        size = size || 8;
+        const ex = [cx + size * COS30, cy + size * SIN30];
+        const ey = [cx, cy - size];
+        const ez = [cx - size * COS30, cy + size * SIN30];
+        return '<g opacity="0.7">' +
+          '<line x1="' + cx + '" y1="' + cy + '" x2="' + ex[0].toFixed(1) + '" y2="' + ex[1].toFixed(1) + '" stroke="' + COL.axis + '" stroke-width="0.9"/>' +
+          '<text x="' + (ex[0] + 1.5).toFixed(1) + '" y="' + (ex[1] + 3).toFixed(1) + '" font-size="6" fill="' + COL.axis + '" font-weight="700">X</text>' +
+          '<line x1="' + cx + '" y1="' + cy + '" x2="' + ey[0].toFixed(1) + '" y2="' + ey[1].toFixed(1) + '" stroke="' + COL.axis + '" stroke-width="0.9"/>' +
+          '<text x="' + (ey[0] - 2).toFixed(1) + '" y="' + (ey[1] - 1).toFixed(1) + '" font-size="6" fill="' + COL.axis + '" font-weight="700">Y</text>' +
+          '<line x1="' + cx + '" y1="' + cy + '" x2="' + ez[0].toFixed(1) + '" y2="' + ez[1].toFixed(1) + '" stroke="' + COL.axis + '" stroke-width="0.9"/>' +
+          '<text x="' + (ez[0] - 5).toFixed(1) + '" y="' + (ez[1] + 5).toFixed(1) + '" font-size="6" fill="' + COL.axis + '" font-weight="700">Z</text>' +
+          '<circle cx="' + cx + '" cy="' + cy + '" r="0.9" fill="' + COL.axis + '"/>' +
+        '</g>';
+      }
+
+      // Defs communs (marqueurs de fleche). uid pour eviter les collisions entre plusieurs SVG.
+      function defs(uid) {
+        return '<defs>' +
+          '<marker id="' + uid + '-flow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="' + COL.flow + '"/></marker>' +
+          '<marker id="' + uid + '-force" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="' + COL.force + '"/></marker>' +
+        '</defs>';
+      }
+
+      // Assemblage commun tuyauterie process + piquage + corps PSV + bonnet, avec label PSV
+      // opts.psvLabel : booleen (defaut true), affiche 'PSV' sur la face avant du corps
+      function psvBase(cx, cy, opts) {
+        opts = opts || {};
+        let s = '';
+        // Tuyauterie process (axe X)
+        s += pipeX(cx, cy, -25, 0, 0, 50, 8, { top: COL.pipeTop, right: COL.pipeRight, front: COL.pipeFront, stroke: COL.pipeStroke });
+        // Piquage (axe Y, du dessus du tuyau jusqu'a la base du corps)
+        s += pipeY(cx, cy, 0, 4, 0, 8, 6, { top: COL.pipeTop, right: COL.pipeRight, front: COL.pipeFront, stroke: COL.pipeStroke });
+        // Corps PSV
+        s += box(cx, cy, -7, 12, -6, 14, 20, 12, { top: COL.psvTop, right: COL.psvRight, front: COL.psvFront, stroke: COL.psvStroke, sw: 0.7 });
+        // Etiquette PSV sur la face avant (z=+6)
+        if (opts.psvLabel !== false) {
+          const p = project(cx, cy, 0, 22, 6);
+          s += '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] + 2).toFixed(1) + '" text-anchor="middle" font-size="6.5" fill="#FFFFFF" font-weight="800" letter-spacing="0.3">PSV</text>';
+        }
+        // Bonnet
+        s += box(cx, cy, -4, 32, -4, 8, 10, 8, { top: COL.bonnetTop, right: COL.bonnetRight, front: COL.bonnetFront, stroke: COL.bonnetStroke, sw: 0.6 });
+        return s;
+      }
+
+      // Variante "process pipe eleve" pour CFG-2 (decharge inverse) : le tuyau process est en haut,
+      // le corps PSV est suspendu dessous, la sortie descend.
+      // Ancres : tuyauterie process a y=52, base du bonnet inverse (sortie vers le bas) a y=-2.
+      function psvBaseInverted(cx, cy, opts) {
+        opts = opts || {};
+        let s = '';
+        // Tuyauterie process en haut
+        s += pipeX(cx, cy, -25, 52, 0, 50, 8, { top: COL.pipeTop, right: COL.pipeRight, front: COL.pipeFront, stroke: COL.pipeStroke });
+        // Piquage descendant du dessous du tuyau (y=48) vers le haut du corps PSV (y=40)
+        s += pipeY(cx, cy, 0, 40, 0, 8, 6, { top: COL.pipeTop, right: COL.pipeRight, front: COL.pipeFront, stroke: COL.pipeStroke });
+        // Corps PSV (base en bas, top vers le haut vers piquage)
+        s += box(cx, cy, -7, 20, -6, 14, 20, 12, { top: COL.psvTop, right: COL.psvRight, front: COL.psvFront, stroke: COL.psvStroke, sw: 0.7 });
+        if (opts.psvLabel !== false) {
+          const p = project(cx, cy, 0, 30, 6);
+          s += '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] + 2).toFixed(1) + '" text-anchor="middle" font-size="6.5" fill="#FFFFFF" font-weight="800" letter-spacing="0.3">PSV</text>';
+        }
+        // "Bonnet" sous la PSV (renvoi de la sortie vers le bas)
+        s += box(cx, cy, -4, 10, -4, 8, 10, 8, { top: COL.bonnetTop, right: COL.bonnetRight, front: COL.bonnetFront, stroke: COL.bonnetStroke, sw: 0.6 });
+        return s;
+      }
+
+      // Variante horizontale (CFG-3) : tuyauterie process verticale (axe Y),
+      // corps PSV attache lateralement le long de +X, sortie continue le long de +X.
+      function psvBaseHorizontal(cx, cy, opts) {
+        opts = opts || {};
+        let s = '';
+        // Tuyauterie process verticale (axe Y)
+        s += pipeY(cx, cy, -15, -25, 0, 50, 8, { top: COL.pipeTop, right: COL.pipeRight, front: COL.pipeFront, stroke: COL.pipeStroke });
+        // Piquage horizontal (axe X, du tuyau vers la base du corps PSV)
+        s += pipeX(cx, cy, -11, 0, 0, 8, 6, { top: COL.pipeTop, right: COL.pipeRight, front: COL.pipeFront, stroke: COL.pipeStroke });
+        // Corps PSV, allonge en X (comme un corps couche)
+        s += box(cx, cy, -3, -6, -6, 20, 12, 12, { top: COL.psvTop, right: COL.psvRight, front: COL.psvFront, stroke: COL.psvStroke, sw: 0.7 });
+        if (opts.psvLabel !== false) {
+          const p = project(cx, cy, 7, 0, 6);
+          s += '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] + 2).toFixed(1) + '" text-anchor="middle" font-size="6.5" fill="#FFFFFF" font-weight="800" letter-spacing="0.3">PSV</text>';
+        }
+        // Bonnet apres le corps (axe X), amorce la conduite de refoulement
+        s += box(cx, cy, 17, -4, -4, 10, 8, 8, { top: COL.bonnetTop, right: COL.bonnetRight, front: COL.bonnetFront, stroke: COL.bonnetStroke, sw: 0.6 });
+        return s;
+      }
+
+      // ============================
+      // GENERATEURS DE SCHEMAS (retournent la partie interne du <svg>, sans balise racine)
+      // opts.uid : suffixe unique pour les marker id (obligatoire)
+      // opts.compact : mode picker (petit), true pour omettre les labels de force detailles
+      // opts.showForceValues : booleen, affiche les valeurs de Fx/Fy/Fz
+      // opts.fDesign : valeur en daN utilisee pour libellier les composantes
+      // ============================
+
+      function schemaCFG1(cx, cy, opts) {
+        // Verticale haut ouverte : refoulement axe +Y, F reaction axe -Y
+        const uid = opts.uid;
+        let s = defs(uid);
+        s += psvBase(cx, cy);
+        // Refoulement vertical du bonnet (y=42) vers l'ouverture (y=58)
+        s += pipeY(cx, cy, 0, 42, 0, 16, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        // Ouverture (ellipse iso en haut)
+        s += openEnd(cx, cy, 0, 58, 0, 6, 'Y', COL.dischStroke);
+        // Fleche flux (a l'interieur de la conduite, vers le haut)
+        s += arrow(cx, cy, 0, 46, 0, 0, 55, 0, { color: COL.flow, width: 1.8, markerId: uid + '-flow' });
+        // Fleche force (dessous du tuyau process, dirigee vers le bas)
+        s += arrow(cx, cy, 0, -6, 0, 0, -18, 0, { color: COL.force, width: 3, markerId: uid + '-force', label: opts.compact ? 'F' : 'F', labelOffset: [4, 3], fontSize: 8 });
+        return s;
+      }
+
+      function schemaCFG2(cx, cy, opts) {
+        // Verticale bas : PSV suspendue sous le tuyau, refoulement axe -Y, F reaction axe +Y
+        const uid = opts.uid;
+        let s = defs(uid);
+        s += psvBaseInverted(cx, cy);
+        // Refoulement vertical descendant (bonnet a y=10 vers l'ouverture y=-6)
+        s += pipeY(cx, cy, 0, -6, 0, 16, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        // Ouverture au fond
+        s += openEnd(cx, cy, 0, -6, 0, 6, 'Y', COL.dischStroke);
+        // Fleche flux vers le bas
+        s += arrow(cx, cy, 0, 6, 0, 0, -3, 0, { color: COL.flow, width: 1.8, markerId: uid + '-flow' });
+        // Fleche force vers le haut (au-dessus du tuyau process), courte pour ne pas deborder du cadre
+        s += arrow(cx, cy, 0, 58, 0, 0, 66, 0, { color: COL.force, width: 3, markerId: uid + '-force', label: 'F', labelOffset: [4, 3], fontSize: 8 });
+        return s;
+      }
+
+      function schemaCFG3(cx, cy, opts) {
+        // Horizontale : tuyauterie verticale, refoulement axe +X, F reaction axe -X
+        const uid = opts.uid;
+        let s = defs(uid);
+        s += psvBaseHorizontal(cx, cy);
+        // Refoulement horizontal (du bonnet x=27 vers l'ouverture x=44)
+        s += pipeX(cx, cy, 27, 0, 0, 17, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        s += openEnd(cx, cy, 44, 0, 0, 6, 'X', COL.dischStroke);
+        // Flux vers +X
+        s += arrow(cx, cy, 31, 0, 0, 41, 0, 0, { color: COL.flow, width: 1.8, markerId: uid + '-flow' });
+        // F vers -X (a gauche, en aval du tuyau process)
+        s += arrow(cx, cy, -19, 0, 0, -30, 0, 0, { color: COL.force, width: 3, markerId: uid + '-force', label: 'F', labelOffset: [-8, -3], fontSize: 8 });
+        return s;
+      }
+
+      function schemaCFG4(cx, cy, opts) {
+        // Coude 90 : montee +Y puis horizontale +X ; composantes Fx et Fy
+        const uid = opts.uid;
+        let s = defs(uid);
+        s += psvBase(cx, cy);
+        // Montee verticale du bonnet (y=42) a y=54
+        s += pipeY(cx, cy, 0, 42, 0, 12, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        // Segment horizontal +X (de x=0 a x=20 a y=57, z=0). Diametre 6.
+        s += pipeX(cx, cy, 0, 57, 0, 20, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        // Ouverture en bout (perpendiculaire a X)
+        s += openEnd(cx, cy, 20, 57, 0, 6, 'X', COL.dischStroke);
+        // Flux au bout, direction +X
+        s += arrow(cx, cy, 10, 57, 0, 18, 57, 0, { color: COL.flow, width: 1.8, markerId: uid + '-flow' });
+        // Reactions : Fy vers -Y sous le tuyau, Fx vers -X sur cote gauche
+        s += arrow(cx, cy, 0, -6, 0, 0, -16, 0, { color: COL.force, width: 2.5, markerId: uid + '-force', label: opts.compact ? 'Fy' : 'Fy', labelOffset: [4, 3], fontSize: 7 });
+        s += arrow(cx, cy, -8, 20, 0, -22, 20, 0, { color: COL.force, width: 2.5, markerId: uid + '-force', label: 'Fx', labelOffset: [-9, -3], fontSize: 7 });
+        return s;
+      }
+
+      function schemaCFG5(cx, cy, opts) {
+        // Collecteur (torche) : refoulement dans une conduite large fermee, F reduite
+        const uid = opts.uid;
+        let s = defs(uid);
+        s += psvBase(cx, cy);
+        // Petit segment vertical du bonnet vers l'entree du collecteur
+        s += pipeY(cx, cy, 0, 42, 0, 6, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        // Segment horizontal vers +X pour rejoindre le collecteur (x=0 a x=15 a y=50)
+        s += pipeX(cx, cy, 0, 50, 0, 15, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        // Collecteur : gros tube vertical dashed a x=22, de y=-10 a y=64, diametre 16
+        s += pipeY(cx, cy, 22, -10, 0, 74, 16, { top: COL.collectorFill, right: COL.collectorFill, front: COL.collectorFill, stroke: COL.collectorStroke, sw: 0.9 });
+        // Etiquette "Coll." sur le collecteur
+        const p = project(cx, cy, 22, 30, 8);
+        s += '<text x="' + p[0].toFixed(1) + '" y="' + p[1].toFixed(1) + '" text-anchor="middle" font-size="6" fill="' + COL.collectorStroke + '" font-weight="700">Coll.</text>';
+        s += '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] + 7).toFixed(1) + '" text-anchor="middle" font-size="5.5" fill="' + COL.collectorStroke + '">torche</text>';
+        // Contour dashed superpose pour bien montrer que c'est un systeme ferme
+        const cp1 = project(cx, cy, 22, -10, -8);
+        const cp2 = project(cx, cy, 22, -10, 8);
+        const cp3 = project(cx, cy, 22, 64, 8);
+        const cp4 = project(cx, cy, 22, 64, -8);
+        s += '<polygon points="' + cp1[0].toFixed(2) + ',' + cp1[1].toFixed(2) + ' ' + cp2[0].toFixed(2) + ',' + cp2[1].toFixed(2) + ' ' + cp3[0].toFixed(2) + ',' + cp3[1].toFixed(2) + ' ' + cp4[0].toFixed(2) + ',' + cp4[1].toFixed(2) + '" fill="none" stroke="' + COL.collectorStroke + '" stroke-width="0.8" stroke-dasharray="2.5 2"/>';
+        // F reduite vers -X
+        s += arrow(cx, cy, -15, 20, 0, -28, 20, 0, { color: COL.force, width: 2.5, markerId: uid + '-force', label: opts.compact ? 'F' : 'F red.', labelOffset: [-14, -3], fontSize: 7 });
+        return s;
+      }
+
+      function schemaCFG6(cx, cy, opts) {
+        // Col de cygne : montee +Y, horizontal +X, descente -Y, sortie vers le bas.
+        const uid = opts.uid;
+        let s = defs(uid);
+        s += psvBase(cx, cy);
+        // Montee du bonnet (y=42) a y=55
+        s += pipeY(cx, cy, 0, 42, 0, 13, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        // Segment horizontal en haut (x=0 a x=16 a y=57)
+        s += pipeX(cx, cy, 0, 57, 0, 16, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        // Descente (x=16, y de 55 a 22)
+        s += pipeY(cx, cy, 16, 22, 0, 33, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        // Ouverture en bas
+        s += openEnd(cx, cy, 16, 22, 0, 6, 'Y', COL.dischStroke);
+        // Flux vers le bas a la sortie
+        s += arrow(cx, cy, 16, 35, 0, 16, 26, 0, { color: COL.flow, width: 1.8, markerId: uid + '-flow' });
+        // Reaction : F vers le bas (car flux net exit vers le bas)
+        s += arrow(cx, cy, 0, -6, 0, 0, -18, 0, { color: COL.force, width: 3, markerId: uid + '-force', label: 'F', labelOffset: [4, 3], fontSize: 8 });
+        return s;
+      }
+
+      function schemaCFG7(cx, cy, opts) {
+        // Laterale (Z) : refoulement axe +Z (perpendiculaire au tuyau), F reaction axe -Z
+        const uid = opts.uid;
+        let s = defs(uid);
+        s += psvBase(cx, cy);
+        // Court segment vertical du bonnet
+        s += pipeY(cx, cy, 0, 42, 0, 6, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        // Refoulement le long de +Z (z=0 a z=20 a y=48, x=0)
+        s += pipeZ(cx, cy, 0, 48, 0, 20, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        // Ouverture perpendiculaire a Z
+        s += openEnd(cx, cy, 0, 48, 20, 6, 'Z', COL.dischStroke);
+        // Flux vers +Z
+        s += arrow(cx, cy, 0, 48, 12, 0, 48, 19, { color: COL.flow, width: 1.8, markerId: uid + '-flow' });
+        // F vers -Z (retour vers le tuyau)
+        s += arrow(cx, cy, 0, 20, -3, 0, 20, -16, { color: COL.force, width: 3, markerId: uid + '-force', label: opts.compact ? 'Fz' : 'Fz', labelOffset: [4, 6], fontSize: 8 });
+        return s;
+      }
+
+      function schemaCFG8(cx, cy, opts) {
+        // Inclinee 45 : refoulement a 45 deg dans le plan XY, composantes Fx et Fy egales
+        const uid = opts.uid;
+        let s = defs(uid);
+        s += psvBase(cx, cy);
+        // Petit segment vertical du bonnet pour amorce
+        s += pipeY(cx, cy, 0, 42, 0, 4, 6, { top: COL.dischTop, right: COL.dischRight, front: COL.dischFront, stroke: COL.dischStroke });
+        // Refoulement incline 45 deg : segment de (0, 46, 0) vers (16, 62, 0)
+        const p1 = project(cx, cy, 0, 46, 0);
+        const p2 = project(cx, cy, 16, 62, 0);
+        // Tube epais + trait fin dedans pour un effet "conduite"
+        s += '<line x1="' + p1[0].toFixed(2) + '" y1="' + p1[1].toFixed(2) + '" x2="' + p2[0].toFixed(2) + '" y2="' + p2[1].toFixed(2) + '" stroke="' + COL.dischStroke + '" stroke-width="7" stroke-linecap="round"/>';
+        s += '<line x1="' + p1[0].toFixed(2) + '" y1="' + p1[1].toFixed(2) + '" x2="' + p2[0].toFixed(2) + '" y2="' + p2[1].toFixed(2) + '" stroke="' + COL.dischTop + '" stroke-width="5" stroke-linecap="round"/>';
+        // Petit repere 45 deg (place a gauche du tube incline pour ne pas etre masque)
+        const ap1 = project(cx, cy, -4, 48, 0);
+        const ap2 = project(cx, cy, 0, 52, 0);
+        s += '<path d="M' + ap1[0].toFixed(2) + ',' + ap1[1].toFixed(2) + ' Q' + ((ap1[0] + ap2[0]) / 2).toFixed(2) + ',' + Math.min(ap1[1], ap2[1]).toFixed(2) + ' ' + ap2[0].toFixed(2) + ',' + ap2[1].toFixed(2) + '" fill="none" stroke="' + COL.axis + '" stroke-width="0.6" stroke-dasharray="1.5 1.2"/>';
+        const angleP = project(cx, cy, -8, 50, 0);
+        s += '<text x="' + angleP[0].toFixed(1) + '" y="' + angleP[1].toFixed(1) + '" font-size="6" fill="' + COL.axis + '" text-anchor="end">45deg</text>';
+        // Flux au bout dans la direction du tube
+        const fp1 = project(cx, cy, 10, 56, 0);
+        const fp2 = project(cx, cy, 15, 61, 0);
+        s += '<line x1="' + fp1[0].toFixed(2) + '" y1="' + fp1[1].toFixed(2) + '" x2="' + fp2[0].toFixed(2) + '" y2="' + fp2[1].toFixed(2) + '" stroke="' + COL.flow + '" stroke-width="1.8" marker-end="url(#' + uid + '-flow)"/>';
+        // Reactions Fx (-X) et Fy (-Y)
+        s += arrow(cx, cy, 0, -6, 0, 0, -16, 0, { color: COL.force, width: 2.5, markerId: uid + '-force', label: 'Fy', labelOffset: [4, 3], fontSize: 7 });
+        s += arrow(cx, cy, -8, 20, 0, -22, 20, 0, { color: COL.force, width: 2.5, markerId: uid + '-force', label: 'Fx', labelOffset: [-9, -3], fontSize: 7 });
+        return s;
+      }
+
+      const SCHEMAS = {
+        'CFG-1': schemaCFG1, 'CFG-2': schemaCFG2, 'CFG-3': schemaCFG3, 'CFG-4': schemaCFG4,
+        'CFG-5': schemaCFG5, 'CFG-6': schemaCFG6, 'CFG-7': schemaCFG7, 'CFG-8': schemaCFG8
+      };
+
+      // Rendu complet d'un schema dans une chaine <svg>...</svg>
+      // configId : 'CFG-1' ... 'CFG-8'
+      // opts.mode : 'picker' (100x120, sans titre, avec petit trihedre)
+      //           | 'result' (200x160, avec titre et valeurs de forces)
+      // opts.uid : suffixe unique pour les marker id
+      // opts.forces : { fx, fy, fz } valeurs numeriques a afficher (mode result)
+      // opts.title : titre en tete (mode result)
+      function render(configId, opts) {
+        opts = opts || {};
+        const fn = SCHEMAS[configId] || SCHEMAS['CFG-1'];
+        const mode = opts.mode || 'picker';
+        const uid = opts.uid || ('iso' + configId + '-' + Math.floor(Math.random() * 1e6));
+
+        if (mode === 'picker') {
+          // ViewBox 100x120, centre world (0,0,0) a l'ecran (50, 80)
+          const inner = fn(50, 80, { uid: uid, compact: true });
+          return '<svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">' +
+            inner +
+            trihedron(88, 108, 7) +
+            '</svg>';
+        } else {
+          // Mode result : viewBox 240x210, marges reservees en haut (titre + trihedre) et en bas (legende).
+          // Origine world (0,0,0) placee a l'ecran (120, 132), facteur 1.5.
+          const scale = 1.5;
+          const inner = fn(0, 0, { uid: uid, showForceValues: true });
+          const title = opts.title ? '<text x="120" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="' + COL.text + '">' + opts.title + '</text>' : '';
+          const forces = opts.forces || {};
+          let legend = '';
+          if (opts.forces) {
+            const fmt = (v) => (v === 0 || v === undefined) ? '0' : (v > 0 ? '+' : '') + Math.round(v);
+            legend = '<g font-family="ui-monospace,Menlo,monospace">' +
+              '<text x="14" y="200" font-size="10" fill="' + COL.force + '" font-weight="700">Fx = ' + fmt(forces.fx) + '</text>' +
+              '<text x="94" y="200" font-size="10" fill="' + COL.force + '" font-weight="700">Fy = ' + fmt(forces.fy) + '</text>' +
+              '<text x="174" y="200" font-size="10" fill="' + COL.force + '" font-weight="700">Fz = ' + fmt(forces.fz) + '</text>' +
+              '<text x="220" y="200" font-size="8" fill="' + COL.axis + '">daN</text>' +
+            '</g>';
+          }
+          return '<svg viewBox="0 0 240 210" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">' +
+            title +
+            '<g transform="translate(120 132) scale(' + scale + ')">' + inner + '</g>' +
+            trihedron(222, 38, 9) +
+            legend +
+            '</svg>';
+        }
+      }
+
+      return { render: render, project: project, trihedron: trihedron, COL: COL };
+    })();
 
     // ============================
     // V2.0 - CONFIGURATIONS TABLE
@@ -5688,127 +5864,16 @@
     }
 
     function updateForceDiagram(configId, fDesign) {
-      const diagrams = {
-        'CFG-1': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-1 : Decharge verticale haut</text>
-          <rect x="80" y="70" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <rect x="85" y="55" width="30" height="20" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <line x1="100" y1="55" x2="100" y2="25" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB)"/>
-          <line x1="100" y1="120" x2="100" y2="148" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR)"/>
-          <text x="115" y="40" font-size="9" fill="#0D9488">Sortie</text>
-          <text x="115" y="140" font-size="9" font-weight="600" fill="#DC2626">Fy = -${fDesign.toFixed(0)} daN</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
-          <defs><marker id="dArrowB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-2': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-2 : Decharge verticale bas</text>
-          <rect x="80" y="40" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <rect x="85" y="85" width="30" height="20" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <line x1="100" y1="105" x2="100" y2="135" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB2)"/>
-          <line x1="100" y1="40" x2="100" y2="20" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR2)"/>
-          <text x="115" y="130" font-size="9" fill="#0D9488">Sortie</text>
-          <text x="115" y="30" font-size="9" font-weight="600" fill="#DC2626">Fy = +${fDesign.toFixed(0)} daN</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
-          <defs><marker id="dArrowB2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-3': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-3 : Decharge horizontale</text>
-          <rect x="40" y="55" width="50" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <rect x="85" y="62" width="20" height="26" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <line x1="105" y1="75" x2="155" y2="75" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB3)"/>
-          <line x1="40" y1="75" x2="10" y2="75" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR3)"/>
-          <text x="140" y="68" font-size="9" fill="#0D9488">Sortie</text>
-          <text x="10" y="100" font-size="9" font-weight="600" fill="#DC2626">Fx = -${fDesign.toFixed(0)} daN</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fy=0, Fz=0</text>
-          <defs><marker id="dArrowB3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-4': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-4 : Coude 90°</text>
-          <rect x="55" y="75" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <path d="M75 75 L75 50 Q75 40 85 40 L110 40" stroke="#D1D5DB" stroke-width="8" fill="none"/>
-          <path d="M75 75 L75 50 Q75 40 85 40 L110 40" stroke="#6B7280" stroke-width="2" fill="none"/>
-          <line x1="110" y1="40" x2="155" y2="40" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB4)"/>
-          <line x1="75" y1="115" x2="75" y2="145" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR4a)"/>
-          <line x1="55" y1="95" x2="20" y2="95" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR4b)"/>
-          <text x="145" y="35" font-size="9" fill="#0D9488">Sortie</text>
-          <text x="85" y="140" font-size="8" font-weight="600" fill="#DC2626">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
-          <text x="5" y="108" font-size="8" font-weight="600" fill="#DC2626">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fz=0</text>
-          <defs><marker id="dArrowB4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR4a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker>
-          <marker id="dArrowR4b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-5': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-5 : Collecteur (torche)</text>
-          <rect x="30" y="55" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <rect x="65" y="62" width="15" height="26" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <rect x="80" y="40" width="80" height="70" rx="5" fill="#F9FAFB" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4 3"/>
-          <text x="120" y="78" text-anchor="middle" font-size="9" fill="#6B7280">Collecteur</text>
-          <line x1="30" y1="75" x2="8" y2="75" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR5)"/>
-          <text x="10" y="100" font-size="9" font-weight="600" fill="#DC2626">Fx = -${fDesign.toFixed(0)} daN</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fy=0, Fz=0 (contre-pression reduit F)</text>
-          <defs><marker id="dArrowR5" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-6': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-6 : Col de cygne (180°)</text>
-          <rect x="50" y="85" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <text x="70" y="108" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
-          <rect x="65" y="50" width="10" height="37" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
-          <rect x="65" y="40" width="60" height="10" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
-          <rect x="115" y="48" width="10" height="40" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
-          <line x1="120" y1="70" x2="120" y2="100" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB6)"/>
-          <text x="132" y="95" font-size="9" fill="#0D9488">Sortie</text>
-          <line x1="70" y1="125" x2="70" y2="148" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR6)"/>
-          <text x="80" y="145" font-size="9" font-weight="600" fill="#DC2626">Fy = -${fDesign.toFixed(0)} daN</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
-          <defs><marker id="dArrowB6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-7': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-7 : Decharge laterale (Z)</text>
-          <rect x="60" y="70" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <text x="80" y="98" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
-          <rect x="75" y="50" width="10" height="22" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
-          <ellipse cx="80" cy="50" rx="5" ry="3" fill="#CCFBF1" stroke="#0D9488" stroke-width="1"/>
-          <line x1="80" y1="50" x2="55" y2="30" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB7)"/>
-          <text x="38" y="28" font-size="9" fill="#0D9488">Z</text>
-          <line x1="80" y1="70" x2="110" y2="95" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR7)"/>
-          <text x="115" y="95" font-size="9" font-weight="600" fill="#DC2626">Fz = -${fDesign.toFixed(0)} daN</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fy=0</text>
-          <line x1="140" y1="130" x2="170" y2="130" stroke="#DC2626" stroke-width="1.5"/>
-          <text x="172" y="133" font-size="7" fill="#6B7280">axe X (tuyauterie)</text>
-          <line x1="140" y1="130" x2="140" y2="110" stroke="#0D9488" stroke-width="1.5"/>
-          <text x="143" y="112" font-size="7" fill="#6B7280">Y</text>
-          <line x1="140" y1="130" x2="122" y2="142" stroke="#0D9488" stroke-width="1.5"/>
-          <text x="118" y="148" font-size="7" fill="#6B7280">Z</text>
-          <defs><marker id="dArrowB7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-8': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-8 : Inclinee 45°</text>
-          <rect x="50" y="80" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <text x="70" y="103" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
-          <line x1="70" y1="80" x2="140" y2="25" stroke="#F0FDFA" stroke-width="10" stroke-linecap="round"/>
-          <line x1="70" y1="80" x2="140" y2="25" stroke="#0D9488" stroke-width="1.5"/>
-          <line x1="120" y1="42" x2="140" y2="25" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB8)"/>
-          <text x="142" y="30" font-size="9" fill="#0D9488">Sortie</text>
-          <path d="M70,72 Q70,62 78,58" stroke="#9CA3AF" stroke-width="1" fill="none" stroke-dasharray="2 1.5"/>
-          <text x="76" y="68" font-size="8" fill="#9CA3AF">45°</text>
-          <line x1="70" y1="120" x2="70" y2="148" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR8a)"/>
-          <text x="80" y="145" font-size="8" font-weight="600" fill="#DC2626">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
-          <line x1="50" y1="100" x2="15" y2="100" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR8b)"/>
-          <text x="8" y="115" font-size="8" font-weight="600" fill="#DC2626">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fz=0</text>
-          <defs><marker id="dArrowB8" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR8a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker>
-          <marker id="dArrowR8b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`
-      };
-
-      forceDiagram.innerHTML = diagrams[configId] || '';
+      // Utilise la bibliotheque Iso pour generer un schema iso avec les composantes de force reelles.
+      const cfg = configurationsTable[configId];
+      const forces = cfg ? cfg.components(fDesign) : { fx: 0, fy: 0, fz: 0 };
+      const title = cfg ? (cfg.id + ' : ' + cfg.description) : '';
+      forceDiagram.innerHTML = Iso.render(configId, {
+        mode: 'result',
+        uid: 'res-' + configId,
+        forces: forces,
+        title: title
+      });
     }
 
     // ============================
@@ -8120,9 +8185,21 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
     // ============================
     // INITIALIZATION
     // ============================
+    function initIsoPicker() {
+      // Injecte les schemas iso dans chaque carte du selecteur de configuration
+      const cards = document.querySelectorAll('[data-iso-picker]');
+      cards.forEach(function (el) {
+        const cfg = el.getAttribute('data-iso-picker');
+        el.innerHTML = Iso.render(cfg, { mode: 'picker', uid: 'pkr-' + cfg });
+      });
+    }
+
     function init() {
       // Check URL mode
       checkUrlMode();
+
+      // Populate iso picker schemas
+      initIsoPicker();
 
       // Initialize simple mode validation
       validateInputs();
