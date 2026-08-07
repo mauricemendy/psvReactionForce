@@ -4295,19 +4295,41 @@
         id: 'CFG-5',
         label: 'Collecteur',
         description: 'Decharge dans collecteur (torche)',
-        components: (fDesign) => ({ fx: -fDesign, fy: 0, fz: 0 })
+        // Systeme ferme : pas de jet a l'atmosphere, la quantite de mouvement
+        // est conservee dans le reseau. Une force ponctuelle statique n'est
+        // pas applicable ici (hors ASME B31.3 / API 521). Le calcul est
+        // volontairement bloque et la ligne est rejetee en Batch avec un
+        // message plutot que de produire silencieusement des zeros.
+        blocked: true,
+        blockedMessage: 'Systeme ferme : calcul statique non applicable. Requis : profil de forces desequilibrees (time history) aux coudes du reseau de torche.',
+        components: () => ({ fx: 0, fy: 0, fz: 0 })
       },
       'CFG-6': {
         id: 'CFG-6',
         label: 'Col de cygne',
         description: 'Double coude 180° (haut-horizontal-bas)',
-        components: (fDesign) => ({ fx: 0, fy: -fDesign, fz: 0 })
+        // Sortie dirigee vers le bas : la reaction est ASCENDANTE (fy > 0).
+        components: (fDesign) => ({ fx: 0, fy: fDesign, fz: 0 })
       },
       'CFG-7': {
         id: 'CFG-7',
         label: 'Laterale (Z)',
         description: 'Decharge perpendiculaire a la ligne (axe Z)',
-        components: (fDesign) => ({ fx: 0, fy: 0, fz: -fDesign })
+        // L'extremite comporte un coude : la reaction se decompose sur Y
+        // et Z selon l'elevation θ de la sortie (0° = strictement lateral,
+        // 90° = strictement vertical vers le bas). θ par defaut = 45°.
+        elevation: true,
+        components: (fDesign, elevDeg) => {
+          const e = (elevDeg == null ? 45 : elevDeg) * Math.PI / 180;
+          // Snap des zeros numeriques : sans cela Math.cos(90°) = 6.12e-17
+          // affiche -0.00 et allume la case comme une charge active.
+          const snap = (v) => (Math.abs(v) < 0.05 ? 0 : v);
+          return {
+            fx: 0,
+            fy: snap(-fDesign * Math.sin(e)),
+            fz: snap(-fDesign * Math.cos(e))
+          };
+        }
       },
       'CFG-8': {
         id: 'CFG-8',
@@ -4544,6 +4566,7 @@
       stats: { total: 0, valid: 0, errors: 0, empty: 0 },
       // v2.0 state
       selectedConfig: 'CFG-1',
+      elevation: 45,             // θ de CFG-7, en degres (defaut : coude visible sur le rendu)
       dlfMode: 'conservative',
       dlfValue: 2.0,
       // v3.0 state - mode dimensionnement API
@@ -5464,7 +5487,8 @@
       let text = `Force brute: ${fBrute} daN\n`;
       text += `DLF: ${dlf}\n`;
       text += `Force de design: ${fDesign} daN\n`;
-      text += `Configuration: ${config.label}\n`;
+      const configSuffix = config.elevation ? ` (θ = ${appState.elevation}°)` : '';
+      text += `Configuration: ${config.label}${configSuffix}\n`;
       text += `Fx: ${fx} daN | Fy: ${fy} daN | Fz: ${fz} daN`;
 
       navigator.clipboard.writeText(text).then(() => {
@@ -5677,7 +5701,7 @@
       const fDesign = fBrute * dlf;
 
       const config = configurationsTable[appState.selectedConfig];
-      const components = config.components(parseFloat(fDesign.toFixed(2)));
+      const components = config.components(parseFloat(fDesign.toFixed(2)), appState.elevation);
 
       fDesignValue.textContent = fDesign.toFixed(2);
       fxValue.textContent = components.fx.toFixed(2);
@@ -6648,8 +6672,14 @@
           return { ...psv, status: 'error', errors: { npsIn: 'Hors API 526' }, errorMessage: res.error };
         }
 
-        const components = (configurationsTable[configId] || configurationsTable['CFG-1'])
-          .components(parseFloat(res.force.fDesignDaN.toFixed(2)));
+        const cfgApi = configurationsTable[configId] || configurationsTable['CFG-1'];
+        if (cfgApi.blocked) {
+          return { ...psv, status: 'error', errors: { config: cfgApi.id }, errorMessage: cfgApi.blockedMessage };
+        }
+        const components = cfgApi.components(
+          parseFloat(res.force.fDesignDaN.toFixed(2)),
+          appState.elevation
+        );
 
         return {
           ...psv,
@@ -6680,7 +6710,12 @@
 
       const fDesign = parseFloat((force * dlf).toFixed(2));
       const config = configurationsTable[configId];
-      const components = config ? config.components(fDesign) : { fx: 0, fy: -fDesign, fz: 0 };
+      if (config && config.blocked) {
+        return { ...psv, status: 'error', errors: { config: config.id }, errorMessage: config.blockedMessage };
+      }
+      const components = config
+        ? config.components(fDesign, appState.elevation)
+        : { fx: 0, fy: -fDesign, fz: 0 };
 
       return {
         ...psv,
@@ -7559,6 +7594,7 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
         localStorage.setItem('psv_calculator_schema_version', String(PSV_SCHEMA_VERSION));
         localStorage.setItem('psv_calculator_batch_data', JSON.stringify(appState.psvList));
         localStorage.setItem('psv_calculator_batch_defaults', JSON.stringify(appState.batchDefaults));
+        localStorage.setItem('psv_calculator_elevation', String(appState.elevation));
         localStorage.setItem('psv_calculator_batch_timestamp', Date.now().toString());
       } catch (e) {
         console.error('Erreur sauvegarde localStorage:', e);
@@ -7602,8 +7638,20 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
     function clearLocalStorage() {
       localStorage.removeItem('psv_calculator_batch_data');
       localStorage.removeItem('psv_calculator_batch_defaults');
+      localStorage.removeItem('psv_calculator_elevation');
       localStorage.removeItem('psv_calculator_batch_timestamp');
       localStorage.removeItem('psv_calculator_schema_version');
+    }
+
+    function loadElevation() {
+      try {
+        const brut = localStorage.getItem('psv_calculator_elevation');
+        if (brut == null) return 45;
+        const v = parseFloat(brut);
+        return Number.isFinite(v) ? v : 45;
+      } catch (e) {
+        return 45;
+      }
     }
 
     function checkSavedSession() {
@@ -7902,7 +7950,7 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
 
       // 4. Composantes selon la configuration de decharge
       const cfg = configurationsTable[result.input.config] || configurationsTable['CFG-1'];
-      const comp = cfg.components(parseFloat(f.fDesignDaN.toFixed(2)));
+      const comp = cfg.components(parseFloat(f.fDesignDaN.toFixed(2)), appState.elevation);
       apiEls.fx.textContent = comp.fx.toFixed(2);
       apiEls.fy.textContent = comp.fy.toFixed(2);
       apiEls.fz.textContent = comp.fz.toFixed(2);
@@ -7973,7 +8021,7 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
       const o = result.orifice;
       const f = result.force;
       const cfg = configurationsTable[result.input.config] || configurationsTable['CFG-1'];
-      const comp = cfg.components(parseFloat(f.fDesignDaN.toFixed(2)));
+      const comp = cfg.components(parseFloat(f.fDesignDaN.toFixed(2)), appState.elevation);
       return [
         'DIMENSIONNEMENT PSV PAR ENVELOPPE (API 526 / API 520)',
         '',
@@ -8123,6 +8171,9 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
     function init() {
       // Check URL mode
       checkUrlMode();
+
+      // Restore persistent simple-mode UI state
+      appState.elevation = loadElevation();
 
       // Initialize simple mode validation
       validateInputs();

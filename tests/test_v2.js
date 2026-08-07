@@ -128,15 +128,25 @@ const data = {
     },
     'CFG-5': {
       id: 'CFG-5', label: 'Collecteur',
-      components: (fDesign) => ({ fx: -fDesign, fy: 0, fz: 0 })
+      blocked: true,
+      components: () => ({ fx: 0, fy: 0, fz: 0 })
     },
     'CFG-6': {
       id: 'CFG-6', label: 'Col de cygne',
-      components: (fDesign) => ({ fx: 0, fy: -fDesign, fz: 0 })
+      components: (fDesign) => ({ fx: 0, fy: fDesign, fz: 0 })
     },
     'CFG-7': {
       id: 'CFG-7', label: 'Laterale (Z)',
-      components: (fDesign) => ({ fx: 0, fy: 0, fz: -fDesign })
+      elevation: true,
+      components: (fDesign, elevDeg) => {
+        const e = (elevDeg == null ? 45 : elevDeg) * Math.PI / 180;
+        const snap = (v) => (Math.abs(v) < 0.05 ? 0 : v);
+        return {
+          fx: 0,
+          fy: snap(-fDesign * Math.sin(e)),
+          fz: snap(-fDesign * Math.cos(e))
+        };
+      }
     },
     'CFG-8': {
       id: 'CFG-8', label: 'Inclinee 45\u00b0',
@@ -369,11 +379,28 @@ test('CFG-4 : √(Fx² + Fy²) = F_design (conservation vectorielle)', () => {
   assertClose(magnitude, fDesign, 0.1, 'Norme vectorielle');
 });
 
-test('CFG-5 : Fx=-F_design, Fy=0, Fz=0 (collecteur)', () => {
-  const fDesign = 500;
-  const c = data.configurationsTable['CFG-5'].components(fDesign);
-  assertEqual(c.fx, -500, 'Fx');
+test('CFG-5 (Collecteur) : systeme ferme, blocked + composantes nulles', () => {
+  // Aucun jet a l'atmosphere : une force ponctuelle statique n'est pas
+  // applicable. La ligne doit porter blocked:true et renvoyer {0,0,0}
+  // plutot que produire silencieusement les composantes d'une force qui
+  // n'existe pas.
+  const cfg = data.configurationsTable['CFG-5'];
+  assertEqual(cfg.blocked, true, 'blocked:true attendu');
+  const c = cfg.components(500);
+  assertEqual(c.fx, 0, 'Fx');
   assertEqual(c.fy, 0, 'Fy');
+  assertEqual(c.fz, 0, 'Fz');
+  // Doit aussi ignorer proprement une force donnee, quelle qu'elle soit.
+  const c2 = cfg.components(10000);
+  assertEqual(c2.fx, 0, 'Fx (10000)');
+  assertEqual(c2.fy, 0, 'Fy (10000)');
+  assertEqual(c2.fz, 0, 'Fz (10000)');
+});
+
+test('CFG-6 (Col de cygne) : sortie vers le bas => reaction ASCENDANTE (fy = +F)', () => {
+  const c = data.configurationsTable['CFG-6'].components(500);
+  assertEqual(c.fx, 0, 'Fx');
+  assertEqual(c.fy, 500, 'Fy doit etre POSITIF (correction physique)');
   assertEqual(c.fz, 0, 'Fz');
 });
 
@@ -385,11 +412,39 @@ test('Fz = 0 pour les configurations dans le plan XY', () => {
   }
 });
 
-test('CFG-7 (Laterale Z) : Fz = -F_design', () => {
-  const c = data.configurationsTable['CFG-7'].components(1000);
+test('CFG-7 θ = 0 (strictement lateral) : {0, 0, -F}', () => {
+  const c = data.configurationsTable['CFG-7'].components(1000, 0);
   assertEqual(c.fx, 0, 'Fx');
-  assertEqual(c.fy, 0, 'Fy');
-  assertEqual(c.fz, -1000, 'Fz');
+  assertEqual(c.fy, 0, 'Fy exactement 0 (snap sin(0))');
+  assertClose(c.fz, -1000, 1e-9, 'Fz = -F');
+});
+
+test('CFG-7 θ = 45 (defaut) : {0, -F/√2, -F/√2}', () => {
+  const F = 1000;
+  const c = data.configurationsTable['CFG-7'].components(F, 45);
+  assertEqual(c.fx, 0, 'Fx');
+  assertClose(c.fy, -F / Math.sqrt(2), 1e-9, 'Fy = -F/√2');
+  assertClose(c.fz, -F / Math.sqrt(2), 1e-9, 'Fz = -F/√2');
+});
+
+test('CFG-7 θ = 90 (strictement vertical) : {0, -F, 0} avec fz EXACTEMENT 0 (snap)', () => {
+  const c = data.configurationsTable['CFG-7'].components(1000, 90);
+  assertEqual(c.fx, 0, 'Fx');
+  assertClose(c.fy, -1000, 1e-9, 'Fy = -F');
+  // Sans snap, Math.cos(90°) = 6.12e-17 laisserait fz a -6.12e-14 daN.
+  assertEqual(c.fz, 0, 'Fz doit etre EXACTEMENT 0 apres snap');
+});
+
+test('CFG-7 sans elevation explicite : defaut θ = 45', () => {
+  const F = 1000;
+  const c = data.configurationsTable['CFG-7'].components(F);
+  assertClose(c.fy, -F / Math.sqrt(2), 1e-9, 'defaut = 45°');
+  assertClose(c.fz, -F / Math.sqrt(2), 1e-9, 'defaut = 45°');
+});
+
+test('CFG-7 elevation:true annonce le comportement θ dans la table', () => {
+  assertEqual(data.configurationsTable['CFG-7'].elevation, true,
+    'elevation:true attendu');
 });
 
 test('Calcul complet : DN100/Gaz/K/15.5bar/CFG-1/DLF=2.0', () => {
@@ -862,6 +917,37 @@ test('Configurations config.gs utilisent les bons multiplicateurs', () => {
 test('getConfig() exporte toute la configuration', () => {
   assert(configGs.includes('function getConfig()'), 'getConfig manquant');
   assert(configGs.includes('return PSV_CONFIG'), 'return PSV_CONFIG manquant');
+});
+
+test('config.gs et index.html partagent la meme semantique CFG-5/6/7', () => {
+  // La suite compare les DEUX tables en profondeur : ces trois assertions
+  // echouent tant que config.gs n'aura pas ete synchronise avec la
+  // correction physique appliquee a index.html.
+
+  // CFG-5 : blocked doit etre porte par la table miroir.
+  assert(/'CFG-5':[^}]*blocked:\s*true/.test(configGs),
+    "CFG-5 doit porter blocked:true dans config.gs");
+  assertEqual(data.configurationsTable['CFG-5'].blocked, true,
+    "CFG-5 doit porter blocked:true dans index.html");
+
+  // CFG-6 : la reaction est ASCENDANTE (fy positif), pas descendante.
+  assert(/'CFG-6':[^}]*fy:\s*1\b/.test(configGs),
+    "CFG-6 doit porter fy:1 (reaction ascendante) dans config.gs");
+  const c6 = data.configurationsTable['CFG-6'].components(1);
+  assertEqual(c6.fy, 1, "CFG-6 doit renvoyer fy > 0 dans index.html");
+
+  // CFG-7 : l'elevation doit etre signalee dans la table miroir aussi,
+  // sans quoi un consommateur (add-on Sheets) ne saura pas que fy/fz
+  // dependent de θ.
+  assert(/'CFG-7':[^}]*elevation:\s*true/.test(configGs),
+    "CFG-7 doit porter elevation:true dans config.gs");
+  assertEqual(data.configurationsTable['CFG-7'].elevation, true,
+    "CFG-7 doit porter elevation:true dans index.html");
+});
+
+test('appState porte elevation:45 par defaut', () => {
+  // Persiste avec le reste et est passe aux appels components(...).
+  assert(/elevation:\s*45\b/.test(jsCode), 'appState.elevation doit valoir 45 par defaut');
 });
 
 

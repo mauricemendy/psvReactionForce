@@ -37,9 +37,22 @@ var PSV_CONFIG = {
     'CFG-2': { id: 'CFG-2', label: 'Verticale bas',    fx: 0,  fy: 1,  fz: 0 },
     'CFG-3': { id: 'CFG-3', label: 'Horizontale',      fx: -1, fy: 0,  fz: 0 },
     'CFG-4': { id: 'CFG-4', label: 'Coude 90°',        fx: -0.707, fy: -0.707, fz: 0 },
-    'CFG-5': { id: 'CFG-5', label: 'Collecteur',       fx: -1, fy: 0,  fz: 0 },
-    'CFG-6': { id: 'CFG-6', label: 'Col de cygne',     fx: 0,  fy: -1, fz: 0 },
-    'CFG-7': { id: 'CFG-7', label: 'Laterale (Z)',     fx: 0,  fy: 0,  fz: -1 },
+    // CFG-5 : systeme ferme (collecteur / torche). Aucun jet a l'atmosphere,
+    // la quantite de mouvement est conservee dans le reseau : une force
+    // ponctuelle statique n'est pas applicable (hors ASME B31.3 / API 521).
+    // Les composantes sont mises a zero et le drapeau `blocked` invite le
+    // consommateur (add-on Sheets) a rejeter la ligne avec le message.
+    'CFG-5': { id: 'CFG-5', label: 'Collecteur',       blocked: true,
+               blockedMessage: 'Systeme ferme : calcul statique non applicable. Requis : profil de forces desequilibrees (time history) aux coudes du reseau de torche.',
+               fx: 0,  fy: 0,  fz: 0 },
+    // CFG-6 : sortie dirigee vers le bas, la reaction est ASCENDANTE.
+    'CFG-6': { id: 'CFG-6', label: 'Col de cygne',     fx: 0,  fy: 1,  fz: 0 },
+    // CFG-7 : l'extremite comporte un coude d'elevation θ. Les constantes
+    // ci-dessous correspondent au defaut θ = 45° (fy = fz = -1/√2).
+    // Le drapeau `elevation` signale que la composition depend de θ ; les
+    // outils qui exploitent θ doivent recalculer fy = -sin θ, fz = -cos θ.
+    'CFG-7': { id: 'CFG-7', label: 'Laterale (Z)',     elevation: true, elevationDefault: 45,
+               fx: 0,  fy: -0.707, fz: -0.707 },
     'CFG-8': { id: 'CFG-8', label: 'Inclinee 45°',     fx: -0.707, fy: -0.707, fz: 0 }
   },
 
