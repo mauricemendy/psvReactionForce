@@ -1994,13 +1994,17 @@
     }
 
     .config-option {
+      position: relative;
       border: 2px solid var(--color-gray-200);
       border-radius: var(--radius-md);
-      padding: var(--space-2) var(--space-2) var(--space-3);
+      padding: var(--space-3) var(--space-3) var(--space-3);
       cursor: pointer;
-      text-align: center;
+      text-align: left;
       transition: all var(--transition-fast);
       background: var(--bg-surface);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
     }
 
     .config-option:hover {
@@ -2018,22 +2022,43 @@
       display: none;
     }
 
-    .config-option-svg {
-      width: 100%;
-      height: 130px;
-      margin: 0 auto var(--space-2);
+    .config-option-header {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-2);
     }
 
-    .config-option-svg svg {
-      width: 100%;
-      height: 100%;
+    .config-option-number {
+      flex: 0 0 auto;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--color-gray-100);
+      color: var(--color-gray-500);
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+
+    .config-option.active .config-option-number {
+      background: var(--color-primary-light);
+      color: var(--color-primary-darker);
+      box-shadow: inset 0 0 0 1.5px var(--color-primary);
+    }
+
+    .config-option-text {
+      flex: 1 1 auto;
+      min-width: 0;
     }
 
     .config-option-label {
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 600;
-      color: var(--color-gray-700);
-      line-height: 1.3;
+      color: var(--color-gray-800);
+      line-height: 1.2;
     }
 
     .config-option.active .config-option-label {
@@ -2041,10 +2066,38 @@
     }
 
     .config-option-desc {
-      font-size: 9px;
-      color: var(--color-gray-400);
+      font-size: 11px;
+      color: var(--color-gray-500);
       margin-top: 2px;
-      line-height: 1.2;
+      line-height: 1.3;
+    }
+
+    .config-option-image {
+      width: 100%;
+      height: 120px;
+      display: block;
+      object-fit: contain;
+      background: transparent;
+    }
+
+    .config-option-check {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .config-option.active .config-option-check {
+      display: inline-flex;
     }
 
     /* DLF Selection */
@@ -2646,15 +2699,18 @@
         max-width: 100% !important;
       }
 
-      .config-option.active .config-option-svg {
-        width: 90px !important;
+      .config-option.active .config-option-header {
+        flex-shrink: 0 !important;
+      }
+
+      .config-option.active .config-option-image {
+        width: 130px !important;
         height: 90px !important;
         flex-shrink: 0 !important;
       }
 
-      .config-option.active .config-option-svg svg {
-        width: 90px !important;
-        height: 90px !important;
+      .config-option.active .config-option-check {
+        display: none !important;
       }
 
       .config-option.active .config-option-label {
@@ -3076,61 +3132,110 @@
             <h4>Type de configuration de decharge</h4>
                 <div class="config-options" id="configOptions">
 
-                  <!-- Cartes de configuration : SVG iso injectes au chargement par Iso.render() -->
+                  <!-- Cartes de configuration : image PSV + entete numerotee, etat selectionne par CSS -->
+
                   <label class="config-option active" data-config="CFG-1">
                     <input type="radio" name="dischargeConfig" value="CFG-1" checked>
-                    <div class="config-option-svg" data-iso-picker="CFG-1"></div>
-                    <div class="config-option-label">Verticale haut</div>
-                    <div class="config-option-desc">Decharge ouverte</div>
+                    <div class="config-option-header">
+                      <span class="config-option-number" aria-hidden="true">1</span>
+                      <div class="config-option-text">
+                        <div class="config-option-label">Verticale haut</div>
+                        <div class="config-option-desc">Decharge ouverte</div>
+                      </div>
+                    </div>
+                    <img class="config-option-image" src="assets/psv/web/cfg-1.webp" alt="Schema Verticale haut" loading="lazy" width="800" height="540">
+                    <span class="config-option-check" aria-hidden="true">✔</span>
                   </label>
 
                   <label class="config-option" data-config="CFG-2">
                     <input type="radio" name="dischargeConfig" value="CFG-2">
-                    <div class="config-option-svg" data-iso-picker="CFG-2"></div>
-                    <div class="config-option-label">Verticale bas</div>
-                    <div class="config-option-desc">Decharge inversee</div>
+                    <div class="config-option-header">
+                      <span class="config-option-number" aria-hidden="true">2</span>
+                      <div class="config-option-text">
+                        <div class="config-option-label">Verticale bas</div>
+                        <div class="config-option-desc">Decharge inversee</div>
+                      </div>
+                    </div>
+                    <img class="config-option-image" src="assets/psv/web/cfg-2.webp" alt="Schema Verticale bas" loading="lazy" width="800" height="540">
+                    <span class="config-option-check" aria-hidden="true">✔</span>
                   </label>
 
                   <label class="config-option" data-config="CFG-3">
                     <input type="radio" name="dischargeConfig" value="CFG-3">
-                    <div class="config-option-svg" data-iso-picker="CFG-3"></div>
-                    <div class="config-option-label">Horizontale</div>
-                    <div class="config-option-desc">Decharge laterale</div>
+                    <div class="config-option-header">
+                      <span class="config-option-number" aria-hidden="true">3</span>
+                      <div class="config-option-text">
+                        <div class="config-option-label">Horizontale</div>
+                        <div class="config-option-desc">Decharge laterale</div>
+                      </div>
+                    </div>
+                    <img class="config-option-image" src="assets/psv/web/cfg-3.webp" alt="Schema Horizontale" loading="lazy" width="800" height="540">
+                    <span class="config-option-check" aria-hidden="true">✔</span>
                   </label>
 
                   <label class="config-option" data-config="CFG-4">
                     <input type="radio" name="dischargeConfig" value="CFG-4">
-                    <div class="config-option-svg" data-iso-picker="CFG-4"></div>
-                    <div class="config-option-label">Coude 90°</div>
-                    <div class="config-option-desc">Haut puis horizontal</div>
+                    <div class="config-option-header">
+                      <span class="config-option-number" aria-hidden="true">4</span>
+                      <div class="config-option-text">
+                        <div class="config-option-label">Coude 90°</div>
+                        <div class="config-option-desc">Haut puis horizontal</div>
+                      </div>
+                    </div>
+                    <img class="config-option-image" src="assets/psv/web/cfg-4.webp" alt="Schema Coude 90°" loading="lazy" width="800" height="540">
+                    <span class="config-option-check" aria-hidden="true">✔</span>
                   </label>
 
                   <label class="config-option" data-config="CFG-5">
                     <input type="radio" name="dischargeConfig" value="CFG-5">
-                    <div class="config-option-svg" data-iso-picker="CFG-5"></div>
-                    <div class="config-option-label">Collecteur</div>
-                    <div class="config-option-desc">Torche / systeme ferme</div>
+                    <div class="config-option-header">
+                      <span class="config-option-number" aria-hidden="true">5</span>
+                      <div class="config-option-text">
+                        <div class="config-option-label">Collecteur</div>
+                        <div class="config-option-desc">Torche / systeme ferme</div>
+                      </div>
+                    </div>
+                    <img class="config-option-image" src="assets/psv/web/cfg-5.webp" alt="Schema Collecteur" loading="lazy" width="800" height="540">
+                    <span class="config-option-check" aria-hidden="true">✔</span>
                   </label>
 
                   <label class="config-option" data-config="CFG-6">
                     <input type="radio" name="dischargeConfig" value="CFG-6">
-                    <div class="config-option-svg" data-iso-picker="CFG-6"></div>
-                    <div class="config-option-label">Col de cygne</div>
-                    <div class="config-option-desc">Double coude 180°</div>
+                    <div class="config-option-header">
+                      <span class="config-option-number" aria-hidden="true">6</span>
+                      <div class="config-option-text">
+                        <div class="config-option-label">Col de cygne</div>
+                        <div class="config-option-desc">Double coude 180°</div>
+                      </div>
+                    </div>
+                    <img class="config-option-image" src="assets/psv/web/cfg-6.webp" alt="Schema Col de cygne" loading="lazy" width="800" height="540">
+                    <span class="config-option-check" aria-hidden="true">✔</span>
                   </label>
 
                   <label class="config-option" data-config="CFG-7">
                     <input type="radio" name="dischargeConfig" value="CFG-7">
-                    <div class="config-option-svg" data-iso-picker="CFG-7"></div>
-                    <div class="config-option-label">Laterale (Z)</div>
-                    <div class="config-option-desc">Perpendiculaire a la ligne</div>
+                    <div class="config-option-header">
+                      <span class="config-option-number" aria-hidden="true">7</span>
+                      <div class="config-option-text">
+                        <div class="config-option-label">Laterale (Z)</div>
+                        <div class="config-option-desc">Perpendiculaire a la ligne</div>
+                      </div>
+                    </div>
+                    <img class="config-option-image" src="assets/psv/web/cfg-7.webp" alt="Schema Laterale (Z)" loading="lazy" width="800" height="540">
+                    <span class="config-option-check" aria-hidden="true">✔</span>
                   </label>
 
                   <label class="config-option" data-config="CFG-8">
                     <input type="radio" name="dischargeConfig" value="CFG-8">
-                    <div class="config-option-svg" data-iso-picker="CFG-8"></div>
-                    <div class="config-option-label">Inclinee 45°</div>
-                    <div class="config-option-desc">Coude a 45 degres</div>
+                    <div class="config-option-header">
+                      <span class="config-option-number" aria-hidden="true">8</span>
+                      <div class="config-option-text">
+                        <div class="config-option-label">Inclinee 45°</div>
+                        <div class="config-option-desc">Coude a 45 degres</div>
+                      </div>
+                    </div>
+                    <img class="config-option-image" src="assets/psv/web/cfg-8.webp" alt="Schema Inclinee 45°" loading="lazy" width="800" height="540">
+                    <span class="config-option-check" aria-hidden="true">✔</span>
                   </label>
 
                 </div>
@@ -4387,50 +4492,94 @@
         'CFG-5': schemaCFG5, 'CFG-6': schemaCFG6, 'CFG-7': schemaCFG7, 'CFG-8': schemaCFG8
       };
 
-      // Rendu complet d'un schema dans une chaine <svg>...</svg>
-      // configId : 'CFG-1' ... 'CFG-8'
-      // opts.mode : 'picker' (100x120, sans titre, avec petit trihedre)
-      //           | 'result' (200x160, avec titre et valeurs de forces)
-      // opts.uid : suffixe unique pour les marker id
-      // opts.forces : { fx, fy, fz } valeurs numeriques a afficher (mode result)
-      // opts.title : titre en tete (mode result)
+      // Ancres (en coordonnees image 800x540) : point d'application de la force de reaction
+      // sur le rendu PSV, une entree par configuration. Ces ancres ont ete releves visuellement
+      // sur les images nettoyees `assets/psv/web/cfg-N.webp`.
+      const PSV_ANCHOR = {
+        'CFG-1': [340, 320],
+        'CFG-2': [400, 260],
+        'CFG-3': [370, 330],
+        'CFG-4': [285, 380],
+        'CFG-5': [180, 400],
+        'CFG-6': [255, 355],
+        'CFG-7': [275, 400],
+        'CFG-8': [270, 380]
+      };
+
+      // Convertit un vecteur force (fx, fy, fz) world en un delta ecran (dx, dy)
+      // dans le systeme d'iso projection standard, puis normalise a une longueur donnee.
+      // Retourne [dx, dy] en pixels image.
+      function projectForce(fx, fy, fz, pxLen) {
+        const dx = (fx - fz) * COS30;
+        const dy = -fy + (fx + fz) * SIN30;
+        const m = Math.sqrt(dx * dx + dy * dy);
+        if (m < 1e-6) return [0, 0];
+        return [dx / m * pxLen, dy / m * pxLen];
+      }
+
+      // Rendu complet d'un schema.
+      // mode 'picker' : SVG iso schematique (encore utilise si opts le demande) — historiquement affichait
+      //                 les cartes du selecteur ; l'app 2025 leur substitue directement des images WebP.
+      // mode 'result' : SVG contenant l'image PSV + fleche(s) de force superposee(s).
       function render(configId, opts) {
         opts = opts || {};
         const fn = SCHEMAS[configId] || SCHEMAS['CFG-1'];
-        const mode = opts.mode || 'picker';
+        const mode = opts.mode || 'result';
         const uid = opts.uid || ('iso' + configId + '-' + Math.floor(Math.random() * 1e6));
 
         if (mode === 'picker') {
-          // ViewBox 100x120, centre world (0,0,0) a l'ecran (50, 80)
           const inner = fn(50, 80, { uid: uid, compact: true });
           return '<svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">' +
-            inner +
-            trihedron(88, 108, 7) +
-            '</svg>';
-        } else {
-          // Mode result : viewBox 240x210, marges reservees en haut (titre + trihedre) et en bas (legende).
-          // Origine world (0,0,0) placee a l'ecran (120, 132), facteur 1.5.
-          const scale = 1.5;
-          const inner = fn(0, 0, { uid: uid, showForceValues: true });
-          const title = opts.title ? '<text x="120" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="' + COL.text + '">' + opts.title + '</text>' : '';
-          const forces = opts.forces || {};
-          let legend = '';
-          if (opts.forces) {
-            const fmt = (v) => (v === 0 || v === undefined) ? '0' : (v > 0 ? '+' : '') + Math.round(v);
-            legend = '<g font-family="ui-monospace,Menlo,monospace">' +
-              '<text x="14" y="200" font-size="10" fill="' + COL.force + '" font-weight="700">Fx = ' + fmt(forces.fx) + '</text>' +
-              '<text x="94" y="200" font-size="10" fill="' + COL.force + '" font-weight="700">Fy = ' + fmt(forces.fy) + '</text>' +
-              '<text x="174" y="200" font-size="10" fill="' + COL.force + '" font-weight="700">Fz = ' + fmt(forces.fz) + '</text>' +
-              '<text x="220" y="200" font-size="8" fill="' + COL.axis + '">daN</text>' +
-            '</g>';
-          }
-          return '<svg viewBox="0 0 240 210" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">' +
-            title +
-            '<g transform="translate(120 132) scale(' + scale + ')">' + inner + '</g>' +
-            trihedron(222, 38, 9) +
-            legend +
-            '</svg>';
+            inner + trihedron(88, 108, 7) + '</svg>';
         }
+
+        // === Mode result ===
+        // ViewBox = image PSV (800x540) + bandeau titre en haut et bandeau legende en bas.
+        // Total : 800 x 620 (haut 40 titre + 540 image + 40 legende).
+        const IMG_W = 800, IMG_H = 540;
+        const VB_H = IMG_H + 80;
+        const forces = opts.forces || { fx: 0, fy: 0, fz: 0 };
+        const anchor = PSV_ANCHOR[configId] || [400, 300];
+
+        // Fleche de reaction : partant de l'ancre PSV, de longueur ~140 px, dans la direction de F.
+        const [fdx, fdy] = projectForce(forces.fx || 0, forces.fy || 0, forces.fz || 0, 140);
+        let arrowSvg = '';
+        const hasForce = (forces.fx || forces.fy || forces.fz);
+        if (hasForce) {
+          const x1 = anchor[0], y1 = anchor[1] + 40; // +40 pour tenir compte du bandeau titre
+          const x2 = x1 + fdx, y2 = y1 + fdy;
+          // Halo blanc semi-transparent sous la fleche pour la detacher de l'image
+          arrowSvg =
+            '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round" opacity="0.75"/>' +
+            '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '" stroke="' + COL.force + '" stroke-width="8" stroke-linecap="round" marker-end="url(#' + uid + '-force)"/>' +
+            '<circle cx="' + x1 + '" cy="' + y1 + '" r="6" fill="' + COL.force + '" stroke="#FFFFFF" stroke-width="2"/>' +
+            '<text x="' + (x2 + Math.sign(fdx || 1) * 12).toFixed(1) + '" y="' + (y2 + (fdy < 0 ? -8 : 20)).toFixed(1) + '" font-size="26" font-weight="800" fill="' + COL.force + '" text-anchor="' + (fdx < 0 ? 'end' : 'start') + '">F</text>';
+        }
+
+        // Titre en haut
+        const title = opts.title ? '<text x="' + (IMG_W / 2) + '" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="' + COL.text + '">' + opts.title + '</text>' : '';
+
+        // Legende des composantes en bas
+        const fmt = (v) => (v === 0 || v === undefined || v === null) ? '0' : (v > 0 ? '+' : '') + Math.round(v);
+        const legendY = IMG_H + 66;
+        const legend = '<g font-family="ui-monospace,Menlo,monospace">' +
+          '<text x="60"  y="' + legendY + '" font-size="20" fill="' + COL.force + '" font-weight="700">Fx = ' + fmt(forces.fx) + '</text>' +
+          '<text x="330" y="' + legendY + '" font-size="20" fill="' + COL.force + '" font-weight="700">Fy = ' + fmt(forces.fy) + '</text>' +
+          '<text x="600" y="' + legendY + '" font-size="20" fill="' + COL.force + '" font-weight="700">Fz = ' + fmt(forces.fz) + '</text>' +
+          '<text x="740" y="' + legendY + '" font-size="16" fill="' + COL.axis + '">daN</text>' +
+        '</g>';
+
+        // Marker de fleche + triedre iso en haut-droit
+        const svgDefs = '<defs><marker id="' + uid + '-force" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="' + COL.force + '"/></marker></defs>';
+
+        return '<svg viewBox="0 0 ' + IMG_W + ' ' + VB_H + '" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">' +
+          svgDefs +
+          title +
+          '<image href="assets/psv/web/' + configId.toLowerCase() + '.webp" x="0" y="40" width="' + IMG_W + '" height="' + IMG_H + '"/>' +
+          arrowSvg +
+          '<g transform="translate(' + (IMG_W - 60) + ' 70) scale(2.3)">' + trihedron(0, 0, 10) + '</g>' +
+          legend +
+          '</svg>';
       }
 
       return { render: render, project: project, trihedron: trihedron, COL: COL };
@@ -8185,21 +8334,14 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
     // ============================
     // INITIALIZATION
     // ============================
-    function initIsoPicker() {
-      // Injecte les schemas iso dans chaque carte du selecteur de configuration
-      const cards = document.querySelectorAll('[data-iso-picker]');
-      cards.forEach(function (el) {
-        const cfg = el.getAttribute('data-iso-picker');
-        el.innerHTML = Iso.render(cfg, { mode: 'picker', uid: 'pkr-' + cfg });
-      });
-    }
-
     function init() {
       // Check URL mode
       checkUrlMode();
 
-      // Populate iso picker schemas
-      initIsoPicker();
+      // Note : les cartes du selecteur affichent maintenant des images PSV
+      // (assets/psv/web/cfg-N.webp) directement en HTML, plus besoin d'injecter
+      // du SVG au chargement. Iso.render() reste utilise pour le diagramme
+      // resultat (fleches de force superposees sur l'image).
 
       // Initialize simple mode validation
       validateInputs();
