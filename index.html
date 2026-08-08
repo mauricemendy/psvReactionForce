@@ -1993,59 +1993,327 @@
       }
     }
 
-    .config-option {
+    /* -----------------------------------------------------------------
+       Panneau config — vignettes (colonne gauche) + schema detaille
+       (colonne droite). Grille 360px + 1fr, tokens du systeme.
+       ----------------------------------------------------------------- */
+    .config-layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: var(--space-5);
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .config-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Grille des 8 vignettes — 2 colonnes strictes. */
+    .config-thumbs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Retrocompatibilite : d'anciens selecteurs referencent .config-options. */
+    .config-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Une vignette. */
+    .config-thumb {
+      display: block;
       border: 2px solid var(--color-gray-200);
-      border-radius: var(--radius-md);
-      padding: var(--space-2) var(--space-2) var(--space-3);
+      border-radius: 6px;
+      padding: 8px 8px 10px;
+      background: #FFFFFF;
       cursor: pointer;
-      text-align: center;
-      transition: all var(--transition-fast);
-      background: var(--bg-surface);
+      transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
     }
 
-    .config-option:hover {
-      border-color: var(--color-gray-300);
-      background: var(--color-gray-50);
+    .config-thumb:hover {
+      border-color: #0D9488;
     }
 
-    .config-option.active {
-      border-color: var(--color-primary);
-      background: var(--color-primary-light);
-      box-shadow: 0 0 0 1px var(--color-primary);
+    .config-thumb.active {
+      border-color: #0D9488;
+      background: #F0FDFA;
+      box-shadow: 0 0 0 1px #0D9488;
     }
 
-    .config-option input[type="radio"] {
+    .config-thumb input[type="radio"] {
       display: none;
     }
 
-    .config-option-svg {
-      width: 100%;
-      height: 130px;
-      margin: 0 auto var(--space-2);
+    /* Cadre image : hauteur fixe 76px, image legerement zoomee pour
+       recadrer le blanc du rendu (specifie section 2.2). */
+    .config-thumb-img {
+      height: 76px;
+      background: #FFFFFF;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .config-option-svg svg {
-      width: 100%;
-      height: 100%;
+    .config-thumb-img img {
+      width: 112%;
+      height: 112%;
+      object-fit: contain;
     }
 
-    .config-option-label {
+    /* Ligne meta sous l'image : libelle a gauche, tag composantes a droite. */
+    .config-thumb-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .config-thumb-label {
       font-size: 11px;
       font-weight: 600;
       color: var(--color-gray-700);
-      line-height: 1.3;
+      line-height: 1.25;
     }
 
-    .config-option.active .config-option-label {
-      color: var(--color-primary-darker);
+    .config-thumb-tag {
+      font-size: 10px;
+      font-weight: 700;
+      color: #9CA3AF;
+      white-space: nowrap;
     }
 
-    .config-option-desc {
-      font-size: 9px;
-      color: var(--color-gray-400);
-      margin-top: 2px;
-      line-height: 1.2;
+    .config-thumb.active .config-thumb-tag {
+      color: #DC2626;
     }
+
+    /* -----------------------------------------------------------------
+       Schema detaille — carte avec image PSV + surcouche vectorielle
+       + trièdre + selecteur θ (CFG-7) + bandeau bloque (CFG-5) + legende.
+       ----------------------------------------------------------------- */
+    .detail-schema {
+      border: 1px solid var(--color-gray-200);
+      border-radius: 8px;
+      background: #FFFFFF;
+      overflow: hidden;
+    }
+
+    .detail-schema-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 14px 16px 10px;
+    }
+
+    .detail-schema-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-gray-900);
+    }
+
+    .detail-schema-description {
+      font-size: 12px;
+      color: var(--color-gray-500);
+    }
+
+    /* Canvas : image + <svg overlay absolu + labels HTML + triad HTML. */
+    .detail-schema-canvas {
+      position: relative;
+      background: #FFFFFF;
+      /* Ratio 800:540 fige avant que l'image ne charge. */
+      aspect-ratio: 800 / 540;
+    }
+
+    .detail-schema-canvas img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .detail-schema-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* Etiquettes des composantes actives, positionnees en % du canvas
+       (conversion lx/8 %, (ly-10)/5.4 % — voir section 2.3). */
+    .detail-schema-label {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-size: 15px;
+      font-weight: 700;
+      color: #DC2626;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    /* Trièdre X/Y/Z aligne sur la perspective du rendu. */
+    .detail-schema-triad {
+      position: absolute;
+      left: 14px;
+      bottom: 12px;
+      width: 78px;
+      height: 78px;
+    }
+
+    .detail-schema-triad-label {
+      position: absolute;
+      transform: translate(-50%, 50%);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-gray-700);
+      pointer-events: none;
+    }
+
+    /* Selecteur d'elevation (CFG-7). */
+    .elev-selector {
+      margin: 0 16px 12px;
+      padding: 12px 14px;
+      background: #F9FAFB;
+      border: 1px solid var(--color-gray-200);
+      border-radius: 8px;
+    }
+
+    .elev-selector-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .elev-selector-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1F2937;
+    }
+
+    .elev-selector-pills {
+      display: flex;
+      gap: 6px;
+    }
+
+    .elev-pill {
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1.5px solid var(--color-gray-200);
+      background: #FFFFFF;
+      color: var(--color-gray-700);
+      cursor: pointer;
+      font-variant-numeric: tabular-nums;
+      transition: all var(--transition-fast);
+    }
+
+    .elev-pill:hover {
+      border-color: #0D9488;
+    }
+
+    .elev-pill.active {
+      border-color: #0D9488;
+      background: #F0FDFA;
+      color: #115E59;
+    }
+
+    .elev-note {
+      font-size: 11px;
+      color: var(--color-gray-500);
+      margin-top: 8px;
+      line-height: 1.45;
+    }
+
+    /* Bandeau CFG-5 : systeme ferme, calcul non applicable. */
+    .detail-blocked-banner {
+      margin: 0 16px 14px;
+      padding: 12px 14px;
+      background: #FEE2E2;
+      border: 1px solid #DC2626;
+      border-radius: 8px;
+      color: #B91C1C;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .detail-blocked-banner strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* Legende en pied de carte. */
+    .detail-legend {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      padding: 10px 16px 14px;
+      border-top: 1px solid var(--color-gray-100);
+      flex-wrap: wrap;
+    }
+
+    .detail-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      color: var(--color-gray-500);
+    }
+
+    .detail-legend-swatch {
+      display: block;
+      border-radius: 2px;
+    }
+
+    .detail-legend-swatch--flow {
+      width: 20px;
+      height: 4px;
+      background: #0D9488;
+    }
+
+    .detail-legend-swatch--force {
+      width: 20px;
+      height: 6px;
+      background: #DC2626;
+    }
+
+    .detail-legend-swatch--point {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #FACC15;
+      border: 2px solid #A16207;
+    }
+
+    /* -----------------------------------------------------------------
+       Retrocompatibilite : anciens selecteurs .config-option*
+       gardes minimalement pour eviter les surprises dans le CSS ambiant.
+       ----------------------------------------------------------------- */
+    .config-option {
+      display: block;
+      border: 2px solid var(--color-gray-200);
+      border-radius: 6px;
+      padding: 8px 8px 10px;
+      background: #FFFFFF;
+      cursor: pointer;
+    }
+    .config-option.active {
+      border-color: #0D9488;
+      background: #F0FDFA;
+      box-shadow: 0 0 0 1px #0D9488;
+    }
+    .config-option input[type="radio"] { display: none; }
+    .config-option-svg { display: none; }
+    .config-option-label { font-size: 11px; font-weight: 600; color: var(--color-gray-700); }
+    .config-option-desc { display: none; }
 
     /* DLF Selection */
     .dlf-section-header {
@@ -2287,10 +2555,14 @@
       margin-bottom: var(--space-4);
     }
 
+    /* -----------------------------------------------------------------
+       Cases de resultats — 4 x 1fr (F_design, Fx, Fy, Fz).
+       Etats : neutre / active (composante != 0) / bloque (CFG-5).
+       ----------------------------------------------------------------- */
     .force-components-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: var(--space-3);
+      gap: 12px;
       margin-bottom: var(--space-4);
     }
 
@@ -2300,72 +2572,93 @@
       }
     }
 
-    /* Force results layout: components left, diagram right */
     .force-results-layout {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: var(--space-4);
+      display: block;
     }
 
-    @media (min-width: 768px) {
-      .force-results-layout {
-        grid-template-columns: 1fr 300px;
-        align-items: start;
-      }
-    }
-
+    /* Neutre. */
     .force-component {
-      background: var(--color-gray-50);
       border: 1px solid var(--color-gray-200);
-      border-radius: var(--radius-md);
-      padding: var(--space-3);
-      text-align: center;
+      background: #F9FAFB;
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: left;
     }
 
+    /* F_design : meme cadre que neutre. */
     .force-component.highlight {
-      background: var(--color-primary-light);
-      border-color: var(--color-primary-lighter);
+      border: 1px solid var(--color-gray-200);
+      background: #F9FAFB;
+    }
+
+    /* Composante active (!= 0). */
+    .force-component.active-comp {
+      border: 1px solid #FCA5A5;
+      background: #FEE2E2;
+    }
+
+    /* Config bloquee (CFG-5) — cases grisees. */
+    .force-component.blocked {
+      background: #F3F4F6;
+      opacity: 0.6;
     }
 
     .force-component-label {
       font-size: 11px;
       font-weight: 600;
       color: var(--color-gray-500);
-      text-transform: uppercase;
-      margin-bottom: 4px;
+      letter-spacing: 0.04em;
+      text-transform: none;
+      margin-bottom: 0;
+    }
+
+    .force-component-axis {
+      font-size: 11px;
+      color: var(--color-gray-400);
+      font-weight: 500;
+      margin-left: 2px;
     }
 
     .force-component-value {
-      font-size: 20px;
-      font-weight: 700;
+      font-size: 24px;
+      font-weight: 600;
       color: var(--color-gray-900);
       font-variant-numeric: tabular-nums;
+      margin-top: 4px;
+      line-height: 1.2;
     }
 
-    .force-component.highlight .force-component-value {
-      color: var(--color-primary-darker);
+    .force-component.active-comp .force-component-value {
+      color: #B91C1C;
+    }
+
+    .force-component.blocked .force-component-value {
+      color: #9CA3AF;
     }
 
     .force-component-unit {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--color-gray-500);
+      font-weight: 500;
+      margin-left: 4px;
     }
 
-    /* SVG Diagram in results */
-    .force-diagram {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: var(--space-4);
-      background: var(--color-gray-50);
-      border-radius: var(--radius-md);
-      margin-top: var(--space-4);
+    /* Note de pied sous la grille des composantes. */
+    .force-components-note {
+      font-size: 11px;
+      color: #9CA3AF;
+      margin-top: 10px;
+      line-height: 1.5;
     }
 
-    .force-diagram svg {
-      max-width: 300px;
-      width: 100%;
-      height: auto;
+    /* -----------------------------------------------------------------
+       Retrocompatibilite : .force-diagram existait dans la section 3.
+       Le schema detaille vit maintenant dans le panneau config, donc
+       l'ancien encart est laisse en display:none — pour ne pas casser
+       les selecteurs qui l'attrapent, on garde la classe.
+       ----------------------------------------------------------------- */
+    .force-diagram--legacy {
+      display: none;
     }
 
     /* ===========================================
@@ -3074,7 +3367,97 @@
           <!-- Section 1: Discharge Configuration -->
           <div class="config-section">
             <h4>Type de configuration de decharge</h4>
-                <div class="config-options" id="configOptions">
+            <div class="config-layout">
+              <div class="config-thumbs config-options" id="configOptions">
+
+                <label class="config-thumb config-option active" data-config="CFG-1">
+                    <input type="radio" name="dischargeConfig" value="CFG-1" checked>
+                    <div class="config-thumb-img"><img src="assets/cfg-1.png" alt="" loading="lazy"></div>
+                    <div class="config-thumb-meta">
+                      <span class="config-thumb-label config-option-label">Verticale haut</span>
+                      <span class="config-thumb-tag" data-config-tag="CFG-1">Fy−</span>
+                    </div>
+                </label>
+
+                <label class="config-thumb config-option" data-config="CFG-2">
+                    <input type="radio" name="dischargeConfig" value="CFG-2">
+                    <div class="config-thumb-img"><img src="assets/cfg-2.png" alt="" loading="lazy"></div>
+                    <div class="config-thumb-meta">
+                      <span class="config-thumb-label config-option-label">Verticale bas</span>
+                      <span class="config-thumb-tag" data-config-tag="CFG-2">Fy+</span>
+                    </div>
+                </label>
+
+                <label class="config-thumb config-option" data-config="CFG-3">
+                    <input type="radio" name="dischargeConfig" value="CFG-3">
+                    <div class="config-thumb-img"><img src="assets/cfg-3.png" alt="" loading="lazy"></div>
+                    <div class="config-thumb-meta">
+                      <span class="config-thumb-label config-option-label">Horizontale</span>
+                      <span class="config-thumb-tag" data-config-tag="CFG-3">Fx−</span>
+                    </div>
+                </label>
+
+                <label class="config-thumb config-option" data-config="CFG-4">
+                    <input type="radio" name="dischargeConfig" value="CFG-4">
+                    <div class="config-thumb-img"><img src="assets/cfg-4.png" alt="" loading="lazy"></div>
+                    <div class="config-thumb-meta">
+                      <span class="config-thumb-label config-option-label">Coude 90°</span>
+                      <span class="config-thumb-tag" data-config-tag="CFG-4">Fx− Fy−</span>
+                    </div>
+                </label>
+
+                <label class="config-thumb config-option" data-config="CFG-5">
+                    <input type="radio" name="dischargeConfig" value="CFG-5">
+                    <div class="config-thumb-img"><img src="assets/cfg-5.png" alt="" loading="lazy"></div>
+                    <div class="config-thumb-meta">
+                      <span class="config-thumb-label config-option-label">Collecteur</span>
+                      <span class="config-thumb-tag" data-config-tag="CFG-5">—</span>
+                    </div>
+                </label>
+
+                <label class="config-thumb config-option" data-config="CFG-6">
+                    <input type="radio" name="dischargeConfig" value="CFG-6">
+                    <div class="config-thumb-img"><img src="assets/cfg-6.png" alt="" loading="lazy"></div>
+                    <div class="config-thumb-meta">
+                      <span class="config-thumb-label config-option-label">Col de cygne</span>
+                      <span class="config-thumb-tag" data-config-tag="CFG-6">Fy+</span>
+                    </div>
+                </label>
+
+                <label class="config-thumb config-option" data-config="CFG-7">
+                    <input type="radio" name="dischargeConfig" value="CFG-7">
+                    <div class="config-thumb-img"><img src="assets/cfg-7.png" alt="" loading="lazy"></div>
+                    <div class="config-thumb-meta">
+                      <span class="config-thumb-label config-option-label">Laterale (Z)</span>
+                      <span class="config-thumb-tag" data-config-tag="CFG-7">Fy− Fz−</span>
+                    </div>
+                </label>
+
+                <label class="config-thumb config-option" data-config="CFG-8">
+                    <input type="radio" name="dischargeConfig" value="CFG-8">
+                    <div class="config-thumb-img"><img src="assets/cfg-8.png" alt="" loading="lazy"></div>
+                    <div class="config-thumb-meta">
+                      <span class="config-thumb-label config-option-label">Inclinee 45°</span>
+                      <span class="config-thumb-tag" data-config-tag="CFG-8">Fx− Fy−</span>
+                    </div>
+                </label>
+
+              </div>
+
+              <!-- Schema detaille de la configuration selectionnee.
+                   Rempli par renderDetailSchema() : header + canvas (image
+                   PSV + surcouche vectorielle + trièdre) + selecteur θ
+                   (CFG-7) + bandeau bloque (CFG-5) + legende. -->
+              <div class="detail-schema" id="detailSchema"></div>
+            </div>
+          </div>
+
+          <!-- Bloc d'origine remplace : les 8 SVG dessinees a la main sont
+               remplacees par les rendus PNG. Les anciennes cartes sont
+               conservees en commentaire pour l'historique ; le nouveau
+               markup, plus haut, honore la table 2.3 de la refonte. -->
+          <div style="display:none" data-legacy-block="config-options-svg">
+                <div class="config-options" id="__legacyConfigOptions" hidden>
 
                   <!-- CFG-1: Vertical Up - Open discharge -->
                   <label class="config-option active" data-config="CFG-1">
@@ -3412,63 +3795,36 @@
                 <div class="dlf-tooltip">Le DLF amplifie la force brute pour tenir compte de l'ouverture dynamique de la soupape. Valeur par defaut : 2.0</div>
               </div>
 
-              <!-- Section 3: Enriched Results -->
+              <!-- Section 3: Force de design et composantes -->
               <div class="config-section">
                 <div class="design-force-header">Force de design et composantes directionnelles de la PSV</div>
-                <!-- Coordinate Triad -->
-                <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); padding: var(--space-3); background: var(--color-gray-50); border-radius: var(--radius-md); border: 1px solid var(--color-gray-200);">
-                  <svg viewBox="0 0 70 70" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <marker id="triadArrowX" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#DC2626"/></marker>
-                      <marker id="triadArrowY" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0D9488"/></marker>
-                      <marker id="triadArrowZ" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#6B7280"/></marker>
-                    </defs>
-                    <!-- Origin point -->
-                    <circle cx="25" cy="45" r="2.5" fill="#374151"/>
-                    <!-- X axis (right) -->
-                    <line x1="25" y1="45" x2="60" y2="45" stroke="#DC2626" stroke-width="2" marker-end="url(#triadArrowX)"/>
-                    <text x="63" y="49" font-size="10" fill="#DC2626" font-weight="700">X</text>
-                    <!-- Y axis (up) -->
-                    <line x1="25" y1="45" x2="25" y2="10" stroke="#0D9488" stroke-width="2" marker-end="url(#triadArrowY)"/>
-                    <text x="21" y="8" font-size="10" fill="#0D9488" font-weight="700">Y</text>
-                    <!-- Z axis (isometric out towards viewer) -->
-                    <line x1="25" y1="45" x2="6" y2="60" stroke="#6B7280" stroke-width="2" marker-end="url(#triadArrowZ)"/>
-                    <text x="1" y="68" font-size="10" fill="#6B7280" font-weight="700">Z</text>
-                  </svg>
-                  <div style="font-size: 12px; color: var(--color-gray-600); line-height: 1.6;">
-                    <div><strong style="color: #DC2626;">X</strong> : Horizontal (axe de la tuyauterie)</div>
-                    <div><strong style="color: #0D9488;">Y</strong> : Vertical (haut positif)</div>
-                    <div><strong style="color: #6B7280;">Z</strong> : Lateral</div>
-                  </div>
-                </div>
                 <div class="force-results-layout">
-                  <div>
                     <div class="force-components-grid" id="forceComponentsGrid">
-                      <div class="force-component highlight">
-                        <div class="force-component-label">F_design</div>
-                        <div class="force-component-value" id="fDesignValue">-</div>
-                        <div class="force-component-unit">daN</div>
+                      <div class="force-component highlight" data-comp="F">
+                        <div class="force-component-label">F design</div>
+                        <div class="force-component-value"><span id="fDesignValue">-</span><span class="force-component-unit">daN</span></div>
                       </div>
-                      <div class="force-component">
-                        <div class="force-component-label">Fx</div>
-                        <div class="force-component-value" id="fxValue">-</div>
-                        <div class="force-component-unit">daN</div>
+                      <div class="force-component" data-comp="Fx">
+                        <div class="force-component-label">Fx <span class="force-component-axis">(axe tuyauterie)</span></div>
+                        <div class="force-component-value"><span id="fxValue">-</span><span class="force-component-unit">daN</span></div>
                       </div>
-                      <div class="force-component">
-                        <div class="force-component-label">Fy</div>
-                        <div class="force-component-value" id="fyValue">-</div>
-                        <div class="force-component-unit">daN</div>
+                      <div class="force-component" data-comp="Fy">
+                        <div class="force-component-label">Fy <span class="force-component-axis">(vertical)</span></div>
+                        <div class="force-component-value"><span id="fyValue">-</span><span class="force-component-unit">daN</span></div>
                       </div>
-                      <div class="force-component">
-                        <div class="force-component-label">Fz</div>
-                        <div class="force-component-value" id="fzValue">-</div>
-                        <div class="force-component-unit">daN</div>
+                      <div class="force-component" data-comp="Fz">
+                        <div class="force-component-label">Fz <span class="force-component-axis">(lateral)</span></div>
+                        <div class="force-component-value"><span id="fzValue">-</span><span class="force-component-unit">daN</span></div>
                       </div>
                     </div>
-                  </div>
-                  <div class="force-diagram" id="forceDiagram">
-                    <!-- SVG diagram will be inserted by JavaScript based on selected config -->
-                  </div>
+                    <div class="force-components-note">
+                      Composantes appliquees au n&#339;ud de sortie, orientees a l'oppose du vecteur de decharge. F design = F statique &times; DLF.
+                    </div>
+                    <!-- Le schema detaille est desormais rendu dans le panneau
+                         config (colonne droite) : cet element est conserve
+                         (id forceDiagram) pour compatibilite JS (reset, hooks)
+                         mais reste masque. -->
+                    <div class="force-diagram force-diagram--legacy" id="forceDiagram"></div>
                 </div>
               </div>
             </div>
@@ -4295,19 +4651,41 @@
         id: 'CFG-5',
         label: 'Collecteur',
         description: 'Decharge dans collecteur (torche)',
-        components: (fDesign) => ({ fx: -fDesign, fy: 0, fz: 0 })
+        // Systeme ferme : pas de jet a l'atmosphere, la quantite de mouvement
+        // est conservee dans le reseau. Une force ponctuelle statique n'est
+        // pas applicable ici (hors ASME B31.3 / API 521). Le calcul est
+        // volontairement bloque et la ligne est rejetee en Batch avec un
+        // message plutot que de produire silencieusement des zeros.
+        blocked: true,
+        blockedMessage: 'Systeme ferme : calcul statique non applicable. Requis : profil de forces desequilibrees (time history) aux coudes du reseau de torche.',
+        components: () => ({ fx: 0, fy: 0, fz: 0 })
       },
       'CFG-6': {
         id: 'CFG-6',
         label: 'Col de cygne',
         description: 'Double coude 180° (haut-horizontal-bas)',
-        components: (fDesign) => ({ fx: 0, fy: -fDesign, fz: 0 })
+        // Sortie dirigee vers le bas : la reaction est ASCENDANTE (fy > 0).
+        components: (fDesign) => ({ fx: 0, fy: fDesign, fz: 0 })
       },
       'CFG-7': {
         id: 'CFG-7',
         label: 'Laterale (Z)',
         description: 'Decharge perpendiculaire a la ligne (axe Z)',
-        components: (fDesign) => ({ fx: 0, fy: 0, fz: -fDesign })
+        // L'extremite comporte un coude : la reaction se decompose sur Y
+        // et Z selon l'elevation θ de la sortie (0° = strictement lateral,
+        // 90° = strictement vertical vers le bas). θ par defaut = 45°.
+        elevation: true,
+        components: (fDesign, elevDeg) => {
+          const e = (elevDeg == null ? 45 : elevDeg) * Math.PI / 180;
+          // Snap des zeros numeriques : sans cela Math.cos(90°) = 6.12e-17
+          // affiche -0.00 et allume la case comme une charge active.
+          const snap = (v) => (Math.abs(v) < 0.05 ? 0 : v);
+          return {
+            fx: 0,
+            fy: snap(-fDesign * Math.sin(e)),
+            fz: snap(-fDesign * Math.cos(e))
+          };
+        }
       },
       'CFG-8': {
         id: 'CFG-8',
@@ -4321,6 +4699,113 @@
     };
 
     const validConfigs = ['CFG-1', 'CFG-2', 'CFG-3', 'CFG-4', 'CFG-5', 'CFG-6', 'CFG-7', 'CFG-8'];
+
+    // ==================================================================
+    // Donnees graphiques du schema detaille — coordonnees et angles
+    // repris a la valeur pres du handoff visuel (README section 2.3 pour
+    // les tables de coordonnees, 2.4 pour les angles du triedre).
+    //
+    // Repere : 800 x 540 px, aligne sur les rendus PNG de assets/. Chaque
+    // configuration porte :
+    //   - point[x,y]  : centre de la bride de sortie (point d'application)
+    //   - arrows[]    : forces de reaction dessinees (x1,y1 -> x2,y2,
+    //                   label texte, lx/ly position en pixels image)
+    //   - flow[]      : traits du flux de fluide (x1,y1 -> x2,y2)
+    //   - axes{x,y,z} : angles ecran (deg) du triedre pour aligner la
+    //                   perspective sur le rendu 3D. Positif = vers le
+    //                   haut, origine = axe X image.
+    //   - elevation   : true pour CFG-7 (fleche recalculee dynamiquement,
+    //                   sur elevation θ, cf. renderDetailSchema).
+    //   - blocked     : true pour CFG-5 (aucune fleche, bandeau rouge).
+    // ==================================================================
+    const CFG_GRAPHICS = {
+      'CFG-1': {
+        img: 'assets/cfg-1.png',
+        point: [513, 93],
+        arrows: [{ x1: 513, y1: 8, x2: 513, y2: 74, label: 'Fy−', lx: 576, ly: 60 }],
+        flow: [{ x1: 523, y1: 300, x2: 523, y2: 160 }]
+      },
+      'CFG-2': {
+        img: 'assets/cfg-2.png',
+        point: [525, 470],
+        arrows: [{ x1: 525, y1: 536, x2: 525, y2: 496, label: 'Fy+', lx: 590, ly: 526 }],
+        flow: [{ x1: 525, y1: 396, x2: 525, y2: 450 }]
+      },
+      'CFG-3': {
+        img: 'assets/cfg-3.png',
+        axes: { x: 4, y: 90, z: -32 },
+        point: [558, 336],
+        arrows: [{ x1: 736, y1: 336, x2: 600, y2: 336, label: 'Fx−', lx: 648, ly: 305 }],
+        flow: [{ x1: 400, y1: 336, x2: 512, y2: 336 }]
+      },
+      'CFG-4': {
+        img: 'assets/cfg-4.png',
+        point: [627, 120],
+        arrows: [
+          { x1: 782, y1: 120, x2: 672, y2: 120, label: 'Fx−', lx: 704, ly: 90 },
+          { x1: 627, y1: 152, x2: 627, y2: 242, label: 'Fy−', lx: 668, ly: 222 }
+        ],
+        flow: [
+          { x1: 408, y1: 292, x2: 408, y2: 190 },
+          { x1: 474, y1: 112, x2: 566, y2: 112 }
+        ]
+      },
+      'CFG-5': {
+        img: 'assets/cfg-5.png',
+        blocked: true,
+        point: [540, 258],
+        arrows: [],
+        flow: [{ x1: 330, y1: 394, x2: 456, y2: 394 }]
+      },
+      'CFG-6': {
+        img: 'assets/cfg-6.png',
+        point: [568, 366],
+        arrows: [{ x1: 568, y1: 500, x2: 568, y2: 404, label: 'Fy+', lx: 612, ly: 492 }],
+        flow: [{ x1: 568, y1: 232, x2: 568, y2: 318 }]
+      },
+      'CFG-7': {
+        img: 'assets/cfg-7.png',
+        axes: { x: -32, y: 90, z: 9 },
+        elevation: true,
+        point: [573, 132],
+        arrows: [],
+        flow: [{ x1: 573, y1: 302, x2: 573, y2: 198 }]
+      },
+      'CFG-8': {
+        img: 'assets/cfg-8.png',
+        point: [604, 68],
+        arrows: [
+          { x1: 766, y1: 68, x2: 660, y2: 68, label: 'Fx−', lx: 688, ly: 40 },
+          { x1: 604, y1: 100, x2: 604, y2: 190, label: 'Fy−', lx: 646, ly: 170 }
+        ],
+        flow: [{ x1: 404, y1: 300, x2: 518, y2: 180 }]
+      }
+    };
+
+    const CFG_DEFAULT_AXES = { x: 9, y: 90, z: -32 };
+    const CFG_ELEVATION_STEPS = [0, 30, 45, 60, 90];
+
+    // Message d'aide sous les puces θ (section 2.5 de la refonte).
+    function elevationNote(elev) {
+      if (elev === 0) return 'Sortie strictement horizontale : la reaction est purement laterale (−Z).';
+      if (elev === 90) return 'Sortie verticale : la reaction est purement descendante (−Y).';
+      return 'Sortie inclinee a ' + elev + '° : la reaction se decompose sur Y et Z (F × sin θ, F × cos θ).';
+    }
+
+    // Compose le tag « Fx- Fy- » d'une vignette d'apres les composantes.
+    function componentTag(configId, elevation) {
+      const cfg = configurationsTable[configId];
+      if (!cfg) return '';
+      if (cfg.blocked) return '—';
+      const raw = cfg.components(1, elevation);
+      const snap = (v) => (Math.abs(v) < 0.05 ? 0 : v);
+      const parts = [];
+      const fx = snap(raw.fx), fy = snap(raw.fy), fz = snap(raw.fz);
+      if (fx !== 0) parts.push('Fx' + (fx > 0 ? '+' : '−'));
+      if (fy !== 0) parts.push('Fy' + (fy > 0 ? '+' : '−'));
+      if (fz !== 0) parts.push('Fz' + (fz > 0 ? '+' : '−'));
+      return parts.length ? parts.join(' ') : '—';
+    }
 
     const dlfPresets = {
       conservative: { value: 2.0, label: 'Conservatif', description: 'Pas d\'analyse dynamique' },
@@ -4544,6 +5029,7 @@
       stats: { total: 0, valid: 0, errors: 0, empty: 0 },
       // v2.0 state
       selectedConfig: 'CFG-1',
+      elevation: 45,             // θ de CFG-7, en degres (defaut : coude visible sur le rendu)
       dlfMode: 'conservative',
       dlfValue: 2.0,
       // v3.0 state - mode dimensionnement API
@@ -5448,6 +5934,8 @@
       fyValue.textContent = '-';
       fzValue.textContent = '-';
       forceDiagram.innerHTML = '';
+      // Reset des etats visuels des cases (aucune composante active).
+      refreshComponentBoxes(appState.selectedConfig);
 
       validateInputs();
     }
@@ -5464,7 +5952,8 @@
       let text = `Force brute: ${fBrute} daN\n`;
       text += `DLF: ${dlf}\n`;
       text += `Force de design: ${fDesign} daN\n`;
-      text += `Configuration: ${config.label}\n`;
+      const configSuffix = config.elevation ? ` (θ = ${appState.elevation}°)` : '';
+      text += `Configuration: ${config.label}${configSuffix}\n`;
       text += `Fx: ${fx} daN | Fy: ${fy} daN | Fz: ${fz} daN`;
 
       navigator.clipboard.writeText(text).then(() => {
@@ -5572,15 +6061,19 @@
 
     // Discharge configuration selection
     configOptions.addEventListener('click', (e) => {
-      const option = e.target.closest('.config-option');
+      const option = e.target.closest('.config-option, .config-thumb');
       if (!option) return;
 
-      configOptions.querySelectorAll('.config-option').forEach(o => o.classList.remove('active'));
+      configOptions.querySelectorAll('.config-option, .config-thumb').forEach(o => o.classList.remove('active'));
       option.classList.add('active');
-      option.querySelector('input[type="radio"]').checked = true;
+      const radio = option.querySelector('input[type="radio"]');
+      if (radio) radio.checked = true;
 
       appState.selectedConfig = option.dataset.config;
       updateDesignForce();
+      renderDetailSchema(appState.selectedConfig, { forceDaN: readCurrentFDesign() });
+      refreshComponentBoxes(appState.selectedConfig);
+      refreshThumbTags();
     });
 
     // DLF mode selection
@@ -5677,7 +6170,7 @@
       const fDesign = fBrute * dlf;
 
       const config = configurationsTable[appState.selectedConfig];
-      const components = config.components(parseFloat(fDesign.toFixed(2)));
+      const components = config.components(parseFloat(fDesign.toFixed(2)), appState.elevation);
 
       fDesignValue.textContent = fDesign.toFixed(2);
       fxValue.textContent = components.fx.toFixed(2);
@@ -5688,128 +6181,292 @@
     }
 
     function updateForceDiagram(configId, fDesign) {
-      const diagrams = {
-        'CFG-1': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-1 : Decharge verticale haut</text>
-          <rect x="80" y="70" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <rect x="85" y="55" width="30" height="20" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <line x1="100" y1="55" x2="100" y2="25" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB)"/>
-          <line x1="100" y1="120" x2="100" y2="148" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR)"/>
-          <text x="115" y="40" font-size="9" fill="#0D9488">Sortie</text>
-          <text x="115" y="140" font-size="9" font-weight="600" fill="#DC2626">Fy = -${fDesign.toFixed(0)} daN</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
-          <defs><marker id="dArrowB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-2': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-2 : Decharge verticale bas</text>
-          <rect x="80" y="40" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <rect x="85" y="85" width="30" height="20" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <line x1="100" y1="105" x2="100" y2="135" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB2)"/>
-          <line x1="100" y1="40" x2="100" y2="20" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR2)"/>
-          <text x="115" y="130" font-size="9" fill="#0D9488">Sortie</text>
-          <text x="115" y="30" font-size="9" font-weight="600" fill="#DC2626">Fy = +${fDesign.toFixed(0)} daN</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
-          <defs><marker id="dArrowB2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-3': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-3 : Decharge horizontale</text>
-          <rect x="40" y="55" width="50" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <rect x="85" y="62" width="20" height="26" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <line x1="105" y1="75" x2="155" y2="75" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB3)"/>
-          <line x1="40" y1="75" x2="10" y2="75" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR3)"/>
-          <text x="140" y="68" font-size="9" fill="#0D9488">Sortie</text>
-          <text x="10" y="100" font-size="9" font-weight="600" fill="#DC2626">Fx = -${fDesign.toFixed(0)} daN</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fy=0, Fz=0</text>
-          <defs><marker id="dArrowB3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-4': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-4 : Coude 90°</text>
-          <rect x="55" y="75" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <path d="M75 75 L75 50 Q75 40 85 40 L110 40" stroke="#D1D5DB" stroke-width="8" fill="none"/>
-          <path d="M75 75 L75 50 Q75 40 85 40 L110 40" stroke="#6B7280" stroke-width="2" fill="none"/>
-          <line x1="110" y1="40" x2="155" y2="40" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB4)"/>
-          <line x1="75" y1="115" x2="75" y2="145" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR4a)"/>
-          <line x1="55" y1="95" x2="20" y2="95" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR4b)"/>
-          <text x="145" y="35" font-size="9" fill="#0D9488">Sortie</text>
-          <text x="85" y="140" font-size="8" font-weight="600" fill="#DC2626">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
-          <text x="5" y="108" font-size="8" font-weight="600" fill="#DC2626">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fz=0</text>
-          <defs><marker id="dArrowB4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR4a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker>
-          <marker id="dArrowR4b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-5': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-5 : Collecteur (torche)</text>
-          <rect x="30" y="55" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <rect x="65" y="62" width="15" height="26" rx="2" fill="#D1D5DB" stroke="#6B7280" stroke-width="2"/>
-          <rect x="80" y="40" width="80" height="70" rx="5" fill="#F9FAFB" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4 3"/>
-          <text x="120" y="78" text-anchor="middle" font-size="9" fill="#6B7280">Collecteur</text>
-          <line x1="30" y1="75" x2="8" y2="75" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR5)"/>
-          <text x="10" y="100" font-size="9" font-weight="600" fill="#DC2626">Fx = -${fDesign.toFixed(0)} daN</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fy=0, Fz=0 (contre-pression reduit F)</text>
-          <defs><marker id="dArrowR5" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-6': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-6 : Col de cygne (180°)</text>
-          <rect x="50" y="85" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <text x="70" y="108" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
-          <rect x="65" y="50" width="10" height="37" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
-          <rect x="65" y="40" width="60" height="10" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
-          <rect x="115" y="48" width="10" height="40" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
-          <line x1="120" y1="70" x2="120" y2="100" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB6)"/>
-          <text x="132" y="95" font-size="9" fill="#0D9488">Sortie</text>
-          <line x1="70" y1="125" x2="70" y2="148" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR6)"/>
-          <text x="80" y="145" font-size="9" font-weight="600" fill="#DC2626">Fy = -${fDesign.toFixed(0)} daN</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fz=0</text>
-          <defs><marker id="dArrowB6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-7': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-7 : Decharge laterale (Z)</text>
-          <rect x="60" y="70" width="40" height="50" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <text x="80" y="98" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
-          <rect x="75" y="50" width="10" height="22" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
-          <ellipse cx="80" cy="50" rx="5" ry="3" fill="#CCFBF1" stroke="#0D9488" stroke-width="1"/>
-          <line x1="80" y1="50" x2="55" y2="30" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB7)"/>
-          <text x="38" y="28" font-size="9" fill="#0D9488">Z</text>
-          <line x1="80" y1="70" x2="110" y2="95" stroke="#DC2626" stroke-width="3" marker-end="url(#dArrowR7)"/>
-          <text x="115" y="95" font-size="9" font-weight="600" fill="#DC2626">Fz = -${fDesign.toFixed(0)} daN</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fx=0, Fy=0</text>
-          <line x1="140" y1="130" x2="170" y2="130" stroke="#DC2626" stroke-width="1.5"/>
-          <text x="172" y="133" font-size="7" fill="#6B7280">axe X (tuyauterie)</text>
-          <line x1="140" y1="130" x2="140" y2="110" stroke="#0D9488" stroke-width="1.5"/>
-          <text x="143" y="112" font-size="7" fill="#6B7280">Y</text>
-          <line x1="140" y1="130" x2="122" y2="142" stroke="#0D9488" stroke-width="1.5"/>
-          <text x="118" y="148" font-size="7" fill="#6B7280">Z</text>
-          <defs><marker id="dArrowB7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR7" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`,
-        'CFG-8': `<svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="100" y="12" text-anchor="middle" font-size="10" font-weight="600" fill="#374151">CFG-8 : Inclinee 45°</text>
-          <rect x="50" y="80" width="40" height="40" rx="3" fill="#E5E7EB" stroke="#6B7280" stroke-width="2"/>
-          <text x="70" y="103" text-anchor="middle" font-size="8" fill="#6B7280">PSV</text>
-          <line x1="70" y1="80" x2="140" y2="25" stroke="#F0FDFA" stroke-width="10" stroke-linecap="round"/>
-          <line x1="70" y1="80" x2="140" y2="25" stroke="#0D9488" stroke-width="1.5"/>
-          <line x1="120" y1="42" x2="140" y2="25" stroke="#0D9488" stroke-width="2.5" marker-end="url(#dArrowB8)"/>
-          <text x="142" y="30" font-size="9" fill="#0D9488">Sortie</text>
-          <path d="M70,72 Q70,62 78,58" stroke="#9CA3AF" stroke-width="1" fill="none" stroke-dasharray="2 1.5"/>
-          <text x="76" y="68" font-size="8" fill="#9CA3AF">45°</text>
-          <line x1="70" y1="120" x2="70" y2="148" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR8a)"/>
-          <text x="80" y="145" font-size="8" font-weight="600" fill="#DC2626">Fy = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
-          <line x1="50" y1="100" x2="15" y2="100" stroke="#DC2626" stroke-width="2.5" marker-end="url(#dArrowR8b)"/>
-          <text x="8" y="115" font-size="8" font-weight="600" fill="#DC2626">Fx = -${(fDesign/Math.sqrt(2)).toFixed(0)}</text>
-          <text x="10" y="148" font-size="8" fill="#6B7280">Fz=0</text>
-          <defs><marker id="dArrowB8" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0D9488"/></marker>
-          <marker id="dArrowR8a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker>
-          <marker id="dArrowR8b" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#DC2626"/></marker></defs>
-        </svg>`
+      // Le schema detaille vit desormais dans le panneau config (colonne
+      // droite), pilote par renderDetailSchema(). Cette fonction reste
+      // exposee pour compat (resetForm, hooks anciens) mais delegue au
+      // nouveau moteur ; l'ancien forceDiagram est vide.
+      if (forceDiagram) forceDiagram.innerHTML = '';
+      renderDetailSchema(configId, { forceDaN: fDesign });
+      refreshComponentBoxes(configId);
+      refreshThumbTags();
+    }
+
+    // ==================================================================
+    // Schema detaille — rendu du canvas (image + surcouche SVG + labels
+    // HTML + triedre + selecteur θ + bandeau bloque + legende). Le repere
+    // est 800 x 540 px, le canvas est fluide en largeur via aspect-ratio.
+    //
+    // Conversion pixels image -> % du canvas :
+    //     left = lx / 8 %       top = (ly - 10) / 5.4 %
+    // (definie section 2.3 de la refonte, cadree pour compenser le
+    // decalage induit par la ligne d'en-tete de la carte au-dessus).
+    // ==================================================================
+    const CFG_LABEL_LEFT_PCT = (lx) => (lx / 8).toFixed(2) + '%';
+    const CFG_LABEL_TOP_PCT = (ly) => ((ly - 10) / 5.4).toFixed(2) + '%';
+
+    function escapeAttr(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Calcule la fleche de reaction pour une config a elevation (CFG-7)
+    // en projetant le vecteur 3D des composantes sur l'ecran via le
+    // triedre local. Reproduit la formule du prototype (section 2.4).
+    function computeElevationArrow(cfgGfx, componentsDaN, elevDeg) {
+      const ang = cfgGfx.axes || CFG_DEFAULT_AXES;
+      const dir = (a) => {
+        const r = a * Math.PI / 180;
+        return [Math.cos(r), -Math.sin(r)];
+      };
+      const dx = dir(ang.x), dy = dir(ang.y), dz = dir(ang.z);
+      let ux = componentsDaN.fx * dx[0] + componentsDaN.fy * dy[0] + componentsDaN.fz * dz[0];
+      let uy = componentsDaN.fx * dx[1] + componentsDaN.fy * dy[1] + componentsDaN.fz * dz[1];
+      const n = Math.hypot(ux, uy) || 1;
+      ux /= n; uy /= n;
+      const P = cfgGfx.point;
+      const parts = [];
+      if (componentsDaN.fx !== 0) parts.push('Fx' + (componentsDaN.fx > 0 ? '+' : '−'));
+      if (componentsDaN.fy !== 0) parts.push('Fy' + (componentsDaN.fy > 0 ? '+' : '−'));
+      if (componentsDaN.fz !== 0) parts.push('Fz' + (componentsDaN.fz > 0 ? '+' : '−'));
+      return {
+        x1: P[0] - ux * 122, y1: P[1] - uy * 122,
+        x2: P[0] - ux * 32,  y2: P[1] - uy * 32,
+        label: parts.join(' + '),
+        lx: P[0] - ux * 92 - uy * 46,
+        ly: P[1] - uy * 92 + ux * 46 + 10
+      };
+    }
+
+    // Rendu du triedre X/Y/Z (SVG 78x78, viewBox 84x84, origine 42,46).
+    function renderTriad(axes) {
+      const ang = axes || CFG_DEFAULT_AXES;
+      const L = 34;
+      const S = 78 / 84;
+      const lines = ['x', 'y', 'z'].map((k) => {
+        const r = ang[k] * Math.PI / 180;
+        const x = (42 + L * Math.cos(r)).toFixed(1);
+        const y = (46 - L * Math.sin(r)).toFixed(1);
+        return '<line x1="42" y1="46" x2="' + x + '" y2="' + y +
+          '" stroke="#374151" stroke-width="2.4" marker-end="url(#triadArrow)"/>';
+      }).join('');
+      const svg = '<svg class="detail-schema-triad" viewBox="0 0 84 84" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><marker id="triadArrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">' +
+        '<path d="M0,0 L5,2.5 L0,5 Z" fill="#374151"/></marker></defs>' +
+        lines +
+        '<circle cx="42" cy="46" r="2.8" fill="#374151"/>' +
+        '</svg>';
+      const labels = ['X', 'Y', 'Z'].map((letter) => {
+        const r = ang[letter.toLowerCase()] * Math.PI / 180;
+        const left = (14 + 39 + (L + 11) * S * Math.cos(r)).toFixed(1);
+        const bottom = (12 + 39 + (L + 11) * S * Math.sin(r)).toFixed(1);
+        return '<span class="detail-schema-triad-label" style="left:' + left + 'px;bottom:' + bottom + 'px;">' + letter + '</span>';
+      }).join('');
+      return svg + labels;
+    }
+
+    // Rendu principal du schema detaille pour une configuration donnee.
+    // options.forceDaN : force de design courante (pour calculer la
+    // fleche CFG-7 en vraies daN). Si absent, on utilise 1 daN — les
+    // valeurs affichees ne dependent pas de la force pour les autres
+    // configs (leurs fleches sont fixes).
+    function renderDetailSchema(configId, options) {
+      const host = document.getElementById('detailSchema');
+      if (!host) return;
+      const cfg = configurationsTable[configId];
+      const gfx = CFG_GRAPHICS[configId];
+      if (!cfg || !gfx) { host.innerHTML = ''; return; }
+
+      const forceDaN = (options && Number.isFinite(options.forceDaN)) ? options.forceDaN : 1;
+      const elev = Number.isFinite(appState.elevation) ? appState.elevation : 45;
+
+      // Fleches : soit statiques (arrows[]), soit calculees (CFG-7).
+      let arrows = gfx.arrows;
+      if (gfx.elevation) {
+        const raw = cfg.components(forceDaN, elev);
+        const snap = (v) => (Math.abs(v) < 0.05 ? 0 : v);
+        const comp = { fx: snap(raw.fx), fy: snap(raw.fy), fz: snap(raw.fz) };
+        if (comp.fx === 0 && comp.fy === 0 && comp.fz === 0) {
+          arrows = [];
+        } else {
+          arrows = [computeElevationArrow(gfx, comp, elev)];
+        }
+      }
+
+      const flowLines = (gfx.flow || []).map((f) =>
+        '<line x1="' + f.x1 + '" y1="' + f.y1 + '" x2="' + f.x2 + '" y2="' + f.y2 +
+        '" stroke="#0D9488" stroke-width="8" stroke-linecap="round" opacity="0.92" marker-end="url(#detailFlow)"/>'
+      ).join('');
+
+      const arrowLines = arrows.map((a) =>
+        '<line x1="' + Number(a.x1).toFixed(1) + '" y1="' + Number(a.y1).toFixed(1) +
+        '" x2="' + Number(a.x2).toFixed(1) + '" y2="' + Number(a.y2).toFixed(1) +
+        '" stroke="#DC2626" stroke-width="10" stroke-linecap="butt" marker-end="url(#detailForce)"/>'
+      ).join('');
+
+      const point = gfx.point;
+      const pointMarker = point
+        ? '<circle cx="' + point[0] + '" cy="' + point[1] + '" r="24" fill="none" stroke="#FACC15" stroke-width="2" opacity="0.5"/>' +
+          '<circle cx="' + point[0] + '" cy="' + point[1] + '" r="14" fill="#FACC15" stroke="#A16207" stroke-width="2.5"/>'
+        : '';
+
+      const overlay =
+        '<svg class="detail-schema-overlay" viewBox="0 0 800 540" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs>' +
+        '<marker id="detailFlow" markerWidth="4" markerHeight="4" refX="3" refY="2" orient="auto">' +
+        '<path d="M0,0 L4,2 L0,4 Z" fill="#0D9488"/></marker>' +
+        '<marker id="detailForce" markerWidth="4" markerHeight="4" refX="3" refY="2" orient="auto">' +
+        '<path d="M0,0 L4,2 L0,4 Z" fill="#DC2626"/></marker>' +
+        '</defs>' +
+        flowLines + arrowLines + pointMarker +
+        '</svg>';
+
+      const labels = arrows.map((a) =>
+        '<div class="detail-schema-label" style="left:' + CFG_LABEL_LEFT_PCT(a.lx) +
+        ';top:' + CFG_LABEL_TOP_PCT(a.ly) + ';">' + escapeAttr(a.label) + '</div>'
+      ).join('');
+
+      const triad = renderTriad(gfx.axes);
+
+      const elevSelector = gfx.elevation
+        ? '<div class="elev-selector">' +
+          '<div class="elev-selector-row">' +
+          '<span class="elev-selector-label">Orientation du coude de sortie &theta;</span>' +
+          '<div class="elev-selector-pills" id="elevSelectorPills">' +
+          CFG_ELEVATION_STEPS.map((v) =>
+            '<span class="elev-pill' + (v === elev ? ' active' : '') +
+            '" data-elev="' + v + '" role="button" tabindex="0">' + v + '°</span>'
+          ).join('') +
+          '</div>' +
+          '</div>' +
+          '<div class="elev-note">' + escapeAttr(elevationNote(elev)) + '</div>' +
+          '</div>'
+        : '';
+
+      const blockedBanner = cfg.blocked
+        ? '<div class="detail-blocked-banner">' +
+          '<strong>Systeme ferme : calcul statique non applicable.</strong>' +
+          'Pas de jet a l\'atmosphere : la quantite de mouvement est conservee dans le reseau. ' +
+          'Requis : profil de forces desequilibrees (time history) aux coudes du reseau de torche.' +
+          '</div>'
+        : '';
+
+      const header =
+        '<div class="detail-schema-header">' +
+        '<span class="detail-schema-title">' + escapeAttr(cfg.label) + '</span>' +
+        '<span class="detail-schema-description">' + escapeAttr(cfg.description || '') + '</span>' +
+        '</div>';
+
+      const canvas =
+        '<div class="detail-schema-canvas">' +
+        '<img src="' + escapeAttr(gfx.img) + '" alt="" loading="lazy">' +
+        overlay + labels + triad +
+        '</div>';
+
+      const legend =
+        '<div class="detail-legend">' +
+        '<div class="detail-legend-item"><span class="detail-legend-swatch detail-legend-swatch--flow"></span>Flux du fluide</div>' +
+        '<div class="detail-legend-item"><span class="detail-legend-swatch detail-legend-swatch--force"></span>Force de reaction</div>' +
+        '<div class="detail-legend-item"><span class="detail-legend-swatch detail-legend-swatch--point"></span>Point d\'application — centre de la bride de sortie</div>' +
+        '</div>';
+
+      host.innerHTML = header + canvas + elevSelector + blockedBanner + legend;
+    }
+
+    // Rafraichit les 3 tags (Fx- / Fy- / Fz-) sous les vignettes en
+    // fonction de la config et de l'elevation courante (CFG-7). Ne
+    // touche pas aux vignettes elles-memes, uniquement au tag.
+    function refreshThumbTags() {
+      const tags = document.querySelectorAll('[data-config-tag]');
+      const elev = Number.isFinite(appState.elevation) ? appState.elevation : 45;
+      tags.forEach((el) => {
+        const id = el.getAttribute('data-config-tag');
+        el.textContent = componentTag(id, elev);
+      });
+    }
+
+    // Met a jour les etats visuels (neutre / active / bloque) des 4
+    // cases de resultats en fonction de la config selectionnee. Le
+    // contenu numerique est ecrit par updateDesignForce ; ici on ne
+    // gere que les classes.
+    function refreshComponentBoxes(configId) {
+      const cfg = configurationsTable[configId];
+      const grid = document.getElementById('forceComponentsGrid');
+      if (!grid || !cfg) return;
+      const boxes = {
+        F: grid.querySelector('[data-comp="F"]'),
+        Fx: grid.querySelector('[data-comp="Fx"]'),
+        Fy: grid.querySelector('[data-comp="Fy"]'),
+        Fz: grid.querySelector('[data-comp="Fz"]')
+      };
+      const readNum = (id) => {
+        const el = document.getElementById(id);
+        if (!el) return 0;
+        const t = (el.textContent || '').replace(/[^\d.\-−]/g, '').replace('−', '-');
+        const v = parseFloat(t);
+        return Number.isFinite(v) ? v : 0;
+      };
+      const setState = (el, state) => {
+        if (!el) return;
+        el.classList.remove('active-comp', 'blocked');
+        if (state) el.classList.add(state);
       };
 
-      forceDiagram.innerHTML = diagrams[configId] || '';
+      if (cfg.blocked) {
+        // Toutes les cases grisees, valeurs mises a « — » (U+2014).
+        ['F', 'Fx', 'Fy', 'Fz'].forEach((k) => setState(boxes[k], 'blocked'));
+        const emDash = '—';
+        ['fDesignValue', 'fxValue', 'fyValue', 'fzValue'].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = emDash;
+        });
+        return;
+      }
+      setState(boxes.F, null);
+      setState(boxes.Fx, readNum('fxValue') !== 0 ? 'active-comp' : null);
+      setState(boxes.Fy, readNum('fyValue') !== 0 ? 'active-comp' : null);
+      setState(boxes.Fz, readNum('fzValue') !== 0 ? 'active-comp' : null);
     }
+
+    // Delegation d'evenement sur les puces d'elevation (CFG-7). L'encart
+    // est re-rendu a chaque changement, donc on delegue depuis le host.
+    function attachDetailSchemaEvents() {
+      const host = document.getElementById('detailSchema');
+      if (!host || host.__wired) return;
+      host.__wired = true;
+
+      const onSelectElev = (target) => {
+        const raw = target.getAttribute('data-elev');
+        const v = parseInt(raw, 10);
+        if (!Number.isFinite(v)) return;
+        appState.elevation = v;
+        try { localStorage.setItem('psv_calculator_elevation', String(v)); } catch (e) { /* quota */ }
+        // Re-rend le schema et repropage aux vignettes / cases.
+        updateDesignForce();
+        renderDetailSchema(appState.selectedConfig, { forceDaN: readCurrentFDesign() });
+        refreshThumbTags();
+        refreshComponentBoxes(appState.selectedConfig);
+      };
+
+      host.addEventListener('click', (e) => {
+        const pill = e.target.closest('.elev-pill');
+        if (pill) onSelectElev(pill);
+      });
+      host.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const pill = e.target.closest('.elev-pill');
+        if (!pill) return;
+        e.preventDefault();
+        onSelectElev(pill);
+      });
+    }
+
+    function readCurrentFDesign() {
+      const el = document.getElementById('fDesignValue');
+      if (!el) return 1;
+      const v = parseFloat((el.textContent || '').replace(/[^\d.\-]/g, ''));
+      return Number.isFinite(v) && v > 0 ? v : 1;
+    }
+
 
     // ============================
     // BATCH MODE - INPUT METHOD
@@ -6648,8 +7305,14 @@
           return { ...psv, status: 'error', errors: { npsIn: 'Hors API 526' }, errorMessage: res.error };
         }
 
-        const components = (configurationsTable[configId] || configurationsTable['CFG-1'])
-          .components(parseFloat(res.force.fDesignDaN.toFixed(2)));
+        const cfgApi = configurationsTable[configId] || configurationsTable['CFG-1'];
+        if (cfgApi.blocked) {
+          return { ...psv, status: 'error', errors: { config: cfgApi.id }, errorMessage: cfgApi.blockedMessage };
+        }
+        const components = cfgApi.components(
+          parseFloat(res.force.fDesignDaN.toFixed(2)),
+          appState.elevation
+        );
 
         return {
           ...psv,
@@ -6680,7 +7343,12 @@
 
       const fDesign = parseFloat((force * dlf).toFixed(2));
       const config = configurationsTable[configId];
-      const components = config ? config.components(fDesign) : { fx: 0, fy: -fDesign, fz: 0 };
+      if (config && config.blocked) {
+        return { ...psv, status: 'error', errors: { config: config.id }, errorMessage: config.blockedMessage };
+      }
+      const components = config
+        ? config.components(fDesign, appState.elevation)
+        : { fx: 0, fy: -fDesign, fz: 0 };
 
       return {
         ...psv,
@@ -7559,6 +8227,7 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
         localStorage.setItem('psv_calculator_schema_version', String(PSV_SCHEMA_VERSION));
         localStorage.setItem('psv_calculator_batch_data', JSON.stringify(appState.psvList));
         localStorage.setItem('psv_calculator_batch_defaults', JSON.stringify(appState.batchDefaults));
+        localStorage.setItem('psv_calculator_elevation', String(appState.elevation));
         localStorage.setItem('psv_calculator_batch_timestamp', Date.now().toString());
       } catch (e) {
         console.error('Erreur sauvegarde localStorage:', e);
@@ -7602,8 +8271,20 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
     function clearLocalStorage() {
       localStorage.removeItem('psv_calculator_batch_data');
       localStorage.removeItem('psv_calculator_batch_defaults');
+      localStorage.removeItem('psv_calculator_elevation');
       localStorage.removeItem('psv_calculator_batch_timestamp');
       localStorage.removeItem('psv_calculator_schema_version');
+    }
+
+    function loadElevation() {
+      try {
+        const brut = localStorage.getItem('psv_calculator_elevation');
+        if (brut == null) return 45;
+        const v = parseFloat(brut);
+        return Number.isFinite(v) ? v : 45;
+      } catch (e) {
+        return 45;
+      }
     }
 
     function checkSavedSession() {
@@ -7902,7 +8583,7 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
 
       // 4. Composantes selon la configuration de decharge
       const cfg = configurationsTable[result.input.config] || configurationsTable['CFG-1'];
-      const comp = cfg.components(parseFloat(f.fDesignDaN.toFixed(2)));
+      const comp = cfg.components(parseFloat(f.fDesignDaN.toFixed(2)), appState.elevation);
       apiEls.fx.textContent = comp.fx.toFixed(2);
       apiEls.fy.textContent = comp.fy.toFixed(2);
       apiEls.fz.textContent = comp.fz.toFixed(2);
@@ -7973,7 +8654,7 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
       const o = result.orifice;
       const f = result.force;
       const cfg = configurationsTable[result.input.config] || configurationsTable['CFG-1'];
-      const comp = cfg.components(parseFloat(f.fDesignDaN.toFixed(2)));
+      const comp = cfg.components(parseFloat(f.fDesignDaN.toFixed(2)), appState.elevation);
       return [
         'DIMENSIONNEMENT PSV PAR ENVELOPPE (API 526 / API 520)',
         '',
@@ -8123,6 +8804,17 @@ PSV-003,Depart C101,80,gaz,H,18.3,CFG-1,1.0
     function init() {
       // Check URL mode
       checkUrlMode();
+
+      // Restore persistent simple-mode UI state
+      appState.elevation = loadElevation();
+
+      // Rendu initial du schema detaille + tags de vignettes + etats des
+      // cases de resultats. La delegation d'evenements sur le selecteur
+      // theta est branchee une seule fois (le host garde un flag interne).
+      renderDetailSchema(appState.selectedConfig, {});
+      attachDetailSchemaEvents();
+      refreshThumbTags();
+      refreshComponentBoxes(appState.selectedConfig);
 
       // Initialize simple mode validation
       validateInputs();
