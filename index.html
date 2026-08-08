@@ -1952,15 +1952,16 @@
       transform: rotate(180deg);
     }
 
-    .config-panel-body {
-      display: none;
+    /* Le corps du panneau est visible par defaut : le pliage a ete
+       retire (voir commentaire dans le markup #configPanel). La regle
+       `.show` reste comme no-op pour compat avec les codes tiers qui
+       pourraient encore la manipuler. */
+    .config-panel-body,
+    .config-panel-body.show {
+      display: block;
       margin-top: var(--space-4);
       padding-top: var(--space-3);
       border-top: 1px solid var(--color-gray-100);
-    }
-
-    .config-panel-body.show {
-      display: block;
     }
 
     .config-section {
@@ -3351,13 +3352,16 @@
       </div>
 
       <!-- Force Application Configuration Panel - Full Width.
-           Le panneau est toujours deplie : il porte deux inputs qui
-           pilotent le resultat (config de decharge, DLF) et le livrable
-           lui-meme (composantes Fx/Fy/Fz + schema detaille). Le
-           pliage a ete retire ; le bouton chevron est conserve dans le
-           DOM en display:none pour compat avec le test v2 qui referencait
-           son id, mais n'est plus branche sur un handler. -->
-      <div class="config-panel results-section" id="configPanel" style="margin-bottom: var(--space-6);">
+           Le panneau est TOUJOURS visible, meme avant tout calcul : il
+           porte deux inputs qui pilotent le calcul (config de decharge,
+           DLF) et le livrable (composantes Fx/Fy/Fz + schema detaille).
+           Le masquer tant qu'aucun calcul n'est lance obligeait a un
+           « cliquer pour voir » qui n'a plus de sens depuis la refonte
+           visuelle. Cases de resultats a « - » par defaut. Le pliage du
+           contenu a ete retire dans une passe precedente ; le chevron
+           est conserve dans le DOM en display:none pour ne pas casser
+           les tests d'integrite DOM. -->
+      <div class="config-panel" id="configPanel" style="margin-bottom: var(--space-6);">
         <div class="config-panel-header" id="configPanelHeader">
           <h3>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -5925,7 +5929,8 @@
         `;
 
         resultsSection.classList.add('show');
-        document.getElementById('configPanel').classList.add('show');
+        // Le panneau config est desormais visible en permanence :
+        // plus besoin de le « reveler » apres un calcul.
         document.getElementById('emptyState').classList.add('hide');
 
         // V2.0 - Update design force and components
@@ -5948,7 +5953,8 @@
       orificeInput.value = '';
       pressureInput.value = '';
       resultsSection.classList.remove('show');
-      document.getElementById('configPanel').classList.remove('show');
+      // Le panneau config reste visible apres reset ; les cases
+      // repassent a « - » via refreshComponentBoxes plus bas.
       document.getElementById('emptyState').classList.remove('hide');
 
       // V2.0 - Reset P1 calculator
