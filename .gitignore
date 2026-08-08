@@ -1,0 +1,7 @@
+# macOS
+.DS_Store
+
+# Handoff de design — references locales (prototype, PNG source, runtime
+# de composants). Les livrables ont ete integres dans index.html /
+# assets/ ; ce dossier ne doit pas rentrer dans le depot.
+design_handoff_psv_force_direction/
