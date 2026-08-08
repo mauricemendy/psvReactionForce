@@ -34,8 +34,13 @@
       --color-error: #DC2626;
       --color-error-light: #FEE2E2;
       --color-error-dark: #B91C1C;
+      --color-error-border: #FCA5A5;   /* bord des cases « composante active » */
       --color-success-dark: #0F766E;
       --color-info: #6B7280;
+
+      /* Marker jaune du point d'application (schema detaille refonte visuelle) */
+      --color-marker: #FACC15;
+      --color-marker-border: #A16207;
 
       /* Neutrals */
       --color-gray-50: #F9FAFB;
@@ -2030,19 +2035,19 @@
       border: 2px solid var(--color-gray-200);
       border-radius: 6px;
       padding: 8px 8px 10px;
-      background: #FFFFFF;
+      background: var(--bg-surface);
       cursor: pointer;
       transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
     }
 
     .config-thumb:hover {
-      border-color: #0D9488;
+      border-color: var(--color-primary);
     }
 
     .config-thumb.active {
-      border-color: #0D9488;
-      background: #F0FDFA;
-      box-shadow: 0 0 0 1px #0D9488;
+      border-color: var(--color-primary);
+      background: var(--color-primary-light);
+      box-shadow: 0 0 0 1px var(--color-primary);
     }
 
     .config-thumb input[type="radio"] {
@@ -2053,7 +2058,7 @@
        recadrer le blanc du rendu (specifie section 2.2). */
     .config-thumb-img {
       height: 76px;
-      background: #FFFFFF;
+      background: var(--bg-surface);
       border-radius: 4px;
       overflow: hidden;
       display: flex;
@@ -2086,12 +2091,12 @@
     .config-thumb-tag {
       font-size: 10px;
       font-weight: 700;
-      color: #9CA3AF;
+      color: var(--color-gray-400);
       white-space: nowrap;
     }
 
     .config-thumb.active .config-thumb-tag {
-      color: #DC2626;
+      color: var(--color-error);
     }
 
     /* -----------------------------------------------------------------
@@ -2101,7 +2106,7 @@
     .detail-schema {
       border: 1px solid var(--color-gray-200);
       border-radius: 8px;
-      background: #FFFFFF;
+      background: var(--bg-surface);
       overflow: hidden;
     }
 
@@ -2126,7 +2131,7 @@
     /* Canvas : image + <svg overlay absolu + labels HTML + triad HTML. */
     .detail-schema-canvas {
       position: relative;
-      background: #FFFFFF;
+      background: var(--bg-surface);
       /* Ratio 800:540 fige avant que l'image ne charge. */
       aspect-ratio: 800 / 540;
     }
@@ -2152,7 +2157,7 @@
       transform: translate(-50%, -50%);
       font-size: 15px;
       font-weight: 700;
-      color: #DC2626;
+      color: var(--color-error);
       letter-spacing: 0.01em;
       white-space: nowrap;
       pointer-events: none;
@@ -2180,7 +2185,7 @@
     .elev-selector {
       margin: 0 16px 12px;
       padding: 12px 14px;
-      background: #F9FAFB;
+      background: var(--color-gray-50);
       border: 1px solid var(--color-gray-200);
       border-radius: 8px;
     }
@@ -2195,7 +2200,7 @@
     .elev-selector-label {
       font-size: 12px;
       font-weight: 600;
-      color: #1F2937;
+      color: var(--color-gray-800);
     }
 
     .elev-selector-pills {
@@ -2209,7 +2214,7 @@
       font-size: 12px;
       font-weight: 600;
       border: 1.5px solid var(--color-gray-200);
-      background: #FFFFFF;
+      background: var(--bg-surface);
       color: var(--color-gray-700);
       cursor: pointer;
       font-variant-numeric: tabular-nums;
@@ -2217,13 +2222,13 @@
     }
 
     .elev-pill:hover {
-      border-color: #0D9488;
+      border-color: var(--color-primary);
     }
 
     .elev-pill.active {
-      border-color: #0D9488;
-      background: #F0FDFA;
-      color: #115E59;
+      border-color: var(--color-primary);
+      background: var(--color-primary-light);
+      color: var(--color-primary-darker);
     }
 
     .elev-note {
@@ -2237,10 +2242,10 @@
     .detail-blocked-banner {
       margin: 0 16px 14px;
       padding: 12px 14px;
-      background: #FEE2E2;
-      border: 1px solid #DC2626;
+      background: var(--color-error-light);
+      border: 1px solid var(--color-error);
       border-radius: 8px;
-      color: #B91C1C;
+      color: var(--color-error-dark);
       font-size: 12px;
       line-height: 1.5;
     }
@@ -2276,21 +2281,21 @@
     .detail-legend-swatch--flow {
       width: 20px;
       height: 4px;
-      background: #0D9488;
+      background: var(--color-primary);
     }
 
     .detail-legend-swatch--force {
       width: 20px;
       height: 6px;
-      background: #DC2626;
+      background: var(--color-error);
     }
 
     .detail-legend-swatch--point {
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: #FACC15;
-      border: 2px solid #A16207;
+      background: var(--color-marker);
+      border: 2px solid var(--color-marker-border);
     }
 
     /* -----------------------------------------------------------------
@@ -2302,13 +2307,13 @@
       border: 2px solid var(--color-gray-200);
       border-radius: 6px;
       padding: 8px 8px 10px;
-      background: #FFFFFF;
+      background: var(--bg-surface);
       cursor: pointer;
     }
     .config-option.active {
-      border-color: #0D9488;
-      background: #F0FDFA;
-      box-shadow: 0 0 0 1px #0D9488;
+      border-color: var(--color-primary);
+      background: var(--color-primary-light);
+      box-shadow: 0 0 0 1px var(--color-primary);
     }
     .config-option input[type="radio"] { display: none; }
     .config-option-svg { display: none; }
@@ -2579,7 +2584,7 @@
     /* Neutre. */
     .force-component {
       border: 1px solid var(--color-gray-200);
-      background: #F9FAFB;
+      background: var(--color-gray-50);
       border-radius: 8px;
       padding: 14px 16px;
       text-align: left;
@@ -2588,18 +2593,18 @@
     /* F_design : meme cadre que neutre. */
     .force-component.highlight {
       border: 1px solid var(--color-gray-200);
-      background: #F9FAFB;
+      background: var(--color-gray-50);
     }
 
     /* Composante active (!= 0). */
     .force-component.active-comp {
-      border: 1px solid #FCA5A5;
-      background: #FEE2E2;
+      border: 1px solid var(--color-error-border);
+      background: var(--color-error-light);
     }
 
     /* Config bloquee (CFG-5) — cases grisees. */
     .force-component.blocked {
-      background: #F3F4F6;
+      background: var(--color-gray-100);
       opacity: 0.6;
     }
 
@@ -2629,11 +2634,11 @@
     }
 
     .force-component.active-comp .force-component-value {
-      color: #B91C1C;
+      color: var(--color-error-dark);
     }
 
     .force-component.blocked .force-component-value {
-      color: #9CA3AF;
+      color: var(--color-gray-400);
     }
 
     .force-component-unit {
@@ -2646,7 +2651,7 @@
     /* Note de pied sous la grille des composantes. */
     .force-components-note {
       font-size: 11px;
-      color: #9CA3AF;
+      color: var(--color-gray-400);
       margin-top: 10px;
       line-height: 1.5;
     }
@@ -4785,6 +4790,27 @@
     const CFG_DEFAULT_AXES = { x: 9, y: 90, z: -32 };
     const CFG_ELEVATION_STEPS = [0, 30, 45, 60, 90];
 
+    // Couleurs du schema detaille — lues depuis les tokens :root pour
+    // que le SVG inline reste aligne avec le design system. Le fallback
+    // couvre les cas ou la CSS ne serait pas encore appliquee au moment
+    // du premier appel (tres rare : renderDetailSchema est appele apres
+    // DOMContentLoaded).
+    function cssVar(name, fallback) {
+      try {
+        const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        return v || fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+    const THEME = {
+      get flow()         { return cssVar('--color-primary', '#0D9488'); },
+      get force()        { return cssVar('--color-error', '#DC2626'); },
+      get marker()       { return cssVar('--color-marker', '#FACC15'); },
+      get markerBorder() { return cssVar('--color-marker-border', '#A16207'); },
+      get triadStroke()  { return cssVar('--color-gray-700', '#374151'); }
+    };
+
     // Message d'aide sous les puces θ (section 2.5 de la refonte).
     function elevationNote(elev) {
       if (elev === 0) return 'Sortie strictement horizontale : la reaction est purement laterale (−Z).';
@@ -6242,18 +6268,19 @@
       const ang = axes || CFG_DEFAULT_AXES;
       const L = 34;
       const S = 78 / 84;
+      const triadColor = THEME.triadStroke;
       const lines = ['x', 'y', 'z'].map((k) => {
         const r = ang[k] * Math.PI / 180;
         const x = (42 + L * Math.cos(r)).toFixed(1);
         const y = (46 - L * Math.sin(r)).toFixed(1);
         return '<line x1="42" y1="46" x2="' + x + '" y2="' + y +
-          '" stroke="#374151" stroke-width="2.4" marker-end="url(#triadArrow)"/>';
+          '" stroke="' + triadColor + '" stroke-width="2.4" marker-end="url(#triadArrow)"/>';
       }).join('');
       const svg = '<svg class="detail-schema-triad" viewBox="0 0 84 84" xmlns="http://www.w3.org/2000/svg">' +
         '<defs><marker id="triadArrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">' +
-        '<path d="M0,0 L5,2.5 L0,5 Z" fill="#374151"/></marker></defs>' +
+        '<path d="M0,0 L5,2.5 L0,5 Z" fill="' + triadColor + '"/></marker></defs>' +
         lines +
-        '<circle cx="42" cy="46" r="2.8" fill="#374151"/>' +
+        '<circle cx="42" cy="46" r="2.8" fill="' + triadColor + '"/>' +
         '</svg>';
       const labels = ['X', 'Y', 'Z'].map((letter) => {
         const r = ang[letter.toLowerCase()] * Math.PI / 180;
@@ -6292,30 +6319,35 @@
         }
       }
 
+      const flowColor = THEME.flow;
+      const forceColor = THEME.force;
+      const markerColor = THEME.marker;
+      const markerBorderColor = THEME.markerBorder;
+
       const flowLines = (gfx.flow || []).map((f) =>
         '<line x1="' + f.x1 + '" y1="' + f.y1 + '" x2="' + f.x2 + '" y2="' + f.y2 +
-        '" stroke="#0D9488" stroke-width="8" stroke-linecap="round" opacity="0.92" marker-end="url(#detailFlow)"/>'
+        '" stroke="' + flowColor + '" stroke-width="8" stroke-linecap="round" opacity="0.92" marker-end="url(#detailFlow)"/>'
       ).join('');
 
       const arrowLines = arrows.map((a) =>
         '<line x1="' + Number(a.x1).toFixed(1) + '" y1="' + Number(a.y1).toFixed(1) +
         '" x2="' + Number(a.x2).toFixed(1) + '" y2="' + Number(a.y2).toFixed(1) +
-        '" stroke="#DC2626" stroke-width="10" stroke-linecap="butt" marker-end="url(#detailForce)"/>'
+        '" stroke="' + forceColor + '" stroke-width="10" stroke-linecap="butt" marker-end="url(#detailForce)"/>'
       ).join('');
 
       const point = gfx.point;
       const pointMarker = point
-        ? '<circle cx="' + point[0] + '" cy="' + point[1] + '" r="24" fill="none" stroke="#FACC15" stroke-width="2" opacity="0.5"/>' +
-          '<circle cx="' + point[0] + '" cy="' + point[1] + '" r="14" fill="#FACC15" stroke="#A16207" stroke-width="2.5"/>'
+        ? '<circle cx="' + point[0] + '" cy="' + point[1] + '" r="24" fill="none" stroke="' + markerColor + '" stroke-width="2" opacity="0.5"/>' +
+          '<circle cx="' + point[0] + '" cy="' + point[1] + '" r="14" fill="' + markerColor + '" stroke="' + markerBorderColor + '" stroke-width="2.5"/>'
         : '';
 
       const overlay =
         '<svg class="detail-schema-overlay" viewBox="0 0 800 540" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">' +
         '<defs>' +
         '<marker id="detailFlow" markerWidth="4" markerHeight="4" refX="3" refY="2" orient="auto">' +
-        '<path d="M0,0 L4,2 L0,4 Z" fill="#0D9488"/></marker>' +
+        '<path d="M0,0 L4,2 L0,4 Z" fill="' + flowColor + '"/></marker>' +
         '<marker id="detailForce" markerWidth="4" markerHeight="4" refX="3" refY="2" orient="auto">' +
-        '<path d="M0,0 L4,2 L0,4 Z" fill="#DC2626"/></marker>' +
+        '<path d="M0,0 L4,2 L0,4 Z" fill="' + forceColor + '"/></marker>' +
         '</defs>' +
         flowLines + arrowLines + pointMarker +
         '</svg>';
