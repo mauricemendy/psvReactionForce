@@ -825,12 +825,21 @@ test('Le tooltip DLF est present', () => {
     'Tooltip DLF manquant');
 });
 
-test('Le panneau config est collapsible par defaut', () => {
+test('Le panneau config est deplie par defaut', () => {
+  // Le pliage a ete retire : le panneau porte deux inputs qui pilotent
+  // le calcul (config, DLF) et le livrable (Fx/Fy/Fz + schema). L'ouvrir
+  // par defaut evite un clic superflu au premier calcul. Le chevron est
+  // conserve dans le DOM (id `configPanelToggle` reference dans les
+  // tests d'integrite DOM) mais masque.
   assert(indexHtml.includes('id="configPanelBody"'), 'configPanelBody manquant');
-  // Body should NOT have class "show" by default
   const bodyMatch = indexHtml.match(/id="configPanelBody"[^>]*/);
-  assert(bodyMatch && !bodyMatch[0].includes('show'),
-    'Config panel body ne devrait pas etre ouvert par defaut');
+  assert(bodyMatch && /class="[^"]*\bshow\b[^"]*"/.test(
+    indexHtml.match(/<div[^>]*id="configPanelBody"[^>]*/)[0]
+  ), 'Config panel body doit etre deplie (class "show") par defaut');
+  // Le chevron doit rester dans le DOM mais ne plus etre visible ni
+  // interactif — le pliage n'a plus de sens.
+  assert(/id="configPanelToggle"[^>]*(?:\bhidden\b|display:\s*none)/.test(indexHtml),
+    'Chevron du panneau doit etre masque (le panneau ne se plie plus)');
 });
 
 // ============================================================

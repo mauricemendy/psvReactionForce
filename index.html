@@ -757,7 +757,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: var(--space-2);
-      align-items: flex-start;
+      align-items: center;
     }
 
     .param-field {
@@ -767,14 +767,12 @@
       min-width: 0;
     }
 
+    /* Mini-labels supprimes de la grille : la baseline des controles
+       s'aligne desormais sur les colonnes voisines (Item ID, Nom,
+       Methode, Config, DLF) qui n'en portent pas. Les libelles sont
+       reportes en placeholder + aria-label + title. */
     .param-field label {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--color-gray-400);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-      margin: 0;
+      display: none;
     }
 
     .param-field .batch-input {
@@ -1927,7 +1925,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      cursor: pointer;
+      /* Le panneau ne se plie plus : le header n'est plus cliquable. */
+      cursor: default;
       user-select: none;
     }
 
@@ -3351,7 +3350,13 @@
         </div>
       </div>
 
-      <!-- Force Application Configuration Panel - Full Width -->
+      <!-- Force Application Configuration Panel - Full Width.
+           Le panneau est toujours deplie : il porte deux inputs qui
+           pilotent le resultat (config de decharge, DLF) et le livrable
+           lui-meme (composantes Fx/Fy/Fz + schema detaille). Le
+           pliage a ete retire ; le bouton chevron est conserve dans le
+           DOM en display:none pour compat avec le test v2 qui referencait
+           son id, mais n'est plus branche sur un handler. -->
       <div class="config-panel results-section" id="configPanel" style="margin-bottom: var(--space-6);">
         <div class="config-panel-header" id="configPanelHeader">
           <h3>
@@ -3361,14 +3366,14 @@
             </svg>
             Configuration d'application des forces
           </h3>
-          <button class="config-panel-toggle" id="configPanelToggle">
+          <button class="config-panel-toggle" id="configPanelToggle" hidden aria-hidden="true" tabindex="-1" style="display:none">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="6 9 12 15 18 9"/>
             </svg>
           </button>
         </div>
 
-        <div class="config-panel-body" id="configPanelBody">
+        <div class="config-panel-body show" id="configPanelBody">
           <!-- Section 1: Discharge Configuration -->
           <div class="config-section">
             <h4>Type de configuration de decharge</h4>
@@ -6080,10 +6085,9 @@
     // ============================
     // V2.0 - CONFIGURATION PANEL
     // ============================
-    configPanelHeader.addEventListener('click', () => {
-      const isOpen = configPanelBody.classList.toggle('show');
-      configPanelToggle.classList.toggle('open', isOpen);
-    });
+    // Le panneau est toujours deplie : plus de handler de pliage.
+    // Le header et le chevron restent dans le DOM (references dans les
+    // tests d'integrite DOM) mais ne portent plus d'interaction.
 
     // Discharge configuration selection
     configOptions.addEventListener('click', (e) => {
@@ -6518,24 +6522,29 @@
 
     // ============================
     // BATCH MODE - FORM HANDLING
-    function generateDNOptions(selected = '') {
+    // Les fonctions ci-dessous acceptent un `labelVide` : quand il est
+    // fourni, l'option vide affiche le nom du champ (DN, Fluide, Orifice)
+    // plutot que « -- » et sert de pseudo-placeholder pour la grille du
+    // batch, ou les mini-labels ont ete supprimes pour aligner les lignes.
+    // Sans argument, on retombe sur le « -- » historique (mode Simple).
+    function generateDNOptions(selected = '', labelVide) {
       return `
-        <option value="">--</option>
+        <option value="">${labelVide || '--'}</option>
         ${validDNs.map(dn => `<option value="${dn}" ${selected === dn ? 'selected' : ''}>${dn}</option>`).join('')}
       `;
     }
 
-    function generateFluidOptions(selected = '') {
+    function generateFluidOptions(selected = '', labelVide) {
       return `
-        <option value="">--</option>
+        <option value="">${labelVide || '--'}</option>
         <option value="gaz" ${selected === 'gaz' ? 'selected' : ''}>Gaz</option>
         <option value="vapeur eau" ${selected === 'vapeur eau' ? 'selected' : ''}>Vapeur</option>
       `;
     }
 
-    function generateOrificeOptions(selected = '') {
+    function generateOrificeOptions(selected = '', labelVide) {
       return `
-        <option value="">--</option>
+        <option value="">${labelVide || '--'}</option>
         ${validOrifices.map(o => `<option value="${o}" ${selected === o ? 'selected' : ''}>${o}</option>`).join('')}
       `;
     }
@@ -6560,9 +6569,16 @@
       ).join('');
     }
 
-    /** Options d'un select generique. */
-    function optionsFrom(valeurs, selected, formatteur) {
-      return '<option value="">--</option>' + valeurs.map(v => {
+    /**
+     * Options d'un select generique. `labelVide` remplace le classique
+     * « -- » par le nom du champ, utilise comme pseudo-placeholder :
+     * la grille du batch ne porte plus de mini-label au-dessus des
+     * controles, et l'option vide sert de libellé visible tant que la
+     * ligne n'a pas ete renseignee.
+     */
+    function optionsFrom(valeurs, selected, formatteur, labelVide) {
+      const placeholder = labelVide || '--';
+      return `<option value="">${placeholder}</option>` + valeurs.map(v => {
         const label = formatteur ? formatteur(v) : v;
         return `<option value="${v}" ${String(selected) === String(v) ? 'selected' : ''}>${label}</option>`;
       }).join('');
@@ -6575,26 +6591,21 @@
       `;
     }
 
-    /** Options d'un select generique. */
-    function optionsFrom(valeurs, selected, formatteur) {
-      return '<option value="">--</option>' + valeurs.map(v => {
-        const label = formatteur ? formatteur(v) : v;
-        return `<option value="${v}" ${String(selected) === String(v) ? 'selected' : ''}>${label}</option>`;
-      }).join('');
-    }
-
-    function generateMethodOptions(selected) {
-      return `
-        <option value="kf" ${selected !== 'api' ? 'selected' : ''}>Kf</option>
-        <option value="api" ${selected === 'api' ? 'selected' : ''}>API</option>
-      `;
-    }
-
-    /** Un champ de la cellule « Parametres » : libelle court + controle. */
+    /**
+     * Un champ de la cellule « Parametres ».
+     *
+     * La grille tabulaire n'affiche plus de mini-label au-dessus du
+     * controle : chaque colonne « Item ID / Nom / Methode / Config /
+     * DLF » n'en a pas non plus, et les mini-labels imposaient un
+     * decalage vertical d'environ 18 px entre les inputs de Parametres
+     * et ceux des colonnes voisines. Le nom du champ est reporte dans
+     * le placeholder de l'input (visible tant que la valeur est vide)
+     * et double par un `title` (tooltip) et un `aria-label` pour ne
+     * perdre ni l'accessibilite ni l'aide contextuelle.
+     */
     function paramField(label, largeur, controle, champErreur) {
       return `
-        <div class="param-field" style="width:${largeur}">
-          <label>${label}</label>
+        <div class="param-field" style="width:${largeur}" title="${label}">
           ${controle}
           <div class="field-error" data-error="${champErreur}"></div>
         </div>`;
@@ -6607,31 +6618,35 @@
      * des colonnes, le tableau devait porter l'union des deux methodes,
      * ce qui imposait un defilement horizontal et laissait a l'ecran une
      * moitie de cellules desactivees sans utilite.
+     *
+     * Les libelles sont portes par les placeholders (inputs) ou par
+     * l'option vide des selects. Voir paramField ci-dessus pour le
+     * pourquoi de l'absence de mini-labels au-dessus des controles.
      */
     function renderParamFields(psv, method) {
       const d = appState.batchDefaults;
 
       if (method === 'api') {
         return paramField('NPS in', '72px',
-            `<select class="batch-input" data-field="npsIn">${optionsFrom(validNps, psv.npsIn, v => v + '"')}</select>`, 'npsIn')
+            `<select class="batch-input" data-field="npsIn" aria-label="NPS in">${optionsFrom(validNps, psv.npsIn, v => v + '"', 'NPS in')}</select>`, 'npsIn')
           + paramField('NPS out', '72px',
-            `<select class="batch-input" data-field="npsOut">${optionsFrom(validNps, psv.npsOut, v => v + '"')}</select>`, 'npsOut')
-          + paramField('Classe', '84px',
-            `<select class="batch-input" data-field="rating">${optionsFrom(validRatings, psv.rating, v => v + '#')}</select>`, 'rating')
+            `<select class="batch-input" data-field="npsOut" aria-label="NPS out">${optionsFrom(validNps, psv.npsOut, v => v + '"', 'NPS out')}</select>`, 'npsOut')
+          + paramField('Classe de bride', '84px',
+            `<select class="batch-input" data-field="rating" aria-label="Classe de bride">${optionsFrom(validRatings, psv.rating, v => v + '#', 'Classe')}</select>`, 'rating')
           + paramField(`P_tarage (${d.psetUnit})`, '96px',
-            `<input type="number" class="batch-input" data-field="pset" value="${psv.pset || ''}" placeholder="ex: 20" min="0" step="0.1">`, 'pset')
-          + paramField(`T (${d.tempUnit === 'F' ? '°F' : '°C'})`, '80px',
-            `<input type="number" class="batch-input" data-field="temp" value="${psv.temp === '' || psv.temp === undefined ? '' : psv.temp}" placeholder="ex: 150" step="1">`, 'temp');
+            `<input type="number" class="batch-input" data-field="pset" value="${psv.pset || ''}" placeholder="P_tarage (${d.psetUnit})" aria-label="P_tarage (${d.psetUnit})" min="0" step="0.1">`, 'pset')
+          + paramField(`Temperature (${d.tempUnit === 'F' ? '°F' : '°C'})`, '80px',
+            `<input type="number" class="batch-input" data-field="temp" value="${psv.temp === '' || psv.temp === undefined ? '' : psv.temp}" placeholder="T (${d.tempUnit === 'F' ? '°F' : '°C'})" aria-label="Temperature (${d.tempUnit === 'F' ? '°F' : '°C'})" step="1">`, 'temp');
       }
 
-      return paramField('DN', '84px',
-          `<select class="batch-input" data-field="dn">${generateDNOptions(psv.dn)}</select>`, 'dn')
+      return paramField('DN (diametre nominal)', '84px',
+          `<select class="batch-input" data-field="dn" aria-label="DN (diametre nominal)">${generateDNOptions(psv.dn, 'DN')}</select>`, 'dn')
         + paramField('Fluide', '104px',
-          `<select class="batch-input" data-field="fluidType">${generateFluidOptions(psv.fluidType)}</select>`, 'fluidType')
+          `<select class="batch-input" data-field="fluidType" aria-label="Fluide">${generateFluidOptions(psv.fluidType, 'Fluide')}</select>`, 'fluidType')
         + paramField('Orifice', '84px',
-          `<select class="batch-input" data-field="orifice">${generateOrificeOptions(psv.orifice)}</select>`, 'orifice')
+          `<select class="batch-input" data-field="orifice" aria-label="Orifice">${generateOrificeOptions(psv.orifice, 'Orifice')}</select>`, 'orifice')
         + paramField('P1 (bar abs)', '104px',
-          `<input type="number" class="batch-input" data-field="pressure" value="${psv.pressure || ''}" placeholder="ex: 15.5" min="0" max="999.99" step="0.01">`, 'pressure');
+          `<input type="number" class="batch-input" data-field="pressure" value="${psv.pressure || ''}" placeholder="P1 (bar abs)" aria-label="P1 (bar abs)" min="0" max="999.99" step="0.01">`, 'pressure');
     }
 
     function renderBatchRow(psv, index) {
